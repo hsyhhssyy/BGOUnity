@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using Assets.CSharpCode.Network;
+using Assets.CSharpCode.Network.Bgo;
 
 namespace LibraryTest
 {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.CSharpCode.Entity
 {
-    public class CardRowCard
+    public class Card
     {
         /// <summary>
         /// 0-Frugality
@@ -14,29 +14,17 @@ namespace Assets.CSharpCode.Entity
         /// 3-Impact of Architecture
         /// </summary>
         public String InternalId;
-        /// <summary>
-        /// Could be null(Means can't take)
-        /// </summary>
-        public String PostUrl;
-        /// <summary>
-        /// &lt;input type="hidden" name="idNote" value="68"&gt;
-        /// </summary>
-        public String IdNote;
-        /// <summary>
-        /// &lt;input type="hidden" name="idMsgChat" value=""&gt;
-        /// </summary>
-        public String IdMsgChat;
+
     }
 
-    public class BuildingCard
+    public class BuildingCell
     {
-        public int Age;
-        public int Name;
+        public Card Card;
 
         public int Worker;
         public int Storage;
 
-        //public int Cost;
+        public int Cost;
 
     }
 }

@@ -1,0 +1,434 @@
+fileFormatVersion: 2
+guid: 88526d1a4b70acc4ab6fd6ebbc0f8da0
+timeCreated: 1458033848
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CardRow-Border_0
+    21300002: CardRow-Border_1
+    21300004: CardRow-Border_2
+    21300006: CardRow-Border_3
+    21300008: CardRow-Border_4
+    21300010: CardRow-Border_5
+    21300012: CardRow-Border_6
+    21300014: CardRow-Border_7
+    21300016: CardRow-Border_8
+    21300018: CardRow-Border_9
+    21300020: CardRow-Border_10
+    21300022: CardRow-Border_11
+    21300024: CardRow-Border_12
+    21300026: CardRow-Border_13
+    21300028: CardRow-Border_14
+    21300030: CardRow-Border_15
+    21300032: CardRow-Border_16
+    21300034: CardRow-Border_17
+    21300036: CardRow-Border_18
+    21300038: CardRow-Border_19
+    21300040: CardRow-Border_20
+    21300042: CardRow_Sprite_CardBackground_0
+    21300044: CardRow_Sprite_CardBackground_1
+    21300046: CardRow_Sprite_CardBackground_2
+    21300048: CardRow_Sprite_CardBackground_3
+    21300050: CardRow_Sprite_CardBackground_4
+    21300052: CardRow_Sprite_CardBackground_5
+    21300054: CardRow_Sprite_CardBackground_6
+    21300056: CardRow_Sprite_CardBackground_7
+    21300058: CardRow_Sprite_CardBackground_8
+    21300060: CardRow_Sprite_CardBackground_9
+    21300062: CardRow_Sprite_CardBackground_10
+    21300064: CardRow_Sprite_CardBackground_11
+    21300066: CardRow_Sprite_CardBackground_12
+    21300068: CardRow_Sprite_CardBackground_13
+    21300070: CardRow_Sprite_CardBackground_14
+    21300072: CardRow_Sprite_CardBackground_15
+    21300074: CardRow_Sprite_CardBackground_16
+    21300076: CardRow_Sprite_CardBackground_17
+    21300078: CardRow_Sprite_CardBackground_18
+    21300080: CardRow_Sprite_CardBackground_19
+    21300082: CardRow_Sprite_CardBackground_20
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 1
+  spritePivot: {x: 0, y: 1}
+  spriteBorder: {x: 170, y: 0, z: 0, w: 40}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: CardRow_Sprite_CardBackground_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_1
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 200
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_2
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 200
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_3
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 200
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -40}
+        - {x: 168, y: -40}
+        - {x: 170, y: -37}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -40}
+        - {x: 168, y: -40}
+        - {x: 170, y: -37}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 160
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_6
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 160
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_7
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 160
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -38}
+        - {x: 2, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 120
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_9
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 120
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_10
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 120
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_11
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 120
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -38}
+        - {x: 2, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_13
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 80
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_14
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 80
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_15
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 80
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -38}
+        - {x: 2, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 40
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_17
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 40
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_18
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 40
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_19
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 40
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -38}
+        - {x: 2, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    - name: CardRow_Sprite_CardBackground_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 170
+        height: 40
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 0}
+        - {x: 0, y: -39}
+        - {x: 1, y: -40}
+        - {x: 170, y: -40}
+        - {x: 170, y: 0}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -10,6 +10,7 @@ namespace Assets.CSharpCode.Network
 {
     public interface IServerAdapter
     {
+        IEnumerator LogIn(String username,String password, Action callback);
         IEnumerator ListGames(Action<List<TtaGame>> callback);
         IEnumerator RefreshBoard(TtaGame game,Action callback);
     }

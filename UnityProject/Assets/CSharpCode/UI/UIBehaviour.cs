@@ -4,58 +4,88 @@ using UnityEngine.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine.Experimental.Networking;
 using Assets.CSharpCode.Network;
 using Assets.CSharpCode.Network.Bgo;
+using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.Translation;
+using Assets.CSharpCode.UI;
+using UnityEngine.SceneManagement;
 
 //using UnityEngine.Experimental.Networking;
 
 public class UIBehaviour : MonoBehaviour
 {
 
-    public Text ConsoleTextBox;
+    public GameObject LoadingGo;
+    
+    private readonly Dictionary<String,Sprite> dictSprites=new Dictionary<string, Sprite>();
 
-
-    public void LoadWebpageButtonClicked()
+    void Start()
     {
-        Type type = Type.GetType("Mono.Runtime");
-        if (type != null)
-        {
-            MethodInfo info = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+        LoadingGo.SetActive(true);
 
-            if (info != null)
-                Debug.Log(info.Invoke(null, null));
+        var sprites = Resources.LoadAll<Sprite>("SpriteTile/CardRow_Sprite_CardBackground");
+
+        foreach (Sprite sp in sprites)
+        {
+            dictSprites.Add(sp.name, sp);
         }
         
-
-        StartCoroutine(GetText());
+        
+        StartCoroutine(GetCardRow());
+        
     }
 
-    private IEnumerator GetText()
+    public void BackButton_Clicked()
     {
-        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormDataSection("field1=foo&field2=bar"));
-        //formData.Add(new MultipartFormFileSection("my file data", "myfile.txt"));
+        SceneManager.LoadScene("Scene/LobbyScene");
+    }
+    
 
-        //UnityWebRequest request = UnityWebRequest.Post("http://boardgaming-online.com/index.php?cnt=202&msg=400&pl=7307514&nat=1", formData);
-        UnityWebRequest request = UnityWebRequest.Get("http://boardgaming-online.com/");
-        yield return request.Send();
-
-        if (request.isError)
+    private IEnumerator GetCardRow()
+    {
+        return SceneTransporter.server.RefreshBoard(SceneTransporter.CurrentGame, () =>
         {
-            Debug.Log(request.error);
-        }
-        else
+            DisplayGameBoard(SceneTransporter.CurrentGame);
+
+            LoadingGo.SetActive(false);
+        });
+    }
+
+    private void DisplayGameBoard(TtaGame game)
+    {
+        System.Random rand = new System.Random(System.DateTime.Now.Second);
+        int cardIndex = 0;
+        foreach(var card in game.CardRow)
         {
-            String str = Encoding.UTF8.GetString(request.downloadHandler.data);
+            var cardGo = GameObject.Find("CardRow/CardRow-Card"+ cardIndex.ToString());
 
-            ConsoleTextBox.text = str;
+            String spriteName = "CardRow_Sprite_CardBackground_" + rand.Next(0, 21);
+            var rend = cardGo.GetComponent<SpriteRenderer>();
+            var sprite = dictSprites[spriteName];
+            rend.sprite = sprite;
 
-            BoardAnalyzer.AnalyzeBoard(str);
+            var textGo = GameObject.Find("CardRow/CardRow-Card" + cardIndex.ToString()+"/NameText");
+            var textMesh = textGo.GetComponent<TextMesh>();
+            
+            textMesh.text = TtaTranslation.GetTranslatedText(card.InternalId.Split("-".ToCharArray(),2)[1]).WordWrap(15).Trim();
 
-            Debug.Log("Form upload complete!");
+            var ageGo = GameObject.Find("CardRow/CardRow-Card" + cardIndex.ToString() + "/AgeText");
+            textMesh = ageGo.GetComponent<TextMesh>();
+
+            textMesh.text =
+                Enum.GetName(
+                    typeof (Age),
+                    Convert.ToInt32(
+                        card.InternalId.Split("-".ToCharArray(), 2)[0]));
+            
+
+            cardIndex++;
         }
     }
 }

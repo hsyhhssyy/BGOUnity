@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>iOS:9</UnityBuildTarget>
     <UnityVersion>5.3.3f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -69,24 +67,30 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
-    <Reference Include="HTMLparserLibDotNet20">
-      <HintPath>Assets\CSharpCode\Network\HTMLparserLibDotNet20.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CSharpCode\Entity\BgoBoard.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
-    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoGame.cs" />
-    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoServer.cs" />
-    <Compile Include="Assets\CSharpCode\Network\TtaGame.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\TTAGame.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
+    <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoRegexpCollections.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BoardAnalyzer.cs" />
-    <Compile Include="Assets\CSharpCode\Network\Bgo\RegexpCollections.cs" />
+    <Compile Include="Assets\CSharpCode\Network\DotNetBgo\DotNetBgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\IServerAdapter.cs" />
+    <Compile Include="Assets\CSharpCode\Translation\TtaTranslation.cs" />
+    <Compile Include="Assets\CSharpCode\UI\CardRowButtonBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
+    <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\UIBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\CSharpCode\Network\F14\" />
+    <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
