@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Assets.CSharpCode.Entity;
@@ -13,6 +14,12 @@ namespace Assets.CSharpCode.Network.Bgo
     {
         public const String BgoBaseUrl = "http://www.boardgaming-online.com/";
         
+        /// <summary>
+        /// 获取正在进行的游戏列表，注意这里面也能取到最近完成的比赛
+        /// </summary>
+        /// <param name="phpSession"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public static IEnumerator GameLists(String phpSession,Action<List<BgoGame>> callback)
         {
             //http://boardgaming-online.com/index.php?cnt=2
@@ -116,7 +123,13 @@ namespace Assets.CSharpCode.Network.Bgo
             }
         }
 
-
+        /// <summary>
+        /// 根据网页内容填充玩家面板
+        /// </summary>
+        /// <param name="phpSession"></param>
+        /// <param name="game"></param>
+        /// <param name="callback"></param>
+        /// <returns></returns>
         public static IEnumerator RefreshBoard(String phpSession, BgoGame game,Action callback)
         {
             WWWForm myPostData = new WWWForm();
@@ -146,6 +159,11 @@ namespace Assets.CSharpCode.Network.Bgo
             }
         }
 
+        /// <summary>
+        /// 填充面板的帮助方法
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="game"></param>
         private static void FillGameBoard(String html,BgoGame game)
         {
             //分析用户面板
@@ -162,6 +180,137 @@ namespace Assets.CSharpCode.Network.Bgo
                 card.PostUrl = mc.Groups[2].Value;
                 game.CardRow.Add(card);
             }
+
+            //第二步，拆开玩家面板
+
+            matches = BgoRegexpCollections.ExtractPlayerPlate.Matches(html);
+            game.Boards=new List<TtaBoard>();
+
+            int plateStart = -1;
+            foreach (Match mc in matches)
+            {
+                if (plateStart != -1)
+                {
+                    String plate = html.Substring(plateStart, mc.Index - plateStart);
+
+                    TtaBoard board = new TtaBoard();
+                    game.Boards.Add(board);
+
+                    FillPlayerBoard(board, plate);
+                    
+                }
+
+                plateStart = mc.Index;
+                
+
+                if (mc.Groups[2].Value != "")
+                {
+                    break;
+                }
+            }
+
+            #region 第三步，校准名字和资源
+            matches = BgoRegexpCollections.ExtractPlayerNameAndResource.Matches(html);
+
+            for (var i = 0; i < matches.Count; i++)
+            {
+                Match mc = matches[i];
+
+                var board = game.Boards[i];
+
+                board.PlayerName = mc.Groups[1].Value;
+                board.ResourceIncrement=new Dictionary<ResourceType, int>();
+                board.ResourceTotal=new Dictionary<ResourceType, int>();
+
+                var strCut = mc.Groups[0].Value;
+
+                var resourceMatches = BgoRegexpCollections.ExtractPlayerNameAndResourceCutResourceOut.Matches(strCut);
+
+                foreach (Match rmc in resourceMatches)
+                {
+                    switch (rmc.Groups[1].Value)
+                    {
+                        case "Culture":
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
+                            int curr =  Convert.ToInt32(cm.Groups[1].Value);
+                            int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
+                            board.ResourceTotal[ResourceType.Culture] = curr;
+                            board.ResourceIncrement[ResourceType.Culture] = incr;
+                        }
+                            break;
+                        case "Science":
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
+                            int curr =  Convert.ToInt32(cm.Groups[1].Value);
+                            int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
+                            int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
+                            board.ResourceTotal[ResourceType.Science] = curr;
+                            board.ResourceTotal[ResourceType.ScienceForMilitary] = mcurr;
+                            board.ResourceIncrement[ResourceType.Science] = incr;
+
+                        }
+                            break;
+                        case "Puissance":
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
+                            int curr = Convert.ToInt32(cm.Groups[1].Value);
+                            board.ResourceTotal[ResourceType.MilitaryForce] = curr;
+                        }
+                            break;
+                        case "Exploration":
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
+                            int curr = cm.Groups[1].Value==""?0:Convert.ToInt32(cm.Groups[1].Value);
+                            board.ResourceTotal[ResourceType.Exploration] = curr;
+                        }
+                            break;
+                        case "HF":
+                        {
+                            var cms = BgoRegexpCollections.ExtractPlayerNameAndResourceHappy.Matches(rmc.Groups[2].Value);
+                            board.ResourceTotal[ResourceType.HappyFace] = cms.Count;
+                            cms = BgoRegexpCollections.ExtractPlayerNameAndResourceUnhappy.Matches(rmc.Groups[2].Value);
+                            board.ResourceTotal[ResourceType.UnhappyFace] = cms.Count;
+
+                        }
+                            break;
+                        case "Nourriture":
+                            {
+                                var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
+                                int curr = Convert.ToInt32(cm.Groups[1].Value);
+                                int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
+                                board.ResourceTotal[ResourceType.Food] = curr;
+                                board.ResourceIncrement[ResourceType.Food] = incr;
+
+                            }
+                            break;
+                        case "Ressources":
+                            {
+                                var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
+                                int curr = Convert.ToInt32(cm.Groups[1].Value);
+                                int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
+                                int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
+                                board.ResourceTotal[ResourceType.Ore] = curr;
+                                board.ResourceTotal[ResourceType.OreForMilitary] = mcurr;
+                                board.ResourceIncrement[ResourceType.Ore] = incr;
+
+                            }
+                            break;
+
+                        default:
+
+                            break;
+                    }
+                }
+            }
+
+            #endregion
+
+        }
+
+        private static void FillPlayerBoard(TtaBoard board, String htmlShade)
+        {
+            
         }
 
         public static String DiscardPile(String phpSession, String matchId)

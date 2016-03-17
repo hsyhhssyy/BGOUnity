@@ -69,6 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TTAGame.cs" />
@@ -82,12 +84,13 @@
     <Compile Include="Assets\CSharpCode\Network\DotNetBgo\DotNetBgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\IServerAdapter.cs" />
     <Compile Include="Assets\CSharpCode\Translation\TtaTranslation.cs" />
-    <Compile Include="Assets\CSharpCode\UI\CardRowButtonBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\BoardScene\BoardUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\BoardScene\CardRowButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
     <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\UIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneUIBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />

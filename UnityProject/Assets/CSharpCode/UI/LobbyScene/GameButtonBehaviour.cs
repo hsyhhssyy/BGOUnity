@@ -1,17 +1,21 @@
-﻿using UnityEngine;
-using System.Collections;
-using Assets.CSharpCode.UI;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameButtonBehaviour : MonoBehaviour
+namespace Assets.CSharpCode.UI.LobbyScene
 {
-
-    public int GameNumber;
-
-    public void OnMouseUpAsButton()
+    [UsedImplicitly]
+    public class GameButtonBehaviour : MonoBehaviour
     {
-        SceneTransporter.CurrentGame = SceneTransporter.LastListedGames[GameNumber];
 
-        SceneManager.LoadScene("Scene/BoardScene");
+        public int GameNumber;
+
+        [UsedImplicitly]
+        public void OnMouseUpAsButton()
+        {
+            SceneTransporter.CurrentGame = SceneTransporter.LastListedGames[GameNumber];
+
+            SceneManager.LoadScene("Scene/BoardScene");
+        }
     }
 }

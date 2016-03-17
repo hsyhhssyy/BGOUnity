@@ -21,13 +21,29 @@ namespace Assets.CSharpCode.Network.Bgo
         //Group 1是当前领袖
 
         //<div id="Plateau(\d)"( style="\S*?")? class="plateau plateau\d"( style="\S*?")?>
-        //寻找玩家面板位置，前面的是玩家面板，后面两个是Journal和Chat
+        //寻找玩家面板位置，前面的是玩家面板，后面两个是Journal和Chat，1是玩家编号，2为空的才是玩家，3为空的是系统版
+        public static readonly Regex ExtractPlayerPlate = new Regex(@"<div id=""Plateau(\d)""( style=""\S*?"")? class=""plateau plateau\d""( style=""\S*?"")?>");
 
         //>([^>]+?)<ul id="indJoueur">((<li class="ind\S*? ind">[\s\S]*?){7})</ul>
-        //1是两个玩家的名字，和他们的面板顺序一致 2是当前资源，用下面的regex来找
+        //1是两个玩家的名字，和他们的面板顺序一致 2是当前资源，用下面的regex来找，注意这个不在PlayerPlate里
+        public static readonly Regex ExtractPlayerNameAndResource = new Regex(@">([^>]+?)<ul id=""indJoueur"">((<li class=""ind\S*? ind"">[\s\S]*?){7})</ul>");
 
-        //<li class="ind\S*? ind">[\s\S]*?(</li>)?
-        //下面的regex先把这7个切出来，然后再具体分析
+        //class="ind(\S*?) ind">([\s\S]*?<)(/li>)?(li|/ul)
+        //这个regex先把这7个切出来，然后再用下面的regex具体分析,1是资源类型，2是值
+        public static readonly Regex ExtractPlayerNameAndResourceCutResourceOut = new Regex(@"class=""ind(\S*?) ind"">([\s\S]*?<)(/li>)?(li|/ul)");
+
+        #region 分析资源用的Regex
+        //(\d+?)( \|[\s\S]*?>([+-]?\d*?))?<
+        //分析资源，1是当前值，3是加值
+        public static readonly Regex ExtractPlayerNameAndResourceNormal = new Regex(@"(\d+?)( \|[\s\S]*?>([+-]?\d*?))?<");
+        //(\d+?)(\+\d+?)?( \|[\s\S]*?>([+-]?\d*?))?<
+        //分析资源，1是当前值，2是特殊当前值，4是加值
+        public static readonly Regex ExtractPlayerNameAndResourceSpecial = new Regex(@"(\d+?)(\+\d+?)?( \|[\s\S]*?>([+-]?\d*?))?<");
+        //happy.png
+        //unhappy.png
+        public static readonly Regex ExtractPlayerNameAndResourceHappy = new Regex(@"/happy.png");
+        public static readonly Regex ExtractPlayerNameAndResourceUnhappy = new Regex(@"/unhappy.png");
+        #endregion
 
         //<div id="statusBar" class="statusActive">([\s\S]*?)</div>
         //这个先把statusbar切出来，然后再分析

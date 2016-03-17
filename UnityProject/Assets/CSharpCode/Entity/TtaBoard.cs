@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Assets.CSharpCode.Entity
 {
@@ -47,5 +45,8 @@ namespace Assets.CSharpCode.Entity
         public int UnhappyWorker;
 
         public List<List<BuildingCell>> Buildings;
+
+        public Dictionary<ResourceType, int> ResourceTotal;
+        public Dictionary<ResourceType, int> ResourceIncrement;
     }
 }

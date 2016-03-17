@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Assets.CSharpCode.Network.Bgo
 {
     public class BgoServer : IServerAdapter
     {
-        private String phpSession="";
-        private String identifiant = "";
-        private String motDePasse = "";
+        private String _phpSession="";
+        private String _identifiant = "";
+        private String _motDePasse = "";
 
         public IEnumerator LogIn(String username, String password, Action callback)
         {
             return BgoPageProvider.HomePage(username, password, (session,mot) =>
             {
-                phpSession = session;
-                identifiant = username;
-                motDePasse = mot;
+                _phpSession = session;
+                _identifiant = username;
+                _motDePasse = mot;
                 if (callback != null)
                 {
                     callback();
@@ -28,7 +26,7 @@ namespace Assets.CSharpCode.Network.Bgo
         
         public IEnumerator ListGames(Action<List<TtaGame>> callback)
         {
-            return BgoPageProvider.GameLists(phpSession, bgoGames =>
+            return BgoPageProvider.GameLists(_phpSession, bgoGames =>
             {
                 List<TtaGame> games=new List<TtaGame>();
                 bgoGames.ForEach(game=>games.Add(game));
@@ -48,7 +46,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
             var bgoGame = (BgoGame)game;
 
-            return BgoPageProvider.RefreshBoard(phpSession, bgoGame, () =>
+            return BgoPageProvider.RefreshBoard(_phpSession, bgoGame, () =>
              {
                  if (callback != null)
                  {

@@ -1,41 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using Assets.CSharpCode.Network;
 using Assets.CSharpCode.Network.Bgo;
-using Assets.CSharpCode.Translation;
-using Assets.CSharpCode.Entity;
+using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.LobbyScene
 {
+    [UsedImplicitly]
     public class LobbyUIBehaviour : MonoBehaviour
     {
         public GameObject LoadingGo;
 
-        private List<TtaGame> Games;
+        private List<TtaGame> _games;
 
-        // Use this for initialization
+        [UsedImplicitly]
         private void Start()
         {
             LoadingGo.SetActive(true);
             StartCoroutine(ListGames());
         }
 
-        // Update is called once per frame
+        
         private IEnumerator ListGames()
         {
             yield return StartCoroutine(SceneTransporter.server.ListGames(
             gamesReturn =>
             {
-                Games = gamesReturn;
+                _games = gamesReturn;
 
                 Debug.Log("List Get!");
 
                 SceneTransporter.LastListedGames = new List<TtaGame>();
 
                 int gameNumber = 0;
-                foreach (var game in Games)
+                foreach (var game in _games)
                 {
                     var bgoGame = (BgoGame) game;
                     if (gameNumber > 5)

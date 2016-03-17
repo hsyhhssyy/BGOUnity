@@ -6,17 +6,22 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.Translation
 {
-    public class TtaTranslation
+    public static class TtaTranslation
     {
-        private static Dictionary<String, String> dictionary; 
+        private static Dictionary<String, String> _dictionary; 
 
         public static void LoadDictionary()
         {
+            if (_dictionary != null)
+            {
+                return;
+            }
+
             TextAsset textAsset= Resources.Load<TextAsset>("Localization/dict_zh-cn");
 
             var dictStr= textAsset.text;
 
-            dictionary=new Dictionary<string, string>();
+            _dictionary=new Dictionary<string, string>();
 
             var rows = dictStr.Split("\n".ToCharArray());
 
@@ -25,16 +30,16 @@ namespace Assets.CSharpCode.Translation
                 var sp = row.Trim().Split("|".ToCharArray());
                 if (sp.Length > 1)
                 {
-                    dictionary[sp[0]] = sp[1];
+                    _dictionary[sp[0]] = sp[1];
                 }
             }
         }
 
         public static String GetTranslatedText(String text)
         {
-            if (dictionary.ContainsKey(text))
+            if (_dictionary.ContainsKey(text))
             {
-                return dictionary[text];
+                return _dictionary[text];
             }
 
             return text;
