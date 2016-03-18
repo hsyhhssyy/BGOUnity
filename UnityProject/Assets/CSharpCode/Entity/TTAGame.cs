@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 
 namespace Assets.CSharpCode.Network
@@ -11,6 +12,6 @@ namespace Assets.CSharpCode.Network
         public List<String> Players; 
         public List<TtaBoard> Boards;
 
-        public List<Card> CardRow;
+        public List<CardInfo> CardRow;
     }
 }

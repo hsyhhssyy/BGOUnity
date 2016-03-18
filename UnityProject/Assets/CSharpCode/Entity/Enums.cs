@@ -22,4 +22,17 @@ namespace Assets.CSharpCode.Entity
     {
         Farm, Mine, Arena, Lab, Library, Temple, Theater, AirForce, Artillery, Cavalry, Infantry,Unknown
     }
+
+    public enum CardType
+    {
+        Action,
+        SpecialTechMilitary, SpecialTechExploration, SpecialTechCivil, SpecialTechEngineering,
+        UrbanTechArena, UrbanTechLab, UrbanTechLibrary, UrbanTechTemple, UrbanTechTheater,
+        ResourceTechFarm,
+        ResourceTechMine,
+        MilitaryTechAirForce, MilitaryTechArtillery, MilitaryTechCavalry, MilitaryTechInfantry,
+        Wonder, Leader, Government,
+        Event, Colony, Tactic, War, Aggression, Pact,
+        Unknown,
+    }
 }

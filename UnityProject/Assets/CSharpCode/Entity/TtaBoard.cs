@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.CSharpCode.Civilopedia;
 
 namespace Assets.CSharpCode.Entity
 {
     public class TtaBoard
     {
         public String PlayerName;
-
-        public List<Card> CardRow;
-
+        
         public List<String> CompletedWonders;
 
         public String ConstructingWonder;
@@ -48,5 +47,14 @@ namespace Assets.CSharpCode.Entity
 
         public Dictionary<ResourceType, int> ResourceTotal;
         public Dictionary<ResourceType, int> ResourceIncrement;
+    }
+
+    public class BuildingCell
+    {
+        public CardInfo Card;
+
+        public int Worker;
+        public int Storage;
+
     }
 }

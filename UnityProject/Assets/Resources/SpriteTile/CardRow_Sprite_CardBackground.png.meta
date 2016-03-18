@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 88526d1a4b70acc4ab6fd6ebbc0f8da0
-timeCreated: 1458033848
+timeCreated: 1458308596
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -25,27 +25,27 @@ TextureImporter:
     21300036: CardRow-Border_18
     21300038: CardRow-Border_19
     21300040: CardRow-Border_20
-    21300042: CardRow_Sprite_CardBackground_0
-    21300044: CardRow_Sprite_CardBackground_1
-    21300046: CardRow_Sprite_CardBackground_2
-    21300048: CardRow_Sprite_CardBackground_3
-    21300050: CardRow_Sprite_CardBackground_4
-    21300052: CardRow_Sprite_CardBackground_5
+    21300042: CardRowBackground_Action
+    21300044: CardRowBackground_Leader
+    21300046: CardRowBackground_Wonder
+    21300048: CardRowBackground_ResourceTechFarm
+    21300050: CardRowBackground_ResourceTechMine
+    21300052: CardRowBackground_Unknown
     21300054: CardRow_Sprite_CardBackground_6
-    21300056: CardRow_Sprite_CardBackground_7
-    21300058: CardRow_Sprite_CardBackground_8
-    21300060: CardRow_Sprite_CardBackground_9
-    21300062: CardRow_Sprite_CardBackground_10
-    21300064: CardRow_Sprite_CardBackground_11
-    21300066: CardRow_Sprite_CardBackground_12
-    21300068: CardRow_Sprite_CardBackground_13
-    21300070: CardRow_Sprite_CardBackground_14
-    21300072: CardRow_Sprite_CardBackground_15
-    21300074: CardRow_Sprite_CardBackground_16
-    21300076: CardRow_Sprite_CardBackground_17
-    21300078: CardRow_Sprite_CardBackground_18
-    21300080: CardRow_Sprite_CardBackground_19
-    21300082: CardRow_Sprite_CardBackground_20
+    21300056: CardRowBackground_UrbanTechArena
+    21300058: CardRowBackground_UrbanTechTheater
+    21300060: CardRowBackground_UrbanTechTemple
+    21300062: CardRowBackground_UrbanTechLibrary
+    21300064: CardRowBackground_UrbanTechLab
+    21300066: CardRowBackground_Government
+    21300068: CardRowBackground_MilitaryTechInfantry
+    21300070: CardRowBackground_MilitaryTechCavalry
+    21300072: CardRowBackground_MilitaryTechArtillery
+    21300074: CardRowBackground_MilitaryTechAirForce
+    21300076: CardRowBackground_SpecialTechMilitary
+    21300078: CardRowBackground_SpecialTechExploration
+    21300080: CardRowBackground_SpecialTechEngineering
+    21300082: CardRowBackground_SpecialTechCivil
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -92,7 +92,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: CardRow_Sprite_CardBackground_0
+    - name: CardRowBackground_Action
       rect:
         serializedVersion: 2
         x: 0
@@ -107,7 +107,7 @@ TextureImporter:
         - {x: 0, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_1
+    - name: CardRowBackground_Leader
       rect:
         serializedVersion: 2
         x: 170
@@ -123,7 +123,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_2
+    - name: CardRowBackground_Wonder
       rect:
         serializedVersion: 2
         x: 340
@@ -139,7 +139,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_3
+    - name: CardRowBackground_ResourceTechFarm
       rect:
         serializedVersion: 2
         x: 510
@@ -155,7 +155,7 @@ TextureImporter:
         - {x: 168, y: -40}
         - {x: 170, y: -37}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_4
+    - name: CardRowBackground_ResourceTechMine
       rect:
         serializedVersion: 2
         x: 0
@@ -171,11 +171,11 @@ TextureImporter:
         - {x: 168, y: -40}
         - {x: 170, y: -37}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_5
+    - name: CardRowBackground_Unknown
       rect:
         serializedVersion: 2
-        x: 170
-        y: 160
+        x: 171
+        y: 161
         width: 170
         height: 40
       alignment: 1
@@ -183,8 +183,7 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
       - - {x: 0, y: 0}
-        - {x: 0, y: -39}
-        - {x: 1, y: -40}
+        - {x: 0, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
     - name: CardRow_Sprite_CardBackground_6
@@ -203,7 +202,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_7
+    - name: CardRowBackground_UrbanTechArena
       rect:
         serializedVersion: 2
         x: 510
@@ -219,7 +218,7 @@ TextureImporter:
         - {x: 2, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_8
+    - name: CardRowBackground_UrbanTechTheater
       rect:
         serializedVersion: 2
         x: 0
@@ -235,7 +234,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_9
+    - name: CardRowBackground_UrbanTechTemple
       rect:
         serializedVersion: 2
         x: 170
@@ -251,7 +250,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_10
+    - name: CardRowBackground_UrbanTechLibrary
       rect:
         serializedVersion: 2
         x: 340
@@ -267,7 +266,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_11
+    - name: CardRowBackground_UrbanTechLab
       rect:
         serializedVersion: 2
         x: 510
@@ -283,7 +282,7 @@ TextureImporter:
         - {x: 2, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_12
+    - name: CardRowBackground_Government
       rect:
         serializedVersion: 2
         x: 0
@@ -299,7 +298,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_13
+    - name: CardRowBackground_MilitaryTechInfantry
       rect:
         serializedVersion: 2
         x: 170
@@ -315,7 +314,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_14
+    - name: CardRowBackground_MilitaryTechCavalry
       rect:
         serializedVersion: 2
         x: 340
@@ -331,7 +330,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_15
+    - name: CardRowBackground_MilitaryTechArtillery
       rect:
         serializedVersion: 2
         x: 510
@@ -347,7 +346,7 @@ TextureImporter:
         - {x: 2, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_16
+    - name: CardRowBackground_MilitaryTechAirForce
       rect:
         serializedVersion: 2
         x: 0
@@ -363,7 +362,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_17
+    - name: CardRowBackground_SpecialTechMilitary
       rect:
         serializedVersion: 2
         x: 170
@@ -379,7 +378,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_18
+    - name: CardRowBackground_SpecialTechExploration
       rect:
         serializedVersion: 2
         x: 340
@@ -395,7 +394,7 @@ TextureImporter:
         - {x: 1, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_19
+    - name: CardRowBackground_SpecialTechEngineering
       rect:
         serializedVersion: 2
         x: 510
@@ -411,7 +410,7 @@ TextureImporter:
         - {x: 2, y: -40}
         - {x: 170, y: -40}
         - {x: 170, y: 0}
-    - name: CardRow_Sprite_CardBackground_20
+    - name: CardRowBackground_SpecialTechCivil
       rect:
         serializedVersion: 2
         x: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Network;
@@ -20,10 +21,13 @@ namespace Assets.CSharpCode.UI.BoardScene
         public GameObject CardRowGo;
 
         private readonly Dictionary<String,Sprite> _dictSprites=new Dictionary<string, Sprite>();
+        private TtaCivilopedia civilopedia;
 
         [UsedImplicitly]
         void Start()
         {
+            civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
+
             LoadingGo.SetActive(true);
             CardRowGo.SetActive(false);
 
@@ -60,13 +64,14 @@ namespace Assets.CSharpCode.UI.BoardScene
         private void DisplayGameBoard(TtaGame game)
         {
             //1、展示卡牌列
-            System.Random rand = new System.Random(System.DateTime.Now.Second);
+
+            GameObject.Find("CardRow").SetActive(true);
             int cardIndex = 0;
             foreach(var card in game.CardRow)
             {
                 var cardGo = GameObject.Find("CardRow/CardRow-Card"+ cardIndex.ToString());
 
-                String spriteName = "CardRow_Sprite_CardBackground_" + rand.Next(0, 21);
+                String spriteName = "CardRowBackground_" + Enum.GetName(typeof(CardType),card.CardType);
                 var rend = cardGo.GetComponent<SpriteRenderer>();
                 var sprite = _dictSprites[spriteName];
                 rend.sprite = sprite;
@@ -74,14 +79,12 @@ namespace Assets.CSharpCode.UI.BoardScene
                 var textGo = GameObject.Find("CardRow/CardRow-Card" + cardIndex.ToString()+"/NameText");
                 var textMesh = textGo.GetComponent<TextMesh>();
 
-                var cardName = TtaTranslation.GetTranslatedText(card.InternalId.Split("-".ToCharArray(), 2)[1]).WordWrap(7);
-                textMesh.text = cardName.Trim();
+                textMesh.text = card.CardName;
 
                 var ageGo = GameObject.Find("CardRow/CardRow-Card" + cardIndex.ToString() + "/AgeText");
                 textMesh = ageGo.GetComponent<TextMesh>();
 
-                textMesh.text =
-                    Enum.GetName(
+                textMesh.text = Enum.GetName(
                         typeof (Age),
                         Convert.ToInt32(
                             card.InternalId.Split("-".ToCharArray(), 2)[0]));
@@ -100,16 +103,52 @@ namespace Assets.CSharpCode.UI.BoardScene
 
             var boardName = "PlayerBoard"+ playerNo;
 
-            //1. 设置玩家名称
+            //玩家名称
             var txtPlayerName = GameObject.Find("PlayerBoard0/PlayerName").GetComponent<TextMesh>();
             txtPlayerName.text = board.PlayerName;
 
+            //资源面板
             DisplayResourcePanel(boardName, board);
 
+            //建筑面板
             foreach (var pair in board.Buildings)
             {
                 var cellName = boardName + "/BuildingBoard/"+Enum.GetName(typeof(BuildingType),pair.Key)+"Cell";
                 DisplayBuildingCell(cellName, pair.Value);
+            }
+
+            //蓝点
+            int blueMarkerOwn = board.BlueBank;
+            for (int blueMarkerDisplay = 15;
+                blueMarkerOwn >= 0 || blueMarkerDisplay >= 0;
+                blueMarkerDisplay--, blueMarkerOwn--)
+            {
+                if (blueMarkerDisplay >= 0)
+                {
+                    var bankGo = GameObject.Find(boardName + "/BlueMarkerBank/" + blueMarkerDisplay);
+                    bankGo.SetActive(blueMarkerOwn > 0);
+                }
+                else
+                {
+                    //Add new markers
+                }
+            }
+
+            //黄点
+            int yellowMarkerOwn = board.YellowBank;
+            for (int yellowMarkerDisplay = 16;
+                yellowMarkerOwn >= 0 || yellowMarkerDisplay >= 0;
+                yellowMarkerDisplay--, yellowMarkerOwn--)
+            {
+                if (yellowMarkerDisplay >= 0)
+                {
+                    var bankGo = GameObject.Find(boardName + "/YellowMarkerBank/" + yellowMarkerDisplay);
+                    bankGo.SetActive(yellowMarkerOwn > 0);
+                }
+                else
+                {
+                    //Add new markers
+                }
             }
         }
 

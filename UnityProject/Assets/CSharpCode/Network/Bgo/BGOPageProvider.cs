@@ -15,6 +15,8 @@ namespace Assets.CSharpCode.Network.Bgo
     {
         public const String BgoBaseUrl = "http://www.boardgaming-online.com/";
         
+        private static TtaCivilopedia civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
+
         /// <summary>
         /// 获取正在进行的游戏列表，注意这里面也能取到最近完成的比赛
         /// </summary>
@@ -171,14 +173,16 @@ namespace Assets.CSharpCode.Network.Bgo
             //第一步：解出卡牌列
             var matches = BgoRegexpCollections.ExtractCardRow.Matches(html);
 
-            game.CardRow=new List<Card>();
+            game.CardRow=new List<CardInfo>();
 
             foreach(Match mc in matches)
             {
-                BgoCardRowCard card=new BgoCardRowCard();
-                card.InternalId = ((int) Enum.Parse(typeof(Age), mc.Groups[4].Value)).ToString() +"-"+ mc.Groups[5].Value;
-                card.IdNote = mc.Groups[3].Value;
-                card.PostUrl = mc.Groups[2].Value;
+                var internalId = ((int)Enum.Parse(typeof(Age), mc.Groups[4].Value)).ToString() + "-" + mc.Groups[5].Value;
+
+                var card = civilopedia.GetCardInfo(internalId);
+                
+                card.ServerData["idNote"] = mc.Groups[3].Value;
+                card.ServerData["postUrl"] = mc.Groups[2].Value;
                 game.CardRow.Add(card);
             }
 
@@ -314,12 +318,19 @@ namespace Assets.CSharpCode.Network.Bgo
 
         private static void FillPlayerBoard(TtaBoard board, String htmlShade)
         {
-            TtaCivilopedia civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
             #region 分析建筑面板
 
             ExtractBuildingBoard(board, htmlShade, civilopedia);
 
             #endregion
+
+            //BlueMarker
+            var blueMarkerHtml = BgoRegexpCollections.ExtractBlueMarker.Match(htmlShade).Groups[1].Value;
+            board.BlueBank = BgoRegexpCollections.ExtractBlueMarkerCounter.Matches(blueMarkerHtml).Count;
+
+            //YellowMarker
+            var yellowMarkerHtml = BgoRegexpCollections.ExtractYellowMarker.Match(htmlShade).Groups[1].Value;
+            board.YellowBank = BgoRegexpCollections.ExtractYellowMarkerCounter.Matches(yellowMarkerHtml).Count;
         }
 
         private static void ExtractBuildingBoard(TtaBoard board, string htmlShade, TtaCivilopedia civilopedia)

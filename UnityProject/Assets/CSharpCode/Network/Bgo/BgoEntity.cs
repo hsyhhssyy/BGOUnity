@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 
 namespace Assets.CSharpCode.Network.Bgo
 {
-    public class BgoCardRowCard : Card
+    public class BgoCardRowCard : CardInfo
     {
         /// <summary>
         /// Could be null(Means can't take)

@@ -86,5 +86,20 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractBuildingBoardPriceAndProduction = new Regex(@"[^\d](\d*?)&nbsp;<img[^>]*? class=""iconeTexte"".*? />");
         #endregion
 
+        /// <summary>
+        /// 这个可以拆出resource bank，然后用下面的Regex去匹配G1然后数匹配数即可
+        /// </summary>
+        //<div class="tta_element"><table class="tableau0".*?>([\s\S]*?)</table>
+        //
+        public static readonly Regex ExtractBlueMarker = new Regex(@"<div class=""tta_element""><table class=""tableau0"".*?>([\s\S]*?)</table>");
+        //blue.gif
+        public static readonly Regex ExtractBlueMarkerCounter = new Regex(@"blue.gif");
+        /// <summary>
+        /// 这个可以拆出worker bank，然后用下面的Regex去匹配G1然后数匹配数即可
+        /// </summary>
+        //<div class="tta_element"><table class="tableau2"[\s\S]*?<table class="tableau0".*?>([\s\S]*?)</table>
+        public static readonly Regex ExtractYellowMarker = new Regex(@"<div class=""tta_element""><table class=""tableau2""[\s\S]*?<table class=""tableau0"".*?>([\s\S]*?)</table>");
+        //blue.gif
+        public static readonly Regex ExtractYellowMarkerCounter = new Regex(@"yellow.gif");
     }
 }
