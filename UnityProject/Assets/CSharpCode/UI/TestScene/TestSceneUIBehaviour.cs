@@ -29,6 +29,8 @@ public class TestSceneUIBehaviour : MonoBehaviour
         TtaTranslation.LoadDictionary();
         SceneTransporter.server=new BgoServer();
 
+        Debug.Log("Clicked");
+
         StartCoroutine(SceneTransporter.server.LogIn("hsyhhssyy", "hsy12345", () =>
         {
             Debug.Log("Logged in!");

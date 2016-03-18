@@ -9,7 +9,10 @@ namespace Assets.CSharpCode.Network.Bgo
         /// </summary>
         //<td rowspan="1" class="tabPartiesTexteC tabPartiesFond\d">(\d*?)</td><td rowspan="1" class="tabPartiesTexteFinG tabPartiesFond\d">([\s\S]*?)<[\s\S]*?nat=(\d)">([\s\S]*?)<
         public static readonly Regex ListGamesInMyGamePage = new Regex(@"<td rowspan=""1"" class=""tabPartiesTexteC tabPartiesFond\d"">(\d*?)</td><td rowspan=""1"" class=""tabPartiesTexteFinG tabPartiesFond\d"">([\s\S]*?)<[\s\S]*?nat=(\d)"">([\s\S]*?)<");
-
+        /// <summary>
+        /// 这个Regex可以查找P标签
+        /// </summary>
+        public static readonly Regex FindP = new Regex(@"<p.*?>(.*?)</p>");
 
         /// <summary>
         /// 这个可以匹配卡牌列. Group 2 是 post url, 3 是 idNote ，4是 age， 5 是card name
@@ -47,5 +50,41 @@ namespace Assets.CSharpCode.Network.Bgo
 
         //<div id="statusBar" class="statusActive">([\s\S]*?)</div>
         //这个先把statusbar切出来，然后再分析
+
+        #region 分析建筑面板
+
+        /// <summary>
+        /// 这个Regex会把BuildingBoard切出来，1就是table中间的内容，不含table标签
+        /// </summary>
+        //<p class="commentaire">&nbsp;</p><table class="tableau2"[\s\S]*?>([\s\S]*?)</table>
+        public static readonly Regex ExtractBuildingBoard=new Regex(@"<p class=""commentaire"">&nbsp;</p><table class=""tableau2""[\s\S]*?>([\s\S]*?)</table>");
+        /// <summary>
+        /// 这个会把BuildingBoard的row切出来，注意第一行是表头，用FindP能切开表头
+        /// </summary>
+        //<tr>([\s\S]*?)(?=(</tr>|<tr>|$))
+        public static readonly Regex ExtractBuildingBoardRow = new Regex(@"<tr>([\s\S]*?)(?=(</tr>|<tr>|$))");
+        /// <summary>
+        /// 这个能切开单元格，对于空白单元格，其1的内容就是"&amp;nbsp;"。<br/>
+        /// 第一列是Age：&lt;p class="ageBatiments">Age&amp;nbsp;A&lt;/p>，可以用FindP来找Age。<br/>
+        /// 对于切出来的单元格，通过FindP，可以找到两行，第一行是建筑物名字，第二行是当前建筑的数量(需要用下面的Regex来数）
+        /// </summary>
+        //<td.*?>([\s\S]*?)(?=(</td>|<td>))
+        public static readonly Regex ExtractBuildingBoardCell=new Regex(@"<td.*?>([\s\S]*?)(?=(</td>|<td>))");
+        /// <summary>
+        /// 这个Regex可以确定建筑物的数量
+        /// </summary>
+        public static readonly Regex ExtractBuildingBoardBuidingCount = new Regex(@"<img class=""icon");
+        /// <summary>
+        /// 这个可以确定单元格里资源的数量
+        /// </summary>
+        //<img class="icon
+        public static readonly Regex ExtractBuildingBoardResourceCount = new Regex(@"<img class=""icone15");
+        /// <summary>
+        /// 这个确认造价和产出，第一个1是造价，第二个1是产出
+        /// </summary>
+        //[^\d](\d*?)&nbsp;<img[^>]*? class="iconeTexte".*? />
+        public static readonly Regex ExtractBuildingBoardPriceAndProduction = new Regex(@"[^\d](\d*?)&nbsp;<img[^>]*? class=""iconeTexte"".*? />");
+        #endregion
+
     }
 }

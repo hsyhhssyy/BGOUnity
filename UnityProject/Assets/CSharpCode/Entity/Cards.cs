@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 
 namespace Assets.CSharpCode.Entity
 {
@@ -19,12 +20,10 @@ namespace Assets.CSharpCode.Entity
 
     public class BuildingCell
     {
-        public Card Card;
+        public CardInfo Card;
 
         public int Worker;
         public int Storage;
-
-        public int Cost;
-
+        
     }
 }

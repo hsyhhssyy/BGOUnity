@@ -98,59 +98,119 @@ namespace Assets.CSharpCode.UI.BoardScene
         {
             TtaBoard board = game.Boards[playerNo];
 
+            var boardName = "PlayerBoard"+ playerNo;
+
             //1. 设置玩家名称
             var txtPlayerName = GameObject.Find("PlayerBoard0/PlayerName").GetComponent<TextMesh>();
             txtPlayerName.text = board.PlayerName;
 
+            DisplayResourcePanel(boardName, board);
+
+            foreach (var pair in board.Buildings)
+            {
+                var cellName = boardName + "/BuildingBoard/"+Enum.GetName(typeof(BuildingType),pair.Key)+"Cell";
+                DisplayBuildingCell(cellName, pair.Value);
+            }
+        }
+
+        private static void DisplayResourcePanel(String boardName,TtaBoard boardData)
+        {
             //2. 设置资源面板
             var txtResourceCulture =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceCulture").GetComponent<TextMesh>();
-            txtResourceCulture.text = board.ResourceTotal[ResourceType.Culture].ToString() +
+                GameObject.Find(boardName+"/ResourceDisplay/ResourceCulture").GetComponent<TextMesh>();
+            txtResourceCulture.text = boardData.ResourceTotal[ResourceType.Culture].ToString() +
                                       " | <color=#ffa500ff>" +
-                                      (board.ResourceIncrement[ResourceType.Culture] >= 0 ? "+" : "-") +
-                                      Math.Abs(board.ResourceIncrement[ResourceType.Culture]).ToString() + "</color>";
+                                      (boardData.ResourceIncrement[ResourceType.Culture] >= 0 ? "+" : "-") +
+                                      Math.Abs(boardData.ResourceIncrement[ResourceType.Culture]).ToString() + "</color>";
 
             var txtResourceScience =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceScience").GetComponent<TextMesh>();
-            txtResourceScience.text = board.ResourceTotal[ResourceType.Science].ToString() +
-                                      (board.ResourceTotal[ResourceType.ScienceForMilitary] > 0
-                                          ? "+<color=#ff0000ff>" + board.ResourceTotal[ResourceType.ScienceForMilitary] +
+                GameObject.Find(boardName + "/ResourceDisplay/ResourceScience").GetComponent<TextMesh>();
+            txtResourceScience.text = boardData.ResourceTotal[ResourceType.Science].ToString() +
+                                      (boardData.ResourceTotal[ResourceType.ScienceForMilitary] > 0
+                                          ? "+<color=#ff0000ff>" + boardData.ResourceTotal[ResourceType.ScienceForMilitary] +
                                             "</color>"
                                           : "")
                                       +
                                       " | <color=#ffa500ff>" +
-                                      (board.ResourceIncrement[ResourceType.Science] >= 0 ? "+" : "-") +
-                                      Math.Abs(board.ResourceIncrement[ResourceType.Science]).ToString() + "</color>";
+                                      (boardData.ResourceIncrement[ResourceType.Science] >= 0 ? "+" : "-") +
+                                      Math.Abs(boardData.ResourceIncrement[ResourceType.Science]).ToString() + "</color>";
 
             var txtResourceMilitaryForce =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceMilitaryForce").GetComponent<TextMesh>();
-            txtResourceMilitaryForce.text = board.ResourceTotal[ResourceType.MilitaryForce].ToString();
+                GameObject.Find(boardName + "/ResourceDisplay/ResourceMilitaryForce").GetComponent<TextMesh>();
+            txtResourceMilitaryForce.text = boardData.ResourceTotal[ResourceType.MilitaryForce].ToString();
 
             var txtResourceExploration =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceExploration").GetComponent<TextMesh>();
-            txtResourceExploration.text = board.ResourceTotal[ResourceType.Exploration] <= 0
+                GameObject.Find(boardName + "/ResourceDisplay/ResourceExploration").GetComponent<TextMesh>();
+            txtResourceExploration.text = boardData.ResourceTotal[ResourceType.Exploration] <= 0
                 ? " - "
-                : ("+" + board.ResourceTotal[ResourceType.Exploration].ToString());
+                : ("+" + boardData.ResourceTotal[ResourceType.Exploration].ToString());
 
             var txtResourceFood =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceFood").GetComponent<TextMesh>();
-            txtResourceFood.text = board.ResourceTotal[ResourceType.Food].ToString() +
-                                      " | <color=#ffa500ff>" +
-                                      (board.ResourceIncrement[ResourceType.Food] >= 0 ? "+" : "-") +
-                                      Math.Abs(board.ResourceIncrement[ResourceType.Food]).ToString() + "</color>";
+                GameObject.Find(boardName + "/ResourceDisplay/ResourceFood").GetComponent<TextMesh>();
+            txtResourceFood.text = boardData.ResourceTotal[ResourceType.Food].ToString() +
+                                   " | <color=#ffa500ff>" +
+                                   (boardData.ResourceIncrement[ResourceType.Food] >= 0 ? "+" : "-") +
+                                   Math.Abs(boardData.ResourceIncrement[ResourceType.Food]).ToString() + "</color>";
 
             var txtResourceOre =
-                GameObject.Find("PlayerBoard0/ResourceDisplay/ResourceOre").GetComponent<TextMesh>();
-            txtResourceOre.text = board.ResourceTotal[ResourceType.Ore].ToString() +
-                                      (board.ResourceTotal[ResourceType.OreForMilitary] > 0
-                                          ? "+<color=#ff0000ff>" + board.ResourceTotal[ResourceType.OreForMilitary] +
-                                            "</color>"
-                                          : "")
-                                      +
-                                      " | <color=#ffa500ff>" +
-                                      (board.ResourceIncrement[ResourceType.Ore] >= 0 ? "+" : "-") +
-                                      Math.Abs(board.ResourceIncrement[ResourceType.Ore]).ToString() + "</color>";
+                GameObject.Find(boardName + "/ResourceDisplay/ResourceOre").GetComponent<TextMesh>();
+            txtResourceOre.text = boardData.ResourceTotal[ResourceType.Ore].ToString() +
+                                  (boardData.ResourceTotal[ResourceType.OreForMilitary] > 0
+                                      ? "+<color=#ff0000ff>" + boardData.ResourceTotal[ResourceType.OreForMilitary] +
+                                        "</color>"
+                                      : "")
+                                  +
+                                  " | <color=#ffa500ff>" +
+                                  (boardData.ResourceIncrement[ResourceType.Ore] >= 0 ? "+" : "-") +
+                                  Math.Abs(boardData.ResourceIncrement[ResourceType.Ore]).ToString() + "</color>";
+        }
 
+        private void DisplayBuildingCell(String cellName,Dictionary<Age,BuildingCell> cellData)
+        {
+            var cellGo = GameObject.Find(cellName);
+            cellGo.SetActive(true);
+
+            GameObject.Find(cellName + "/BuildingMarker/Enable").SetActive(true);
+            GameObject.Find(cellName + "/BuildingMarker/Disable").SetActive(true);
+
+            for (int ageNum = 0; ageNum <= 3; ageNum++)
+            {
+                var ageEnumValue = (Age) ageNum;
+
+                var disableMarker = GameObject.Find(cellName + "/BuildingMarker/Disable/" + ageNum);
+                var enableMarker = GameObject.Find(cellName + "/BuildingMarker/Enable/" + ageNum);
+                var buildingCounter = GameObject.Find(cellName + "/BuildingCounter/" + ageNum);
+                var resourceMarker = GameObject.Find(cellName + "/ResourceMarker/" + ageNum);
+                var resourceCounter = GameObject.Find(cellName + "/ResourceCounter/" + ageNum);
+
+                bool techDisabled = !cellData.ContainsKey(ageEnumValue);
+                disableMarker.SetActive(techDisabled);
+                enableMarker.SetActive(!techDisabled);
+                resourceMarker.SetActive(false);
+                resourceCounter.SetActive(false);
+                buildingCounter.SetActive(false);
+
+                if (techDisabled)
+                {
+                    continue;
+                }
+
+                var cell = cellData[ageEnumValue];
+
+                if (cell.Worker > 0)
+                {
+                    buildingCounter.SetActive(true);
+                    buildingCounter.GetComponent<TextMesh>().text = "x"+cell.Worker.ToString();
+                }
+
+                if (cell.Storage > 0)
+                {
+                    resourceMarker.SetActive(true);
+                    resourceCounter.SetActive(true);
+                    resourceCounter.GetComponent<TextMesh>().text = "x"+cell.Storage.ToString();
+                }
+                
+            }
         }
     }
 }

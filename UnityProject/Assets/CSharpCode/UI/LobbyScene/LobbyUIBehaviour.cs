@@ -42,8 +42,8 @@ namespace Assets.CSharpCode.UI.LobbyScene
                         break;
                     }
 
-                    var gameIDGo = GameObject.Find("GameLists/Lobby-Game" + gameNumber.ToString() + "/GameID");
-                    var textMesh = gameIDGo.GetComponent<TextMesh>();
+                    var gameIdGo = GameObject.Find("GameLists/Lobby-Game" + gameNumber.ToString() + "/GameID");
+                    var textMesh = gameIdGo.GetComponent<TextMesh>();
                     textMesh.text = bgoGame.GameId;
 
                     var gameNameGo = GameObject.Find("GameLists/Lobby-Game" + gameNumber.ToString() + "/GameName");

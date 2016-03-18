@@ -15,9 +15,12 @@ namespace Assets.CSharpCode.Civilopedia
             return new TtaCivilopedia();
         }
 
-        public CardInfo getCardInfo(String internalId)
+        public CardInfo GetCardInfo(String internalId)
         {
-            return null;
+            CardInfo info=new CardInfo();
+            info.CardName = internalId;
+            info.InternalId = internalId;
+            return info;
         }
     }
 }

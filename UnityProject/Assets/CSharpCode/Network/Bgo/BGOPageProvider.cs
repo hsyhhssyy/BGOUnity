@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using UnityEngine;
 using UnityEngine.Experimental.Networking;
@@ -210,7 +211,17 @@ namespace Assets.CSharpCode.Network.Bgo
             }
 
             #region 第三步，校准名字和资源
-            matches = BgoRegexpCollections.ExtractPlayerNameAndResource.Matches(html);
+
+            ExtractPlayerNameAndResource(html, game);
+
+            #endregion
+
+        }
+
+        // ReSharper disable once FunctionComplexityOverflow
+        private static void ExtractPlayerNameAndResource(string html, BgoGame game)
+        {
+            var matches = BgoRegexpCollections.ExtractPlayerNameAndResource.Matches(html);
 
             for (var i = 0; i < matches.Count; i++)
             {
@@ -219,8 +230,8 @@ namespace Assets.CSharpCode.Network.Bgo
                 var board = game.Boards[i];
 
                 board.PlayerName = mc.Groups[1].Value;
-                board.ResourceIncrement=new Dictionary<ResourceType, int>();
-                board.ResourceTotal=new Dictionary<ResourceType, int>();
+                board.ResourceIncrement = new Dictionary<ResourceType, int>();
+                board.ResourceTotal = new Dictionary<ResourceType, int>();
 
                 var strCut = mc.Groups[0].Value;
 
@@ -233,7 +244,7 @@ namespace Assets.CSharpCode.Network.Bgo
                         case "Culture":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
-                            int curr =  Convert.ToInt32(cm.Groups[1].Value);
+                            int curr = Convert.ToInt32(cm.Groups[1].Value);
                             int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
                             board.ResourceTotal[ResourceType.Culture] = curr;
                             board.ResourceIncrement[ResourceType.Culture] = incr;
@@ -242,13 +253,12 @@ namespace Assets.CSharpCode.Network.Bgo
                         case "Science":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
-                            int curr =  Convert.ToInt32(cm.Groups[1].Value);
+                            int curr = Convert.ToInt32(cm.Groups[1].Value);
                             int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
                             int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
                             board.ResourceTotal[ResourceType.Science] = curr;
                             board.ResourceTotal[ResourceType.ScienceForMilitary] = mcurr;
                             board.ResourceIncrement[ResourceType.Science] = incr;
-
                         }
                             break;
                         case "Puissance":
@@ -261,7 +271,7 @@ namespace Assets.CSharpCode.Network.Bgo
                         case "Exploration":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
-                            int curr = cm.Groups[1].Value==""?0:Convert.ToInt32(cm.Groups[1].Value);
+                            int curr = cm.Groups[1].Value == "" ? 0 : Convert.ToInt32(cm.Groups[1].Value);
                             board.ResourceTotal[ResourceType.Exploration] = curr;
                         }
                             break;
@@ -271,30 +281,27 @@ namespace Assets.CSharpCode.Network.Bgo
                             board.ResourceTotal[ResourceType.HappyFace] = cms.Count;
                             cms = BgoRegexpCollections.ExtractPlayerNameAndResourceUnhappy.Matches(rmc.Groups[2].Value);
                             board.ResourceTotal[ResourceType.UnhappyFace] = cms.Count;
-
                         }
                             break;
                         case "Nourriture":
-                            {
-                                var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
-                                int curr = Convert.ToInt32(cm.Groups[1].Value);
-                                int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
-                                board.ResourceTotal[ResourceType.Food] = curr;
-                                board.ResourceIncrement[ResourceType.Food] = incr;
-
-                            }
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
+                            int curr = Convert.ToInt32(cm.Groups[1].Value);
+                            int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
+                            board.ResourceTotal[ResourceType.Food] = curr;
+                            board.ResourceIncrement[ResourceType.Food] = incr;
+                        }
                             break;
                         case "Ressources":
-                            {
-                                var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
-                                int curr = Convert.ToInt32(cm.Groups[1].Value);
-                                int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
-                                int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
-                                board.ResourceTotal[ResourceType.Ore] = curr;
-                                board.ResourceTotal[ResourceType.OreForMilitary] = mcurr;
-                                board.ResourceIncrement[ResourceType.Ore] = incr;
-
-                            }
+                        {
+                            var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
+                            int curr = Convert.ToInt32(cm.Groups[1].Value);
+                            int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
+                            int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
+                            board.ResourceTotal[ResourceType.Ore] = curr;
+                            board.ResourceTotal[ResourceType.OreForMilitary] = mcurr;
+                            board.ResourceIncrement[ResourceType.Ore] = incr;
+                        }
                             break;
 
                         default:
@@ -303,14 +310,93 @@ namespace Assets.CSharpCode.Network.Bgo
                     }
                 }
             }
-
-            #endregion
-
         }
 
         private static void FillPlayerBoard(TtaBoard board, String htmlShade)
         {
-            
+            TtaCivilopedia civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
+            #region 分析建筑面板
+
+            ExtractBuildingBoard(board, htmlShade, civilopedia);
+
+            #endregion
+        }
+
+        private static void ExtractBuildingBoard(TtaBoard board, string htmlShade, TtaCivilopedia civilopedia)
+        {
+            board.Buildings = new Dictionary<BuildingType, Dictionary<Age, BuildingCell>>();
+            var titleMap = new List<BuildingType>();
+
+            var buildingBoardTableHtml = BgoRegexpCollections.ExtractBuildingBoard.Match(htmlShade).Groups[1].Value;
+
+            var mcsRow = BgoRegexpCollections.ExtractBuildingBoardRow.Matches(buildingBoardTableHtml);
+
+            //分析表头
+            var titleRowHtml = mcsRow[0].Groups[1].Value;
+            foreach (Match mcTitle in BgoRegexpCollections.FindP.Matches(titleRowHtml))
+            {
+                BuildingType bType;
+                switch (mcTitle.Groups[1].Value)
+                {
+                    case "Air Force":
+                        bType = BuildingType.AirForce;
+                        break;
+                    case "&nbsp;":
+                        bType = BuildingType.Unknown;
+                        break;
+                    default:
+                        bType = (BuildingType) Enum.Parse(typeof (BuildingType), mcTitle.Groups[1].Value);
+                        break;
+                }
+
+                if (bType != BuildingType.Unknown)
+                {
+                    titleMap.Add(bType);
+                }
+            }
+
+            for (int rowIndex = 1; rowIndex < mcsRow.Count; rowIndex++)
+            {
+                //分析从第二行开始的内容
+                var mcsColumn = BgoRegexpCollections.ExtractBuildingBoardCell.Matches(mcsRow[rowIndex].Groups[1].Value);
+
+                //第一格是时代
+                var strAge =
+                    BgoRegexpCollections.FindP.Match(mcsColumn[0].Groups[1].Value).Groups[1].Value.Replace("Age&nbsp;",
+                        "");
+                var age = (Age) Enum.Parse(typeof (Age), strAge);
+
+                //从第二格开始
+                for (int colIndex = 1; colIndex < mcsColumn.Count; colIndex++)
+                {
+                    if (mcsColumn[colIndex].Groups[1].Value == "&nbsp;")
+                    {
+                        continue;
+                    }
+
+                    BuildingCell cell = new BuildingCell();
+
+                    var cellHtml = mcsColumn[colIndex].Groups[1].Value;
+
+                    var mcsNameAndCount = BgoRegexpCollections.FindP.Matches(cellHtml);
+                    var buildingName = mcsNameAndCount[0].Groups[1].Value;
+                    cell.Card = civilopedia.GetCardInfo(buildingName);
+
+                    var workerCount = mcsNameAndCount[1].Groups[1].Value == "&nbsp;"
+                        ? 0
+                        : BgoRegexpCollections.ExtractBuildingBoardBuidingCount.Matches(mcsNameAndCount[1].Groups[1].Value).Count;
+                    cell.Worker = workerCount;
+
+                    var mcsResource = BgoRegexpCollections.ExtractBuildingBoardResourceCount.Matches(cellHtml);
+                    cell.Storage = mcsResource.Count;
+
+                    if (!board.Buildings.ContainsKey(titleMap[colIndex-1]))
+                    {
+                        board.Buildings[titleMap[colIndex-1]] = new Dictionary<Age, BuildingCell>();
+                    }
+                    board.Buildings[titleMap[colIndex-1]].Add(age, cell);
+                }
+            }
         }
 
         public static String DiscardPile(String phpSession, String matchId)

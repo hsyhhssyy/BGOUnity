@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: a38315739004bdd43aeec56f3a3d5294
+timeCreated: 1458301036
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Building-III-Enable
+    21300002: Building-II-Enable
+    21300004: Building-I-Enable
+    21300006: Building-A-Enable
+    21300008: Building-III-Disable
+    21300010: BlueMarker
+    21300012: Building-II-Disable
+    21300014: Building-I-Disable
+    21300016: Building-A-Disable
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Building-III-Enable
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 637
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-II-Enable
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 613
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-I-Enable
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 589
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-A-Enable
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 565
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-III-Disable
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 637
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: BlueMarker
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 639
+        width: 14
+        height: 14
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-II-Disable
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 613
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-I-Disable
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 589
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Building-A-Disable
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 565
+        width: 28
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

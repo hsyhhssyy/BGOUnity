@@ -7,5 +7,7 @@ namespace Assets.CSharpCode.Civilopedia
 {
     public class CardInfo
     {
+        public String InternalId;
+        public String CardName;
     }
 }

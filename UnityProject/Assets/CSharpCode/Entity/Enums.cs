@@ -17,4 +17,9 @@ namespace Assets.CSharpCode.Entity
         OreForMilitary, ScienceForMilitary,
         YellowMarker, RedMarker, BlueMarker, WhiteMarker
     }
+
+    public enum BuildingType
+    {
+        Farm, Mine, Arena, Lab, Library, Temple, Theater, AirForce, Artillery, Cavalry, Infantry,Unknown
+    }
 }

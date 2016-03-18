@@ -44,7 +44,7 @@ namespace Assets.CSharpCode.Entity
         public int HappyWorker;
         public int UnhappyWorker;
 
-        public List<List<BuildingCell>> Buildings;
+        public Dictionary<BuildingType, Dictionary<Age, BuildingCell>> Buildings;
 
         public Dictionary<ResourceType, int> ResourceTotal;
         public Dictionary<ResourceType, int> ResourceIncrement;

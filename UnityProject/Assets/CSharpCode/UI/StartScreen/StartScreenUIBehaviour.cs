@@ -20,7 +20,7 @@ namespace Assets.CSharpCode.UI.StartScreen
             Debug.Log("App Loaded");
         }
 
-        [UsedImplicitly]
+        [UsedImplicitly] 
         public void LoginButton_Clicked()
         {
             Debug.Log("LoginButton!");
