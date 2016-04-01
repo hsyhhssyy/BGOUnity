@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>iOS:9</UnityBuildTarget>
     <UnityVersion>5.3.3f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -71,30 +73,39 @@
   <ItemGroup>
     <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
-    <Compile Include="Assets\CSharpCode\Entity\TTAGame.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
+    <Compile Include="Assets\CSharpCode\Helper\ExceptionHandle.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
+    <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoPostProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoRegexpCollections.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoServer.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoTestServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BoardAnalyzer.cs" />
     <Compile Include="Assets\CSharpCode\Network\DotNetBgo\DotNetBgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\IServerAdapter.cs" />
     <Compile Include="Assets\CSharpCode\Translation\TtaTranslation.cs" />
     <Compile Include="Assets\CSharpCode\UI\BoardScene\BoardUIBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\BoardScene\CardRowButtonBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\BoardScene\Dialog\Actions\DialogActionsButtonCollider.cs" />
+    <Compile Include="Assets\CSharpCode\UI\BoardScene\Dialog\DialogUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\BoardScene\PlayerBoardColliderBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
     <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneColliders.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneUIBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

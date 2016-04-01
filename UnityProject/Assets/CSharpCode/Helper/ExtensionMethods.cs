@@ -2,83 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Entity;
+using UnityEngine;
 
 namespace Assets.CSharpCode.Helper
 {
     public static class ExtensionMethods
     {
         private const string _newline = "\r\n";
-
-        public static string WordWrap2(this string theString, int width)
-        {
-            int pos, next;
-            StringBuilder sb = new StringBuilder();
-
-            // Lucidity check
-            if (width < 1)
-                return theString;
-
-            // Parse each line of text
-            for (pos = 0; pos < theString.Length; pos = next)
-            {
-                // Find end of line
-                int eol = theString.IndexOf(_newline, pos);
-
-                if (eol == -1)
-                    next = eol = theString.Length;
-                else
-                    next = eol + _newline.Length;
-
-                // Copy this line of text, breaking into smaller lines as needed
-                if (eol > pos)
-                {
-                    do
-                    {
-                        int len = eol - pos;
-
-                        if (len > width)
-                            len = BreakLine(theString, pos, width);
-
-                        sb.Append(theString, pos, len);
-                        sb.Append(_newline);
-
-                        // Trim whitespace following break
-                        pos += len;
-
-                        while (pos < eol && Char.IsWhiteSpace(theString[pos]))
-                            pos++;
-
-                    } while (eol > pos);
-                }
-                else sb.Append(_newline); // Empty line
-            }
-
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Locates position to break the given line so as to avoid
-        /// breaking words.
-        /// </summary>
-        /// <param name="text">String that contains line of text</param>
-        /// <param name="pos">Index where line of text starts</param>
-        /// <param name="max">Maximum line length</param>
-        /// <returns>The modified line length</returns>
-        public static int BreakLine(string text, int pos, int max)
-        {
-            // Find last whitespace in line
-            int i = max - 1;
-            while (i >= 0 && !Char.IsWhiteSpace(text[pos + i]))
-                i--;
-            if (i < 0)
-                return max; // No whitespace found; break at maximum length
-                            // Find start of whitespace
-            while (i >= 0 && Char.IsWhiteSpace(text[pos + i]))
-                i--;
-            // Return length of text before whitespace
-            return i + 1;
-        }
-
+        
         #region 中英文混排自动折行
         public static String WordWrap(this String strToConvert, int length)
         {
@@ -166,5 +98,23 @@ namespace Assets.CSharpCode.Helper
         }
 
         #endregion
+
+        public static GameObject FindObject(this GameObject parent, string name)
+        {
+            Component[] trs = parent.GetComponentsInChildren(typeof(Transform), true);
+            foreach (Transform t in trs)
+            {
+                if (t.name == name)
+                {
+                    return t.gameObject;
+                }
+            }
+            return null;
+        }
+
+        public static List<PlayerAction> FindAction(this List<PlayerAction> actions)
+        {
+            return null;
+        }
     }
 }

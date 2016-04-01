@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a38315739004bdd43aeec56f3a3d5294
-timeCreated: 1458312709
+timeCreated: 1459519503
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -14,9 +14,20 @@ TextureImporter:
     21300014: Building-I-Disable
     21300016: Building-A-Disable
     21300018: YellowMarker
-    21300020: HandCard_MilitaryTech
+    21300020: HandCard_Military
     21300022: WhiteMarker
     21300024: RedMarker
+    21300026: MissingMarker
+    21300028: happyFace
+    21300030: unhappyFace
+    21300032: WonderBox
+    21300034: HandCard_Action
+    21300036: HandCard_Urban
+    21300038: HandCard_Leader
+    21300040: HandCard_Production
+    21300042: HandCard_Government
+    21300044: HandCard_SpecialTech
+    21300046: ActionCardColliderBox
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -173,7 +184,7 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: HandCard_MilitaryTech
+    - name: HandCard_Military
       rect:
         serializedVersion: 2
         x: 7
@@ -204,6 +215,131 @@ TextureImporter:
         height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: MissingMarker
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 639
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: happyFace
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 611
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: unhappyFace
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 611
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: WonderBox
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 488
+        width: 93
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -46.5, y: 31.5}
+        - {x: -46.5, y: -31.5}
+        - {x: 46.5, y: -31.5}
+        - {x: 46.5, y: 31.5}
+    - name: HandCard_Action
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 509
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: HandCard_Urban
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 485
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: HandCard_Leader
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 461
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: HandCard_Production
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 437
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: HandCard_Government
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 413
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: HandCard_SpecialTech
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 389
+        width: 166
+        height: 23
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: ActionCardColliderBox
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 318
+        width: 166
+        height: 140
+      alignment: 1
+      pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

@@ -103,7 +103,7 @@ namespace Assets.CSharpCode.Network.Bgo
             var cookieHeaders = myPostData.headers;
             cookieHeaders.Add("Cookie", "PHPSESSID=" + phpSession);
 
-            var data = Encoding.UTF8.GetString(myPostData.data);
+            //var data = Encoding.UTF8.GetString(myPostData.data);
 
             www = new WWW(BgoBaseUrl, myPostData.data, cookieHeaders);
 
@@ -139,7 +139,7 @@ namespace Assets.CSharpCode.Network.Bgo
             var cookieHeaders = myPostData.headers;
             cookieHeaders.Add("Cookie", "PHPSESSID=" + phpSession);
 
-            var data = Encoding.UTF8.GetString(myPostData.data);
+            //var data = Encoding.UTF8.GetString(myPostData.data);
 
             var www = new WWW(BgoBaseUrl+ "index.php?cnt=202&pl="+game.GameId+"&nat="+game.Nat, null, cookieHeaders);
 
@@ -167,26 +167,93 @@ namespace Assets.CSharpCode.Network.Bgo
         /// </summary>
         /// <param name="html"></param>
         /// <param name="game"></param>
-        private static void FillGameBoard(String html,BgoGame game)
+        // ReSharper disable once FunctionComplexityOverflow
+        internal static void FillGameBoard(String html,BgoGame game)
         {
             //分析用户面板
-            //第一步：解出卡牌列
+
+            game.PossibleActions=new List<PlayerAction>();
+
+            //解出卡牌列
             var matches = BgoRegexpCollections.ExtractCardRow.Matches(html);
 
-            game.CardRow=new List<CardInfo>();
+            game.CardRow=new List<CardRowCardInfo>();
 
             foreach(Match mc in matches)
             {
-                var internalId = ((int)Enum.Parse(typeof(Age), mc.Groups[4].Value)).ToString() + "-" + mc.Groups[5].Value;
+                var internalId =
+                    ((int) Enum.Parse(typeof (Age), mc.Groups[5].Value)) + "-" + mc.Groups[6].Value;
 
                 var card = civilopedia.GetCardInfo(internalId);
+
+                BgoCardRowCardInfo cardRowCardInfo = new BgoCardRowCardInfo
+                {
+                    Card = card,
+                    CanPutBack = mc.Groups[4].Value.Contains("carteEnMain"),
+                    CanTake = mc.Groups[2].Value!=""&& (!mc.Groups[4].Value.Contains("carteEnMain")),
+                    CivilActionCost =
+                        BgoRegexpCollections.ExtractGovenrmentAndActionPointsMissing.Matches(mc.Groups[8].Value).Count
+                };
+
+                //Debug.Log(card.CardName + mc.Groups[2].Value);
+
+                BgoPlayerAction pa = new BgoPlayerAction
+                {
+                    ActionType = PlayerActionType.TakeCardFromCardRow
+                };
+                pa.Data[0] = cardRowCardInfo;
+                pa.Data[1] = game.CardRow.Count; //Card Row Pos
+                pa.Data[2] = mc.Groups[3].Value;//idNote
+                pa.Data[3] = mc.Groups[2].Value;//PostUrl
                 
-                card.ServerData["idNote"] = mc.Groups[3].Value;
-                card.ServerData["postUrl"] = mc.Groups[2].Value;
-                game.CardRow.Add(card);
+                game.PossibleActions.Add(pa);
+
+                game.CardRow.Add(cardRowCardInfo);
             }
 
-            //第二步，拆开玩家面板
+            //当前事件
+            var matchCurrentEvent = BgoRegexpCollections.ExtractCurrentEvent.Match(html);
+            if (matchCurrentEvent.Groups[3].Value == "")
+            {
+                game.CurrentEventAge = (Age) Enum.Parse(typeof (Age), matchCurrentEvent.Groups[5].Value);
+                game.CurrentEventCard =
+                    civilopedia.GetCardInfo((int)game.CurrentEventAge + "-" + matchCurrentEvent.Groups[6].Value);
+                game.CurrentEventCount = matchCurrentEvent.Groups[7].Value;
+            }
+            else
+            {
+                game.CurrentEventAge = (Age)Enum.Parse(typeof(Age), matchCurrentEvent.Groups[3].Value);
+                game.CurrentEventCard = null;
+                game.CurrentEventCount = matchCurrentEvent.Groups[7].Value;
+            }
+
+            //未来事件
+            var matchFutureEvent = BgoRegexpCollections.ExtractFutureEvent.Match(html);
+            if (matchFutureEvent.Groups[2].Value.Length > 4)
+            {
+                game.FutureEventAge = Age.A;
+                game.FutureEventCount = "0";
+            }
+            else
+            {
+                game.FutureEventAge = (Age)Enum.Parse(typeof(Age), matchFutureEvent.Groups[2].Value);
+                game.FutureEventCount = matchFutureEvent.Groups[3].Value; 
+            }
+
+            //卡牌剩余
+            var matchCivilRemain = BgoRegexpCollections.ExtractCivilCardRemains.Match(html);
+            game.CivilCardsRemain = Convert.ToInt32(matchCivilRemain.Groups[2].Value);
+            var matchMilitaryRemain = BgoRegexpCollections.ExtractMilitryCardRemains.Match(html);
+            game.MilitaryCardsRemain = Convert.ToInt32(matchMilitaryRemain.Groups[2].Value);
+
+            //时代和回合
+            var matchAgeAndRound = BgoRegexpCollections.ExtractAgeAndRound.Match(html);
+            game.CurrentAge = (Age)Enum.Parse(typeof (Age), matchAgeAndRound.Groups[1].Value);
+            game.CurrentRound = Convert.ToInt32(matchAgeAndRound.Groups[2].Value);
+
+
+
+            //拆开玩家面板
 
             matches = BgoRegexpCollections.ExtractPlayerPlate.Matches(html);
             game.Boards=new List<TtaBoard>();
@@ -200,7 +267,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
                     TtaBoard board = new TtaBoard();
                     game.Boards.Add(board);
-
+                    
                     FillPlayerBoard(board, plate);
                     
                 }
@@ -214,12 +281,43 @@ namespace Assets.CSharpCode.Network.Bgo
                 }
             }
 
-            #region 第三步，校准名字和资源
+            #region 校准名字和资源
 
             ExtractPlayerNameAndResource(html, game);
 
             #endregion
 
+
+            //可用行动
+            matches = BgoRegexpCollections.ExtractActions.Matches(html);
+            foreach (Match mc in matches)
+            {
+                BgoPlayerAction pa = new BgoPlayerAction {ActionType = PlayerActionType.Unknown};
+                pa.Data[0] = mc.Groups[2].Value;
+                pa.Data[1] = mc.Groups[1].Value;
+
+                game.PossibleActions.Add(pa);
+            }
+
+            Match mSubmitForm=BgoRegexpCollections.ExtractSubmitForm.Match(html);
+            game.ActionForm = new Dictionary<string, string>();
+
+            if (mSubmitForm.Success)
+            {
+                game.ActionFormSubmitUrl = mSubmitForm.Groups[1].Value;
+                matches = BgoRegexpCollections.ExtractSubmitFormDetail.Matches(mSubmitForm.Groups[2].Value);
+                foreach (Match mc in matches)
+                {
+                    if (mc.Groups[2].Value != "")
+                    {
+                        game.ActionForm[mc.Groups[2].Value] = "";
+                    }
+                    else
+                    {
+                        game.ActionForm[mc.Groups[4].Value] = mc.Groups[5].Value;
+                    }
+                }
+            }
         }
 
         // ReSharper disable once FunctionComplexityOverflow
@@ -234,8 +332,6 @@ namespace Assets.CSharpCode.Network.Bgo
                 var board = game.Boards[i];
 
                 board.PlayerName = mc.Groups[1].Value;
-                board.ResourceIncrement = new Dictionary<ResourceType, int>();
-                board.ResourceTotal = new Dictionary<ResourceType, int>();
 
                 var strCut = mc.Groups[0].Value;
 
@@ -249,9 +345,9 @@ namespace Assets.CSharpCode.Network.Bgo
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
                             int curr = Convert.ToInt32(cm.Groups[1].Value);
-                            int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
-                            board.ResourceTotal[ResourceType.Culture] = curr;
-                            board.ResourceIncrement[ResourceType.Culture] = incr;
+                            int incr = cm.Groups[3].Value == "-" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
+                            board.ResourceQuantity[ResourceType.Culture] = curr;
+                            board.ResourceFluctuation[ResourceType.Culture] = incr;
                         }
                             break;
                         case "Science":
@@ -259,41 +355,41 @@ namespace Assets.CSharpCode.Network.Bgo
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceSpecial.Match(rmc.Groups[2].Value);
                             int curr = Convert.ToInt32(cm.Groups[1].Value);
                             int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
-                            int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
-                            board.ResourceTotal[ResourceType.Science] = curr;
-                            board.ResourceTotal[ResourceType.ScienceForMilitary] = mcurr;
-                            board.ResourceIncrement[ResourceType.Science] = incr;
+                            int incr = cm.Groups[4].Value == "-" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
+                            board.ResourceQuantity[ResourceType.Science] = curr;
+                            board.ResourceQuantity[ResourceType.ScienceForMilitary] = mcurr;
+                            board.ResourceFluctuation[ResourceType.Science] = incr;
                         }
                             break;
                         case "Puissance":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
                             int curr = Convert.ToInt32(cm.Groups[1].Value);
-                            board.ResourceTotal[ResourceType.MilitaryForce] = curr;
+                            board.ResourceQuantity[ResourceType.MilitaryForce] = curr;
                         }
                             break;
                         case "Exploration":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
                             int curr = cm.Groups[1].Value == "" ? 0 : Convert.ToInt32(cm.Groups[1].Value);
-                            board.ResourceTotal[ResourceType.Exploration] = curr;
+                            board.ResourceQuantity[ResourceType.Exploration] = curr;
                         }
                             break;
                         case "HF":
                         {
                             var cms = BgoRegexpCollections.ExtractPlayerNameAndResourceHappy.Matches(rmc.Groups[2].Value);
-                            board.ResourceTotal[ResourceType.HappyFace] = cms.Count;
+                            board.ResourceQuantity[ResourceType.HappyFace] = cms.Count;
                             cms = BgoRegexpCollections.ExtractPlayerNameAndResourceUnhappy.Matches(rmc.Groups[2].Value);
-                            board.ResourceTotal[ResourceType.UnhappyFace] = cms.Count;
+                            board.ResourceQuantity[ResourceType.UnhappyFace] = cms.Count;
                         }
                             break;
                         case "Nourriture":
                         {
                             var cm = BgoRegexpCollections.ExtractPlayerNameAndResourceNormal.Match(rmc.Groups[2].Value);
                             int curr = Convert.ToInt32(cm.Groups[1].Value);
-                            int incr = cm.Groups[3].Value == "" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
-                            board.ResourceTotal[ResourceType.Food] = curr;
-                            board.ResourceIncrement[ResourceType.Food] = incr;
+                            int incr = cm.Groups[3].Value == "-" ? 0 : Convert.ToInt32(cm.Groups[3].Value);
+                            board.ResourceQuantity[ResourceType.Food] = curr;
+                            board.ResourceFluctuation[ResourceType.Food] = incr;
                         }
                             break;
                         case "Ressources":
@@ -302,38 +398,110 @@ namespace Assets.CSharpCode.Network.Bgo
                             int curr = Convert.ToInt32(cm.Groups[1].Value);
                             int mcurr = cm.Groups[2].Value == "" ? 0 : Convert.ToInt32(cm.Groups[2].Value);
                             int incr = cm.Groups[4].Value == "" ? 0 : Convert.ToInt32(cm.Groups[4].Value);
-                            board.ResourceTotal[ResourceType.Ore] = curr;
-                            board.ResourceTotal[ResourceType.OreForMilitary] = mcurr;
-                            board.ResourceIncrement[ResourceType.Ore] = incr;
+                            board.ResourceQuantity[ResourceType.Ore] = curr;
+                            board.ResourceQuantity[ResourceType.OreForMilitary] = mcurr;
+                            board.ResourceFluctuation[ResourceType.Ore] = incr;
                         }
                             break;
 
                         default:
-
+                            Debug.Log("UnknownRMC:"+rmc.Groups[1].Value);
                             break;
                     }
                 }
             }
         }
 
+        // ReSharper disable once FunctionComplexityOverflow
         private static void FillPlayerBoard(TtaBoard board, String htmlShade)
         {
             #region 分析建筑面板
 
-            ExtractBuildingBoard(board, htmlShade, civilopedia);
+            ExtractBuildingBoard(board, htmlShade);
 
             #endregion
 
-            //BlueMarker
+            //蓝点
             var blueMarkerHtml = BgoRegexpCollections.ExtractBlueMarker.Match(htmlShade).Groups[1].Value;
-            board.BlueBank = BgoRegexpCollections.ExtractBlueMarkerCounter.Matches(blueMarkerHtml).Count;
+            board.ResourceQuantity[ResourceType.BlueMarker] = BgoRegexpCollections.ExtractBlueMarkerCounter.Matches(blueMarkerHtml).Count;
 
-            //YellowMarker
+            //黄点
             var yellowMarkerHtml = BgoRegexpCollections.ExtractYellowMarker.Match(htmlShade).Groups[1].Value;
-            board.YellowBank = BgoRegexpCollections.ExtractYellowMarkerCounter.Matches(yellowMarkerHtml).Count;
+            board.ResourceQuantity[ResourceType.YellowMarker] = BgoRegexpCollections.ExtractYellowMarkerCounter.Matches(yellowMarkerHtml).Count;
+
+            //红白点
+            var matchCivilMilitaryActions = BgoRegexpCollections.ExtractGovenrmentAndActionPoints.Match(htmlShade);
+            board.Government = civilopedia.GetCardInfo(matchCivilMilitaryActions.Groups[1].Value);
+            board.ResourceQuantity[ResourceType.WhiteMarker] =
+                BgoRegexpCollections.ExtractGovenrmentAndActionPointsCama.Matches(
+                    matchCivilMilitaryActions.Groups[2].Value).Count;
+            board.ResourceFluctuation[ResourceType.WhiteMarker] =
+                BgoRegexpCollections.ExtractGovenrmentAndActionPointsMissing.Matches(
+                    matchCivilMilitaryActions.Groups[2].Value).Count;
+            board.ResourceQuantity[ResourceType.ExtraWhiteMarker] = 0;
+            board.ResourceFluctuation[ResourceType.ExtraWhiteMarker] = 0;
+
+            board.ResourceQuantity[ResourceType.RedMarker] =
+               BgoRegexpCollections.ExtractGovenrmentAndActionPointsCama.Matches(
+                   matchCivilMilitaryActions.Groups[3].Value).Count;
+            board.ResourceFluctuation[ResourceType.RedMarker] =
+                BgoRegexpCollections.ExtractGovenrmentAndActionPointsMissing.Matches(
+                    matchCivilMilitaryActions.Groups[3].Value).Count;
+            board.ResourceQuantity[ResourceType.ExtraRedMarker] = 0;
+            board.ResourceFluctuation[ResourceType.ExtraRedMarker] = 0;
+
+            //领袖
+            var matchLeader = BgoRegexpCollections.ExtractLeader.Match(htmlShade);
+            board.Leader = matchLeader.Success ? civilopedia.GetCardInfo(matchLeader.Groups[1].Value) : null;
+
+            //闲置工人
+            var matchWorkerPool = BgoRegexpCollections.ExtractWorkerPool.Match(htmlShade);
+            board.ResourceQuantity[ResourceType.WorkerPool] =
+                BgoRegexpCollections.ExtractPlayerNameAndResourceHappy.Matches(matchWorkerPool.Groups[1].Value).Count;
+            board.ResourceFluctuation[ResourceType.WorkerPool] =
+                BgoRegexpCollections.ExtractPlayerNameAndResourceUnhappy.Matches(matchWorkerPool.Groups[1].Value).Count;
+
+            //奇迹
+            var matchWonder = BgoRegexpCollections.ExtractWonder.Match(htmlShade);
+            board.CompletedWonders = new List<CardInfo>();
+            foreach (Match m in BgoRegexpCollections.ExtractWondeName.Matches(matchWonder.Groups[1].Value))
+            {
+                if (m.Groups[3].Value != "")
+                {
+                    board.CompletedWonders.Add(civilopedia.GetCardInfo(m.Groups[3].Value));
+                }
+                else
+                {
+                    board.ConstructingWonder = civilopedia.GetCardInfo(m.Groups[5].Value);
+                    board.ConstructingWonderSteps =new List<string>();
+                    foreach (Match mBuild in BgoRegexpCollections.ExtractWondeBuildStatus.Matches(m.Groups[6].Value))
+                    {
+                        board.ConstructingWonderSteps.Add(mBuild.Groups[1].Value.Length > 4
+                            ? "X"
+                            : mBuild.Groups[1].Value);
+                    }
+                }
+            }
+
+            //手牌
+            var matchHandCivilCard = BgoRegexpCollections.ExtractHandCivilCard.Match(htmlShade);
+            board.CivilCards=new List<CardInfo>();
+            foreach (Match m in BgoRegexpCollections.ExtractHandCardName.Matches(matchHandCivilCard.Groups[1].Value))
+            {
+                var internalId = (int)(Age)Enum.Parse(typeof(Age),m.Groups[1].Value) + "-" + m.Groups[2].Value;
+                board.CivilCards.Add(civilopedia.GetCardInfo(internalId));
+            }
+
+            var matchHandMilitaryCard = BgoRegexpCollections.ExtractHandMilitaryCard.Match(htmlShade);
+            board.MilitaryCards = new List<CardInfo>();
+            foreach (Match m in BgoRegexpCollections.ExtractHandCardName.Matches(matchHandMilitaryCard.Groups[1].Value))
+            {
+                var internalId = (int)(Age)Enum.Parse(typeof(Age), m.Groups[1].Value) + "-" + m.Groups[2].Value;
+                board.MilitaryCards.Add(civilopedia.GetCardInfo(internalId));
+            }
         }
 
-        private static void ExtractBuildingBoard(TtaBoard board, string htmlShade, TtaCivilopedia civilopedia)
+        private static void ExtractBuildingBoard(TtaBoard board, string htmlShade)
         {
             board.Buildings = new Dictionary<BuildingType, Dictionary<Age, BuildingCell>>();
             var titleMap = new List<BuildingType>();

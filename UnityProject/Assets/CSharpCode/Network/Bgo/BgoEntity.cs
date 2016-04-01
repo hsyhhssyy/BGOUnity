@@ -28,5 +28,24 @@ namespace Assets.CSharpCode.Network.Bgo
         public String GameId;
         public String Nat;
 
+        public Dictionary<String, String> ActionForm;
+        public String ActionFormSubmitUrl;
+    }
+
+    public class BgoSessionObject
+    {
+        public String _phpSession = "";
+        public String _identifiant = "";
+        public String _motDePasse = "";
+    }
+
+    public class BgoPlayerAction : Assets.CSharpCode.Entity.PlayerAction
+    {
+        
+    }
+
+    public class BgoCardRowCardInfo:CardRowCardInfo
+    {
+        public readonly Dictionary<String, Object> ServerData = new Dictionary<string, object>();
     }
 }

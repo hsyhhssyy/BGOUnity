@@ -1,119 +1,119 @@
-0-Cultural Heritage|Action
-0-Engineering Genius|Action
-0-Frugality|Action
-0-Patriotism|Action
-0-Rich Land|Action
-0-Stockpile|Action
-0-Urban Growth|Action
-1-Breakthrough|Action
-1-Cultural Heritage|Action
-1-Engineering Genius|Action
-1-Frugality|Action
-1-Patriotism|Action
-1-Reserves|Action
-1-Rich Land|Action
-1-Urban Growth|Action
-2-Breakthrough|Action
-2-Efficient Upgrade|Action
-2-Engineering Genius|Action
-2-Frugality|Action
-2-Patriotism|Action
-2-Reserves|Action
-2-Revolutionary Idea|Action
-2-Rich Land|Action
-2-Urban Growth|Action
-2-Wave of Nationalism|Action
-3-Efficient Upgrade|Action
-3-Endowment for the Arts|Action
-3-Engineering Genius|Action
-3-Military Build-Up|Action
-3-Patriotism|Action
-3-Reserves|Action
-3-Revolutionary Idea|Action
-3-Urban Growth|Action
-1-Monarchy|Government
-1-Theocracy|Government
-2-Constitutional Monarchy|Government
-2-Republic|Government
-3-Communism|Government
-3-Democracy|Government
-3-Fundamentalism|Government
-0-Aristotle|Leader
-0-Hammurabi|Leader
-0-Homer|Leader
-0-Julius Caesar|Leader
-0-Moses|Leader
-1-Christopher Columbus|Leader
-1-Genghis Khan|Leader
-1-Joan of Arc|Leader
-1-Leonardo Da Vinci|Leader
-1-Michelangelo|Leader
-2-Frederick Barbarossa|Leader
-2-Isaac Newton|Leader
-2-James Cook|Leader
-2-Maximillien Robespierre|Leader
-2-Napoleon Bonaparte|Leader
-2-William Shakespeare|Leader
-3-Albert Einstein|Leader
-3-Bill Gates|Leader
-3-Charles Chaplin|Leader
-3-Mahatma Gandhi|Leader
-3-Sid Meier|Leader
-3-Winston Churchill|Leader
-3-Air Forces|MilitaryTechAirForce
-2-Cannon|MilitaryTechArtillery
-3-Rockets|MilitaryTechArtillery
-1-Knights|MilitaryTechCavalry
-2-Cavalrymen|MilitaryTechCavalry
-3-Tanks|MilitaryTechCavalry
-1-Swordsmen|MilitaryTechInfantry
-2-Riflemen|MilitaryTechInfantry
-3-Modern Infantry|MilitaryTechInfantry
-1-Irrigation|ResourceTechFarm
-2-Selective Breeding|ResourceTechFarm
-3-Mechanized Agriculture|ResourceTechFarm
-1-Iron|ResourceTechMine
-2-Coal|ResourceTechMine
-3-Oil|ResourceTechMine
-1-Code of Laws|SpecialTechCivil
-2-Justice System|SpecialTechCivil
-3-Civil Service|SpecialTechCivil
-1-Masonry|SpecialTechEngineering
-2-Architecture|SpecialTechEngineering
-3-Engineering|SpecialTechEngineering
-1-Cartography|SpecialTechExploration
-2-Navigation|SpecialTechExploration
-3-Satellites|SpecialTechExploration
-1-Warfare|SpecialTechMilitary
-2-Strategy|SpecialTechMilitary
-3-Military Theory|SpecialTechMilitary
-1-Bread & Circuses|UrbanTechArena
-2-Team Sports|UrbanTechArena
-3-Professional Sports|UrbanTechArena
-1-Alchemy|UrbanTechLab
-2-Scientific Method|UrbanTechLab
-3-Computers|UrbanTechLab
-1-Printing Press|UrbanTechLibrary
-2-Journalism|UrbanTechLibrary
-3-Multimedia|UrbanTechLibrary
-1-Theology|UrbanTechTemple
-2-Organized Religion|UrbanTechTemple
-1-Drama|UrbanTechTheater
-2-Opera|UrbanTechTheater
-3-Movies|UrbanTechTheater
-0-Colossus|Wonder
-0-Hanging Gardens|Wonder
-0-Library of Alexandria|Wonder
-0-Pyramids|Wonder
-1-Great Wall|Wonder
-1-St. Peter's Basilica|Wonder
-1-Taj Mahal|Wonder
-1-Universitas Carolina|Wonder
-2-Eiffel Tower|Wonder
-2-Kremlin|Wonder
-2-Ocean Liner|Wonder
-2-Transcontinental Railroad|Wonder
-3-Fast Food Chains|Wonder
-3-First Space Flight|Wonder
-3-Hollywood|Wonder
-3-Internet|Wonder
+0-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage
+0-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
+0-Frugality|Action|SpriteTile/Actions/frugality
+0-Patriotism|Action|SpriteTile/Actions/patriotism
+0-Rich Land|Action|SpriteTile/Actions/rich_land
+0-Stockpile|Action|SpriteTile/Actions/stockpile
+0-Urban Growth|Action|SpriteTile/Actions/urban_growth
+1-Breakthrough|Action|SpriteTile/Actions/breakthrough
+1-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage
+1-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
+1-Frugality|Action|SpriteTile/Actions/frugality
+1-Patriotism|Action|SpriteTile/Actions/patriotism
+1-Reserves|Action|SpriteTile/Actions/reserves
+1-Rich Land|Action|SpriteTile/Actions/rich_land
+1-Urban Growth|Action|SpriteTile/Actions/urban_growth
+2-Breakthrough|Action|SpriteTile/Actions/breakthrough
+2-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade
+2-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
+2-Frugality|Action|SpriteTile/Actions/frugality
+2-Patriotism|Action|SpriteTile/Actions/patriotism
+2-Reserves|Action|SpriteTile/Actions/reserves
+2-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea
+2-Rich Land|Action|SpriteTile/Actions/rich_land
+2-Urban Growth|Action|SpriteTile/Actions/urban_growth
+2-Wave of Nationalism|Action|SpriteTile/Actions/wave_of_nationalism
+3-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade
+3-Endowment for the Arts|Action|SpriteTile/Actions/endowment_for_the_arts
+3-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
+3-Military Build-Up|Action|SpriteTile/Actions/military_build-up
+3-Patriotism|Action|SpriteTile/Actions/patriotism
+3-Reserves|Action|SpriteTile/Actions/reserves
+3-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea
+3-Urban Growth|Action|SpriteTile/Actions/urban_growth
+1-Monarchy|Government|SpriteTile/Governments/monarchy
+1-Theocracy|Government|SpriteTile/Governments/theocracy
+2-Constitutional Monarchy|Government|SpriteTile/Governments/constitutional_monarchy
+2-Republic|Government|SpriteTile/Governments/republic
+3-Communism|Government|SpriteTile/Governments/communism
+3-Democracy|Government|SpriteTile/Governments/democracy
+3-Fundamentalism|Government|SpriteTile/Governments/fundamentalism
+0-Aristotle|Leader|SpriteTile/Leaders/aristotle
+0-Hammurabi|Leader|SpriteTile/Leaders/hammurabi
+0-Homer|Leader|SpriteTile/Leaders/homer
+0-Julius Caesar|Leader|SpriteTile/Leaders/julius_caesar
+0-Moses|Leader|SpriteTile/Leaders/moses
+1-Christopher Columbus|Leader|SpriteTile/Leaders/christopher_columbus
+1-Genghis Khan|Leader|SpriteTile/Leaders/genghis_khan
+1-Joan of Arc|Leader|SpriteTile/Leaders/joan_of_arc
+1-Leonardo Da Vinci|Leader|SpriteTile/Leaders/leonardo_da_vinci
+1-Michelangelo|Leader|SpriteTile/Leaders/michelangelo
+2-Frederick Barbarossa|Leader|SpriteTile/Leaders/frederick_barbarossa
+2-Isaac Newton|Leader|SpriteTile/Leaders/isaac_newton
+2-James Cook|Leader|SpriteTile/Leaders/james_cook
+2-Maximillien Robespierre|Leader|SpriteTile/Leaders/maximillien_robespierre
+2-Napoleon Bonaparte|Leader|SpriteTile/Leaders/napoleon_bonaparte
+2-William Shakespeare|Leader|SpriteTile/Leaders/william_shakespeare
+3-Albert Einstein|Leader|SpriteTile/Leaders/albert_einstein
+3-Bill Gates|Leader|SpriteTile/Leaders/bill_gates
+3-Charles Chaplin|Leader|SpriteTile/Leaders/charles_chaplin
+3-Mahatma Gandhi|Leader|SpriteTile/Leaders/mahatma_gandhi
+3-Sid Meier|Leader|SpriteTile/Leaders/sid_meier
+3-Winston Churchill|Leader|SpriteTile/Leaders/winston_churchill
+3-Air Forces|MilitaryTechAirForce|SpriteTile/MilitaryTechAirForces/air_forces
+2-Cannon|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/cannon
+3-Rockets|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/rockets
+1-Knights|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/knights
+2-Cavalrymen|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/cavalrymen
+3-Tanks|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/tanks
+1-Swordsmen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/swordsmen
+2-Riflemen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/riflemen
+3-Modern Infantry|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/modern_infantry
+1-Irrigation|ResourceTechFarm|SpriteTile/ResourceTechFarms/irrigation
+2-Selective Breeding|ResourceTechFarm|SpriteTile/ResourceTechFarms/selective_breeding
+3-Mechanized Agriculture|ResourceTechFarm|SpriteTile/ResourceTechFarms/mechanized_agriculture
+1-Iron|ResourceTechMine|SpriteTile/ResourceTechMines/iron
+2-Coal|ResourceTechMine|SpriteTile/ResourceTechMines/coal
+3-Oil|ResourceTechMine|SpriteTile/ResourceTechMines/oil
+1-Code of Laws|SpecialTechCivil|SpriteTile/SpecialTechCivils/code_of_laws
+2-Justice System|SpecialTechCivil|SpriteTile/SpecialTechCivils/justice_system
+3-Civil Service|SpecialTechCivil|SpriteTile/SpecialTechCivils/civil_service
+1-Masonry|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/masonry
+2-Architecture|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/architecture
+3-Engineering|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/engineering
+1-Cartography|SpecialTechExploration|SpriteTile/SpecialTechExplorations/cartography
+2-Navigation|SpecialTechExploration|SpriteTile/SpecialTechExplorations/navigation
+3-Satellites|SpecialTechExploration|SpriteTile/SpecialTechExplorations/satellites
+1-Warfare|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/warfare
+2-Strategy|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/strategy
+3-Military Theory|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/military_theory
+1-Bread & Circuses|UrbanTechArena|SpriteTile/UrbanTechArenas/bread_&_circuses
+2-Team Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/team_sports
+3-Professional Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/professional_sports
+1-Alchemy|UrbanTechLab|SpriteTile/UrbanTechLabs/alchemy
+2-Scientific Method|UrbanTechLab|SpriteTile/UrbanTechLabs/scientific_method
+3-Computers|UrbanTechLab|SpriteTile/UrbanTechLabs/computers
+1-Printing Press|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/printing_press
+2-Journalism|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/journalism
+3-Multimedia|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/multimedia
+1-Theology|UrbanTechTemple|SpriteTile/UrbanTechTemples/theology
+2-Organized Religion|UrbanTechTemple|SpriteTile/UrbanTechTemples/organized_religion
+1-Drama|UrbanTechTheater|SpriteTile/UrbanTechTheaters/drama
+2-Opera|UrbanTechTheater|SpriteTile/UrbanTechTheaters/opera
+3-Movies|UrbanTechTheater|SpriteTile/UrbanTechTheaters/movies
+0-Colossus|Wonder|SpriteTile/Wonders/colossus
+0-Hanging Gardens|Wonder|SpriteTile/Wonders/hanging_gardens
+0-Library of Alexandria|Wonder|SpriteTile/Wonders/library_of_alexandria
+0-Pyramids|Wonder|SpriteTile/Wonders/pyramids
+1-Great Wall|Wonder|SpriteTile/Wonders/great_wall
+1-St. Peter's Basilica|Wonder|SpriteTile/Wonders/st._peter's_basilica
+1-Taj Mahal|Wonder|SpriteTile/Wonders/taj_mahal
+1-Universitas Carolina|Wonder|SpriteTile/Wonders/universitas_carolina
+2-Eiffel Tower|Wonder|SpriteTile/Wonders/eiffel_tower
+2-Kremlin|Wonder|SpriteTile/Wonders/kremlin
+2-Ocean Liner|Wonder|SpriteTile/Wonders/ocean_liner
+2-Transcontinental Railroad|Wonder|SpriteTile/Wonders/transcontinental_railroad
+3-Fast Food Chains|Wonder|SpriteTile/Wonders/fast_food_chains
+3-First Space Flight|Wonder|SpriteTile/Wonders/first_space_flight
+3-Hollywood|Wonder|SpriteTile/Wonders/hollywood
+3-Internet|Wonder|SpriteTile/Wonders/internet

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Network;
 using Assets.CSharpCode.Network.Bgo;
 using JetBrains.Annotations;
@@ -24,7 +25,7 @@ namespace Assets.CSharpCode.UI.LobbyScene
         
         private IEnumerator ListGames()
         {
-            yield return StartCoroutine(SceneTransporter.server.ListGames(
+            yield return StartCoroutine(SceneTransporter.Server.ListGames(
             gamesReturn =>
             {
                 _games = gamesReturn;

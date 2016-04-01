@@ -15,7 +15,9 @@ namespace Assets.CSharpCode.Entity
     {
         Food, Ore, Science, Culture, MilitaryForce, Exploration,HappyFace, UnhappyFace,
         OreForMilitary, ScienceForMilitary,
-        YellowMarker, RedMarker, BlueMarker, WhiteMarker
+        YellowMarker,BlueMarker, WhiteMarker,RedMarker,
+        ExtraWhiteMarker,ExtraRedMarker,
+        WorkerPool,
     }
 
     public enum BuildingType
@@ -34,5 +36,18 @@ namespace Assets.CSharpCode.Entity
         Wonder, Leader, Government,
         Event, Colony, Tactic, War, Aggression, Pact,
         Unknown,
+    }
+
+    public enum PlayerActionType
+    {
+        Unknown,
+
+        #region 常见内政行动
+        TakeCardFromCardRow, PutBackCard,
+        #endregion
+
+        #region 常见政治行动
+        PlayEvent, PlayeColony,
+        #endregion
     }
 }

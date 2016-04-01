@@ -28,8 +28,8 @@ namespace Assets.CSharpCode.UI.StartScreen
 
             LoginButton.GetComponent<Button>().interactable = false;
 
-            SceneTransporter.server = new BgoServer();
-            StartCoroutine(SceneTransporter.server.LogIn("hsyhhssyy", "hsy12345", () =>
+            SceneTransporter.Server = new BgoServer();
+            StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
             {
                 Debug.Log("Logged in!");
 

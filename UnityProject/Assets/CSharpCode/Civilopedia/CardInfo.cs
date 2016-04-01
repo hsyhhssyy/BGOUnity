@@ -15,9 +15,24 @@ namespace Assets.CSharpCode.Civilopedia
         /// 3-Impact of Architecture
         /// </summary>
         public String InternalId;
+
+        public Age CardAge;
         public String CardName;
         public CardType CardType;
 
+        //Arts
+        public String SmallImage;
+
+        //ServerData
         public Dictionary<String,Object> ServerData=new Dictionary<string, object>();
+
+
+
+        public CardInfo Clone()
+        {
+            CardInfo clone = (CardInfo)MemberwiseClone();
+            clone.ServerData = new Dictionary<string, object>();
+            return clone;
+        }
     }
 }

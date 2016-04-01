@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.CSharpCode.Entity;
 
 namespace Assets.CSharpCode.Network.Bgo
 {
     public class BgoServer : IServerAdapter
     {
-        private String _phpSession="";
-        private String _identifiant = "";
-        private String _motDePasse = "";
+        private BgoSessionObject sessionObject;
 
         public IEnumerator LogIn(String username, String password, Action callback)
         {
             return BgoPageProvider.HomePage(username, password, (session,mot) =>
             {
-                _phpSession = session;
-                _identifiant = username;
-                _motDePasse = mot;
+                sessionObject=new BgoSessionObject();
+                sessionObject._phpSession = session;
+                sessionObject._identifiant = username;
+                sessionObject._motDePasse = mot;
                 if (callback != null)
                 {
                     callback();
@@ -26,7 +26,7 @@ namespace Assets.CSharpCode.Network.Bgo
         
         public IEnumerator ListGames(Action<List<TtaGame>> callback)
         {
-            return BgoPageProvider.GameLists(_phpSession, bgoGames =>
+            return BgoPageProvider.GameLists(sessionObject._phpSession, bgoGames =>
             {
                 List<TtaGame> games=new List<TtaGame>();
                 bgoGames.ForEach(game=>games.Add(game));
@@ -46,13 +46,30 @@ namespace Assets.CSharpCode.Network.Bgo
 
             var bgoGame = (BgoGame)game;
 
-            return BgoPageProvider.RefreshBoard(_phpSession, bgoGame, () =>
+            return BgoPageProvider.RefreshBoard(sessionObject._phpSession, bgoGame, () =>
              {
                  if (callback != null)
                  {
                      callback();
                  }
              });
+        }
+
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action,Action callback)
+        {
+            BgoGame bgoGame = game as BgoGame;
+            BgoPlayerAction bgoAction = action as BgoPlayerAction;
+            Action callbackDelegate = () =>
+            {
+                if (callback != null)
+                {
+                    callback();
+                }
+            };
+            
+            return BgoPostProvider.PostAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
+            
+            return null;
         }
     }
 }

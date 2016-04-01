@@ -13,5 +13,8 @@ namespace Assets.CSharpCode.Network
         IEnumerator LogIn(String username,String password, Action callback);
         IEnumerator ListGames(Action<List<TtaGame>> callback);
         IEnumerator RefreshBoard(TtaGame game,Action callback);
+
+        IEnumerator TakeAction(TtaGame game, PlayerAction action,Action callback);
     }
+
 }

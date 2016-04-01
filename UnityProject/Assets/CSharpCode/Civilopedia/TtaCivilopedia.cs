@@ -43,14 +43,19 @@ namespace Assets.CSharpCode.Civilopedia
             foreach (var row in rows)
             {
                 var sp = row.Trim().Split("|".ToCharArray());
-                if (sp.Length > 1)
+                if (sp.Length < 2)
                 {
-                   CardInfo info=new CardInfo();
-                    info.InternalId = sp[0];
-                    info.CardType = (CardType)Enum.Parse(typeof (CardType), sp[1]);
-                    info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).WordWrap(7).Trim();
-                    civilopedia.cardInfos[info.InternalId] = info;
+                    continue;
                 }
+                CardInfo info = new CardInfo();
+                info.InternalId = sp[0];
+                info.CardType = (CardType)Enum.Parse(typeof (CardType), sp[1]);
+                info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).WordWrap(7).Trim();
+                info.CardAge = (Age)Convert.ToInt32(info.InternalId.Split("-".ToCharArray(), 2)[0]);
+                info.SmallImage = sp[2];
+
+                civilopedia.cardInfos[info.InternalId] = info;
+                
             }
 
             Civilopedias.Add("2.0", civilopedia);
@@ -59,21 +64,37 @@ namespace Assets.CSharpCode.Civilopedia
 
         //-------------------------------
 
-        private Dictionary<String, CardInfo> cardInfos; 
+        private Dictionary<String, CardInfo> cardInfos;
 
         public CardInfo GetCardInfo(String internalId)
         {
-            if (cardInfos.ContainsKey(internalId))
+            var cardInfo = (new[] {"", "0-", "1-", "2-", "3-"})
+                .Select(x => x + internalId)
+                .Intersect(cardInfos.Keys)
+                .Select(x => cardInfos[x])
+                .FirstOrDefault();
+            
+
+            if (cardInfo == null)
             {
-                return cardInfos[internalId];
+                Debug.Log("Unknown internal id "+ internalId);
+                cardInfo = new CardInfo
+                {
+                    CardName =
+                        TtaTranslation.GetTranslatedText(internalId.Split("-".ToCharArray(), 2).Last())
+                            .WordWrap(7)
+                            .Trim(),
+                    InternalId = internalId,
+                    CardType = CardType.Action,
+                    CardAge = Age.A
+                };
+            }
+            else
+            {
+                cardInfo = cardInfo.Clone();
             }
 
-            CardInfo info = new CardInfo();
-            info.CardName =
-                TtaTranslation.GetTranslatedText(internalId.Split("-".ToCharArray(), 2).Last()).WordWrap(7).Trim();
-            info.InternalId = internalId;
-            info.CardType = CardType.Action;
-            return info;
+            return cardInfo;
         }
     }
 }
