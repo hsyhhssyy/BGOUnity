@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Network.Bgo;
@@ -24,6 +25,8 @@ public class TestSceneUIBehaviour : MonoBehaviour
         var informationMesh = GameObject.Find("Information").GetComponent<TextMesh>();
 
         informationMesh.text = SceneTransporter.LastError.WordWrap(60);
+       
+
     }
 
 [UsedImplicitly]
@@ -42,8 +45,8 @@ public class TestSceneUIBehaviour : MonoBehaviour
             BgoGame g = new BgoGame {GameId = "7279176", Nat = "1", Name = "2.5尝鲜 8"};
 
             SceneTransporter.CurrentGame = g;
-
-            SceneManager.LoadScene("Scene/BoardScene");
+            
+            ExtensionMethods.LoadScene("Scene/BoardScene",1);
         }));
     }
     [UsedImplicitly]
@@ -83,7 +86,8 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
             SceneTransporter.CurrentGame = g;
 
-            SceneManager.LoadScene("Scene/BoardScene");
+            ExtensionMethods.LoadScene("Scene/BoardScene", 1);
+            
         }));
     }
 }

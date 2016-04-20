@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Entity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.CSharpCode.Helper
 {
@@ -102,19 +103,26 @@ namespace Assets.CSharpCode.Helper
         public static GameObject FindObject(this GameObject parent, string name)
         {
             Component[] trs = parent.GetComponentsInChildren(typeof(Transform), true);
-            foreach (Transform t in trs)
-            {
-                if (t.name == name)
-                {
-                    return t.gameObject;
-                }
-            }
-            return null;
+            return (from Transform t in trs where t.name == name select t.gameObject).FirstOrDefault();
         }
 
-        public static List<PlayerAction> FindAction(this List<PlayerAction> actions)
+        #region Scene之间交换数据
+
+        private static readonly Dictionary<String, object> Storage=new Dictionary<string, object>(); 
+
+        public static void LoadScene<T>(String name, params T[] parameter )
         {
-            return null;
+            Storage[name] = new List<T>(parameter);
+            SceneManager.LoadScene(name);
         }
+
+        public static List<T> GetPassedData<T>(this MonoBehaviour go)
+        {
+            var scene = SceneManager.GetActiveScene();
+            var path = scene.path.Substring("Assets/".Length, scene.path.Length - ("Assets/"+".unity").Length);
+            return Storage.ContainsKey(path) ? (List<T>) Storage[path] : new List<T>();
+        }
+
+        #endregion
     }
 }
