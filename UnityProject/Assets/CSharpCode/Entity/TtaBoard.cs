@@ -13,8 +13,8 @@ namespace Assets.CSharpCode.Entity
         public CardInfo ConstructingWonder;
         public List<String> ConstructingWonderSteps;
 
-        public List<String> SpecialTechs;
-        public List<String> Colonies;
+        public List<CardInfo> SpecialTechs;
+        public List<CardInfo> Colonies;
         
         public CardInfo Government;
         public CardInfo Leader;

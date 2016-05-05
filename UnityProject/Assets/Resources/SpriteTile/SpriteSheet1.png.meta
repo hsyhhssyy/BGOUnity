@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a38315739004bdd43aeec56f3a3d5294
-timeCreated: 1459519503
+timeCreated: 1461153863
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -28,6 +28,10 @@ TextureImporter:
     21300042: HandCard_Government
     21300044: HandCard_SpecialTech
     21300046: ActionCardColliderBox
+    21300048: TacticsBox
+    21300050: Tactic_Icon_Infantry
+    21300052: Tactic_Icon_Cavalry
+    21300054: Tactic_Icon_Artillery
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -334,12 +338,56 @@ TextureImporter:
     - name: ActionCardColliderBox
       rect:
         serializedVersion: 2
-        x: 183
-        y: 318
+        x: 578
+        y: 469
         width: 166
         height: 140
       alignment: 1
       pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: TacticsBox
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 459
+        width: 122
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Tactic_Icon_Infantry
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 439
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Tactic_Icon_Cavalry
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 439
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: Tactic_Icon_Artillery
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 439
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

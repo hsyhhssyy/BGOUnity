@@ -17,6 +17,21 @@ namespace Assets.CSharpCode.UI
 
         public static TtaGame CurrentGame;
 
+        public static bool IsCurrentGameRefreshed()
+        {
+            if(SceneTransporter.CurrentGame == null)
+            {
+                return false;
+            }
+
+            if (SceneTransporter.CurrentGame.Boards == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static String LastError = "";
     }
 }

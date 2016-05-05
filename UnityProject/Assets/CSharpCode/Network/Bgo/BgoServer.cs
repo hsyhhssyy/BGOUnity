@@ -69,7 +69,6 @@ namespace Assets.CSharpCode.Network.Bgo
             
             return BgoPostProvider.PostAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
             
-            return null;
         }
     }
 }

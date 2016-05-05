@@ -178,6 +178,12 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractSpecialTech=new Regex(@"<td class=[^>]*?specTechsBox[\s\S]*?<table([\s\S]*?)</table></td>");
 
         /// <summary>
+        /// Group1就是名字（不包含时代）
+        /// </summary>
+        //<p class=[^>]*?special1[^>]*?>(.*?)<
+        public static readonly Regex ExtractSpecialTechName = new Regex(@"<p class=[^>]*?special1[^>]*?>(.*?)<");
+
+        /// <summary>
         /// 殖民地单元格，用下面的解析group1得到具体殖民地
         /// </summary>
         //<td class=[^>]*?colonyBox[\s\S]*?<table([\s\S]*?)</table></td>

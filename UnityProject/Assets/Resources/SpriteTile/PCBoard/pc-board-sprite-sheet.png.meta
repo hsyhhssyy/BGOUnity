@@ -1,0 +1,293 @@
+fileFormatVersion: 2
+guid: e67874b290e91404ca3bd5b1435c5ba8
+timeCreated: 1462372675
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: player-brief-plate-orange
+    21300002: player-name-plate-orange
+    21300004: no-card-image-small
+    21300006: no-card-image-normal
+    21300008: completed-wonder-mask
+    21300010: unknown-completed-wonder-image
+    21300012: leader_image_no_leader
+    21300014: leader_unknown
+    21300016: government-board
+    21300018: special_tech_exploration
+    21300020: special_tech_civil
+    21300022: special_tech_engineering
+    21300024: special_tech_military
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: player-brief-plate-orange
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 1745
+        width: 96
+        height: 146
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: player-name-plate-orange
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 465
+        width: 96
+        height: 146
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 2, y: 0}
+        - {x: 0, y: -2}
+        - {x: 0, y: -144}
+        - {x: 2, y: -146}
+        - {x: 94, y: -146}
+        - {x: 96, y: -144}
+        - {x: 96, y: -2}
+        - {x: 94, y: 0}
+      - - {x: 25, y: -102}
+        - {x: 20, y: -101}
+        - {x: 10, y: -101}
+        - {x: 4, y: -107}
+        - {x: 5, y: -111}
+        - {x: 5, y: -101}
+        - {x: 6, y: -102}
+        - {x: 16, y: -102}
+        - {x: 24, y: -95}
+        - {x: 24, y: -88}
+        - {x: 20, y: -83}
+        - {x: 18, y: -83}
+        - {x: 21, y: -84}
+        - {x: 29, y: -84}
+      - - {x: 5, y: -141}
+        - {x: 21, y: -141}
+        - {x: 21, y: -129}
+        - {x: 19, y: -125}
+        - {x: 6, y: -125}
+        - {x: 5, y: -129}
+      - - {x: 68, y: -102}
+        - {x: 55, y: -102}
+        - {x: 49, y: -103}
+        - {x: 47, y: -106}
+        - {x: 47, y: -122}
+        - {x: 48, y: -123}
+        - {x: 67, y: -123}
+        - {x: 71, y: -121}
+        - {x: 71, y: -111}
+        - {x: 70, y: -106}
+      - - {x: 64, y: -64}
+        - {x: 61, y: -64}
+        - {x: 63, y: -64}
+        - {x: 67, y: -61}
+        - {x: 71, y: -56}
+        - {x: 71, y: -25}
+        - {x: 70, y: -22}
+        - {x: 48, y: -22}
+        - {x: 48, y: -102}
+        - {x: 68, y: -102}
+        - {x: 71, y: -101}
+        - {x: 71, y: -71}
+    - name: no-card-image-small
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 653
+        width: 70
+        height: 105
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 2, y: 0}
+        - {x: 0, y: -2}
+        - {x: 0, y: -103}
+        - {x: 2, y: -105}
+        - {x: 68, y: -105}
+        - {x: 70, y: -103}
+        - {x: 70, y: -2}
+        - {x: 68, y: 0}
+    - name: no-card-image-normal
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 443
+        width: 210
+        height: 315
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -103, y: 157.5}
+        - {x: -105, y: 155.5}
+        - {x: -105, y: -155.5}
+        - {x: -103, y: -157.5}
+        - {x: 105, y: -157.5}
+        - {x: 105, y: 157.5}
+    - name: completed-wonder-mask
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 730
+        width: 151
+        height: 28
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: unknown-completed-wonder-image
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 700
+        width: 151
+        height: 27
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: leader_image_no_leader
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 361
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -32, y: 37}
+        - {x: -37, y: 23}
+        - {x: -37, y: -29}
+        - {x: -26, y: -37}
+        - {x: 32, y: -37}
+        - {x: 37, y: -23}
+        - {x: 37, y: 29}
+        - {x: 26, y: 37}
+    - name: leader_unknown
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 360
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25, y: 37}
+        - {x: -37, y: 34}
+        - {x: -37, y: -27}
+        - {x: -25, y: -37}
+        - {x: 35, y: -37}
+        - {x: 37, y: -27}
+        - {x: 37, y: 32}
+        - {x: 32, y: 37}
+    - name: government-board
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 335
+        width: 84
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: special_tech_exploration
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 664
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: special_tech_civil
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 663
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: special_tech_engineering
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 664
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: special_tech_military
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 663
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

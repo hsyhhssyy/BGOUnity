@@ -73,11 +73,11 @@
   <ItemGroup>
     <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
-    <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
-    <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExceptionHandle.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
@@ -97,15 +97,24 @@
     <Compile Include="Assets\CSharpCode\UI\BoardScene\PlayerBoardColliderBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\BuildingCellCollider.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardNormalImagePopupCollider.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardRowCardClickCollider.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\BuildingCellDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CardRowDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\SpecialTechDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoradBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoardDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBriefPlateBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
     <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneColliders.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneUIBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\WarningDisplayBehaviour.cs" />
     <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

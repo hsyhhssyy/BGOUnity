@@ -27,6 +27,8 @@ namespace Assets.CSharpCode.Entity
         public List<CardRowCardInfo> CardRow;
 
         public List<PlayerAction> PossibleActions;
+
+        public String Version = "2.0";
     }
 
     public class CardRowCardInfo

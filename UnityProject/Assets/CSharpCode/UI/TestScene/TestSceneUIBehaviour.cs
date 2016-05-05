@@ -46,7 +46,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
             SceneTransporter.CurrentGame = g;
             
-            ExtensionMethods.LoadScene("Scene/BoardScene",1);
+            ExtensionMethods.LoadScene("Scene/BoardScene-PC",1);
         }));
     }
     [UsedImplicitly]
@@ -66,10 +66,11 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
             SceneTransporter.CurrentGame = g;
 
-            SceneManager.LoadScene("Scene/BoardScene");
+            SceneManager.LoadScene("Scene/BoardScene-PC");
         }));
     }
 
+    [UsedImplicitly]
     public void 根据测试文本展示页面_Clicked()
     {
         //登录
@@ -82,11 +83,11 @@ public class TestSceneUIBehaviour : MonoBehaviour
         {
             Debug.Log("Logged in!");
 
-            BgoGame g = new BgoGame { GameId = "7279178", Nat = "2", Name = "2.5尝鲜 10" };
+            BgoGame g = new BgoGame { GameId = "7279178", Nat = "2", Name = "Text based Game" };
 
             SceneTransporter.CurrentGame = g;
 
-            ExtensionMethods.LoadScene("Scene/BoardScene", 1);
+            ExtensionMethods.LoadScene("Scene/BoardScene-PC", 1);
             
         }));
     }

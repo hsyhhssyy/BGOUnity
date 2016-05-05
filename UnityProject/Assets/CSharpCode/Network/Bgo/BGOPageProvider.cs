@@ -483,6 +483,17 @@ namespace Assets.CSharpCode.Network.Bgo
                 }
             }
 
+            //特殊科技
+            var matchSpecialTech = BgoRegexpCollections.ExtractSpecialTech.Match(htmlShade);
+            String tech=matchSpecialTech.Groups[1].Value;
+            var matchesSpecialTech = BgoRegexpCollections.ExtractSpecialTechName.Matches(tech);
+            board.SpecialTechs=new List<CardInfo>();
+            foreach (Match match in matchesSpecialTech)
+            {
+                CardInfo info = civilopedia.GetCardInfo(match.Groups[1].Value);
+                board.SpecialTechs.Add(info);
+            }
+
             //手牌
             var matchHandCivilCard = BgoRegexpCollections.ExtractHandCivilCard.Match(htmlShade);
             board.CivilCards=new List<CardInfo>();

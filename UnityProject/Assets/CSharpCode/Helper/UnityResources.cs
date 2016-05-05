@@ -6,32 +6,37 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.Helper
 {
-    public class UnityResources
+    public static class UnityResources
     {
-        private static bool loaded=false;
+        private static bool _loaded=false;
 
         private readonly static Dictionary<String, Sprite> _Sprites = new Dictionary<string, Sprite>(); 
 
         private static void LoadResource()
         {
-            if (loaded)
+            if (_loaded)
             {
                 return;
             }
 
-            loaded = true;
+            _loaded = true;
 
             LoadSprite("SpriteTile/CardRow_Sprite_CardBackground");
             LoadSprite("SpriteTile/SpriteSheet1");
+            LoadSprite("SpriteTile/PCBoard/pc-board-sprite-sheet");
         }
 
         public static Sprite GetSprite(String key)
         {
-            if (!loaded)
+            if (key == null)
+            {
+                return null;
+            }
+            if (!_loaded)
             {
                 LoadResource();
             }
-            return _Sprites.ContainsKey(key) ? _Sprites[key] : null;
+            return _Sprites.ContainsKey(key) ? _Sprites[key] : Resources.Load<Sprite>(key);
         }
 
         private static void LoadSprite(String resourcePath)
