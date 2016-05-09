@@ -1,119 +1,119 @@
-0-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage
-0-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
-0-Frugality|Action|SpriteTile/Actions/frugality
-0-Patriotism|Action|SpriteTile/Actions/patriotism
-0-Rich Land|Action|SpriteTile/Actions/rich_land
-0-Stockpile|Action|SpriteTile/Actions/stockpile
-0-Urban Growth|Action|SpriteTile/Actions/urban_growth
-1-Breakthrough|Action|SpriteTile/Actions/breakthrough
-1-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage
-1-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
-1-Frugality|Action|SpriteTile/Actions/frugality
-1-Patriotism|Action|SpriteTile/Actions/patriotism
-1-Reserves|Action|SpriteTile/Actions/reserves
-1-Rich Land|Action|SpriteTile/Actions/rich_land
-1-Urban Growth|Action|SpriteTile/Actions/urban_growth
-2-Breakthrough|Action|SpriteTile/Actions/breakthrough
-2-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade
-2-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
-2-Frugality|Action|SpriteTile/Actions/frugality
-2-Patriotism|Action|SpriteTile/Actions/patriotism
-2-Reserves|Action|SpriteTile/Actions/reserves
-2-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea
-2-Rich Land|Action|SpriteTile/Actions/rich_land
-2-Urban Growth|Action|SpriteTile/Actions/urban_growth
-2-Wave of Nationalism|Action|SpriteTile/Actions/wave_of_nationalism
-3-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade
-3-Endowment for the Arts|Action|SpriteTile/Actions/endowment_for_the_arts
-3-Engineering Genius|Action|SpriteTile/Actions/engineering_genius
-3-Military Build-Up|Action|SpriteTile/Actions/military_build-up
-3-Patriotism|Action|SpriteTile/Actions/patriotism
-3-Reserves|Action|SpriteTile/Actions/reserves
-3-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea
-3-Urban Growth|Action|SpriteTile/Actions/urban_growth
-1-Monarchy|Government|SpriteTile/Governments/monarchy
-1-Theocracy|Government|SpriteTile/Governments/theocracy
-2-Constitutional Monarchy|Government|SpriteTile/Governments/constitutional_monarchy
-2-Republic|Government|SpriteTile/Governments/republic
-3-Communism|Government|SpriteTile/Governments/communism
-3-Democracy|Government|SpriteTile/Governments/democracy
-3-Fundamentalism|Government|SpriteTile/Governments/fundamentalism
-0-Aristotle|Leader|SpriteTile/Leaders/aristotle
-0-Hammurabi|Leader|SpriteTile/Leaders/hammurabi
-0-Homer|Leader|SpriteTile/Leaders/homer
-0-Julius Caesar|Leader|SpriteTile/Leaders/julius_caesar
-0-Moses|Leader|SpriteTile/Leaders/moses
-1-Christopher Columbus|Leader|SpriteTile/Leaders/christopher_columbus
-1-Genghis Khan|Leader|SpriteTile/Leaders/genghis_khan
-1-Joan of Arc|Leader|SpriteTile/Leaders/joan_of_arc
-1-Leonardo Da Vinci|Leader|SpriteTile/Leaders/leonardo_da_vinci
-1-Michelangelo|Leader|SpriteTile/Leaders/michelangelo
-2-Frederick Barbarossa|Leader|SpriteTile/Leaders/frederick_barbarossa
-2-Isaac Newton|Leader|SpriteTile/Leaders/isaac_newton
-2-James Cook|Leader|SpriteTile/Leaders/james_cook
-2-Maximillien Robespierre|Leader|SpriteTile/Leaders/maximillien_robespierre
-2-Napoleon Bonaparte|Leader|SpriteTile/Leaders/napoleon_bonaparte
-2-William Shakespeare|Leader|SpriteTile/Leaders/william_shakespeare
-3-Albert Einstein|Leader|SpriteTile/Leaders/albert_einstein
-3-Bill Gates|Leader|SpriteTile/Leaders/bill_gates
-3-Charles Chaplin|Leader|SpriteTile/Leaders/charles_chaplin
-3-Mahatma Gandhi|Leader|SpriteTile/Leaders/mahatma_gandhi
-3-Sid Meier|Leader|SpriteTile/Leaders/sid_meier
-3-Winston Churchill|Leader|SpriteTile/Leaders/winston_churchill
-3-Air Forces|MilitaryTechAirForce|SpriteTile/MilitaryTechAirForces/air_forces
-2-Cannon|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/cannon
-3-Rockets|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/rockets
-1-Knights|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/knights
-2-Cavalrymen|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/cavalrymen
-3-Tanks|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/tanks
-1-Swordsmen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/swordsmen
-2-Riflemen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/riflemen
-3-Modern Infantry|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/modern_infantry
-1-Irrigation|ResourceTechFarm|SpriteTile/ResourceTechFarms/irrigation
-2-Selective Breeding|ResourceTechFarm|SpriteTile/ResourceTechFarms/selective_breeding
-3-Mechanized Agriculture|ResourceTechFarm|SpriteTile/ResourceTechFarms/mechanized_agriculture
-1-Iron|ResourceTechMine|SpriteTile/ResourceTechMines/iron
-2-Coal|ResourceTechMine|SpriteTile/ResourceTechMines/coal
-3-Oil|ResourceTechMine|SpriteTile/ResourceTechMines/oil
-1-Code of Laws|SpecialTechCivil|SpriteTile/SpecialTechCivils/code_of_laws
-2-Justice System|SpecialTechCivil|SpriteTile/SpecialTechCivils/justice_system
-3-Civil Service|SpecialTechCivil|SpriteTile/SpecialTechCivils/civil_service
-1-Masonry|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/masonry
-2-Architecture|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/architecture
-3-Engineering|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/engineering
-1-Cartography|SpecialTechExploration|SpriteTile/SpecialTechExplorations/cartography
-2-Navigation|SpecialTechExploration|SpriteTile/SpecialTechExplorations/navigation
-3-Satellites|SpecialTechExploration|SpriteTile/SpecialTechExplorations/satellites
-1-Warfare|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/warfare
-2-Strategy|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/strategy
-3-Military Theory|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/military_theory
-1-Bread & Circuses|UrbanTechArena|SpriteTile/UrbanTechArenas/bread_&_circuses
-2-Team Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/team_sports
-3-Professional Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/professional_sports
-1-Alchemy|UrbanTechLab|SpriteTile/UrbanTechLabs/alchemy
-2-Scientific Method|UrbanTechLab|SpriteTile/UrbanTechLabs/scientific_method
-3-Computers|UrbanTechLab|SpriteTile/UrbanTechLabs/computers
-1-Printing Press|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/printing_press
-2-Journalism|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/journalism
-3-Multimedia|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/multimedia
-1-Theology|UrbanTechTemple|SpriteTile/UrbanTechTemples/theology
-2-Organized Religion|UrbanTechTemple|SpriteTile/UrbanTechTemples/organized_religion
-1-Drama|UrbanTechTheater|SpriteTile/UrbanTechTheaters/drama
-2-Opera|UrbanTechTheater|SpriteTile/UrbanTechTheaters/opera
-3-Movies|UrbanTechTheater|SpriteTile/UrbanTechTheaters/movies
-0-Colossus|Wonder|SpriteTile/Wonders/colossus
-0-Hanging Gardens|Wonder|SpriteTile/Wonders/hanging_gardens
-0-Library of Alexandria|Wonder|SpriteTile/Wonders/library_of_alexandria
-0-Pyramids|Wonder|SpriteTile/Wonders/pyramids
-1-Great Wall|Wonder|SpriteTile/Wonders/great_wall
-1-St. Peter's Basilica|Wonder|SpriteTile/Wonders/st._peter's_basilica
-1-Taj Mahal|Wonder|SpriteTile/Wonders/taj_mahal
-1-Universitas Carolina|Wonder|SpriteTile/Wonders/universitas_carolina
-2-Eiffel Tower|Wonder|SpriteTile/Wonders/eiffel_tower
-2-Kremlin|Wonder|SpriteTile/Wonders/kremlin
-2-Ocean Liner|Wonder|SpriteTile/Wonders/ocean_liner
-2-Transcontinental Railroad|Wonder|SpriteTile/Wonders/transcontinental_railroad
-3-Fast Food Chains|Wonder|SpriteTile/Wonders/fast_food_chains
-3-First Space Flight|Wonder|SpriteTile/Wonders/first_space_flight
-3-Hollywood|Wonder|SpriteTile/Wonders/hollywood
-3-Internet|Wonder|SpriteTile/Wonders/internet
+0-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage|SpriteTile/CardImages/Action/action_0_01.png
+0-Engineering Genius|Action|SpriteTile/Actions/engineering_genius|SpriteTile/CardImages/Action/action_0_02.png
+0-Frugality|Action|SpriteTile/Actions/frugality|SpriteTile/CardImages/Action/action_0_03.png
+0-Patriotism|Action|SpriteTile/Actions/patriotism|SpriteTile/CardImages/Action/action_0_04.png
+0-Rich Land|Action|SpriteTile/Actions/rich_land|SpriteTile/CardImages/Action/action_0_05.png
+0-Stockpile|Action|SpriteTile/Actions/stockpile|SpriteTile/CardImages/Action/action_0_06.png
+0-Urban Growth|Action|SpriteTile/Actions/urban_growth|SpriteTile/CardImages/Action/action_0_07.png
+1-Breakthrough|Action|SpriteTile/Actions/breakthrough|SpriteTile/CardImages/Action/action_1_01.png
+1-Cultural Heritage|Action|SpriteTile/Actions/cultural_heritage|SpriteTile/CardImages/Action/action_1_02.png
+1-Engineering Genius|Action|SpriteTile/Actions/engineering_genius|SpriteTile/CardImages/Action/action_1_03.png
+1-Frugality|Action|SpriteTile/Actions/frugality|SpriteTile/CardImages/Action/action_1_04.png
+1-Patriotism|Action|SpriteTile/Actions/patriotism|SpriteTile/CardImages/Action/action_1_05.png
+1-Reserves|Action|SpriteTile/Actions/reserves|SpriteTile/CardImages/Action/action_1_06.png
+1-Rich Land|Action|SpriteTile/Actions/rich_land|SpriteTile/CardImages/Action/action_1_07.png
+1-Urban Growth|Action|SpriteTile/Actions/urban_growth|SpriteTile/CardImages/Action/action_1_08.png
+2-Breakthrough|Action|SpriteTile/Actions/breakthrough|SpriteTile/CardImages/Action/action_2_01.png
+2-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade|SpriteTile/CardImages/Action/action_2_02.png
+2-Engineering Genius|Action|SpriteTile/Actions/engineering_genius|SpriteTile/CardImages/Action/action_2_03.png
+2-Frugality|Action|SpriteTile/Actions/frugality|SpriteTile/CardImages/Action/action_2_04.png
+2-Patriotism|Action|SpriteTile/Actions/patriotism|SpriteTile/CardImages/Action/action_2_05.png
+2-Reserves|Action|SpriteTile/Actions/reserves|SpriteTile/CardImages/Action/action_2_06.png
+2-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea|SpriteTile/CardImages/Action/action_2_07.png
+2-Rich Land|Action|SpriteTile/Actions/rich_land|SpriteTile/CardImages/Action/action_2_08.png
+2-Urban Growth|Action|SpriteTile/Actions/urban_growth|SpriteTile/CardImages/Action/action_2_09.png
+2-Wave of Nationalism|Action|SpriteTile/Actions/wave_of_nationalism|SpriteTile/CardImages/Action/action_2_10.png
+3-Efficient Upgrade|Action|SpriteTile/Actions/efficient_upgrade|SpriteTile/CardImages/Action/action_3_01.png
+3-Endowment for the Arts|Action|SpriteTile/Actions/endowment_for_the_arts|SpriteTile/CardImages/Action/action_3_02.png
+3-Engineering Genius|Action|SpriteTile/Actions/engineering_genius|SpriteTile/CardImages/Action/action_3_03.png
+3-Military Build-Up|Action|SpriteTile/Actions/military_build-up|SpriteTile/CardImages/Action/action_3_04.png
+3-Patriotism|Action|SpriteTile/Actions/patriotism|SpriteTile/CardImages/Action/action_3_05.png
+3-Reserves|Action|SpriteTile/Actions/reserves|SpriteTile/CardImages/Action/action_3_06.png
+3-Revolutionary Idea|Action|SpriteTile/Actions/revolutionary_idea|SpriteTile/CardImages/Action/action_3_07.png
+3-Urban Growth|Action|SpriteTile/Actions/urban_growth|SpriteTile/CardImages/Action/action_3_08.png
+1-Monarchy|Government|SpriteTile/Governments/monarchy|SpriteTile/CardImages/Government/government_1_01.png
+1-Theocracy|Government|SpriteTile/Governments/theocracy|SpriteTile/CardImages/Government/government_1_02.png
+2-Constitutional Monarchy|Government|SpriteTile/Governments/constitutional_monarchy|SpriteTile/CardImages/Government/government_2_01.png
+2-Republic|Government|SpriteTile/Governments/republic|SpriteTile/CardImages/Government/government_2_02.png
+3-Communism|Government|SpriteTile/Governments/communism|SpriteTile/CardImages/Government/government_3_01.png
+3-Democracy|Government|SpriteTile/Governments/democracy|SpriteTile/CardImages/Government/government_3_02.png
+3-Fundamentalism|Government|SpriteTile/Governments/fundamentalism|SpriteTile/CardImages/Government/government_3_03.png
+0-Aristotle|Leader|SpriteTile/Leaders/aristotle|SpriteTile/CardImages/Leader/leader_0_01.png
+0-Hammurabi|Leader|SpriteTile/Leaders/hammurabi|SpriteTile/CardImages/Leader/leader_0_02.png
+0-Homer|Leader|SpriteTile/Leaders/homer|SpriteTile/CardImages/Leader/leader_0_03.png
+0-Julius Caesar|Leader|SpriteTile/Leaders/julius_caesar|SpriteTile/CardImages/Leader/leader_0_04.png
+0-Moses|Leader|SpriteTile/Leaders/moses|SpriteTile/CardImages/Leader/leader_0_05.png
+1-Christopher Columbus|Leader|SpriteTile/Leaders/christopher_columbus|SpriteTile/CardImages/Leader/leader_1_01.png
+1-Genghis Khan|Leader|SpriteTile/Leaders/genghis_khan|SpriteTile/CardImages/Leader/leader_1_02.png
+1-Joan of Arc|Leader|SpriteTile/Leaders/joan_of_arc|SpriteTile/CardImages/Leader/leader_1_03.png
+1-Leonardo Da Vinci|Leader|SpriteTile/Leaders/leonardo_da_vinci|SpriteTile/CardImages/Leader/leader_1_04.png
+1-Michelangelo|Leader|SpriteTile/Leaders/michelangelo|SpriteTile/CardImages/Leader/leader_1_05.png
+1-Frederick Barbarossa|Leader|SpriteTile/Leaders/frederick_barbarossa|SpriteTile/CardImages/Leader/leader_1_06.png
+2-Isaac Newton|Leader|SpriteTile/Leaders/isaac_newton|SpriteTile/CardImages/Leader/leader_2_01.png
+2-James Cook|Leader|SpriteTile/Leaders/james_cook|SpriteTile/CardImages/Leader/leader_2_02.png
+2-Maximillien Robespierre|Leader|SpriteTile/Leaders/maximillien_robespierre|SpriteTile/CardImages/Leader/leader_2_03.png
+2-Napoleon Bonaparte|Leader|SpriteTile/Leaders/napoleon_bonaparte|SpriteTile/CardImages/Leader/leader_2_04.png
+2-William Shakespeare|Leader|SpriteTile/Leaders/william_shakespeare|SpriteTile/CardImages/Leader/leader_2_05.png
+3-Albert Einstein|Leader|SpriteTile/Leaders/albert_einstein|SpriteTile/CardImages/Leader/leader_3_01.png
+3-Bill Gates|Leader|SpriteTile/Leaders/bill_gates|SpriteTile/CardImages/Leader/leader_3_02.png
+3-Charles Chaplin|Leader|SpriteTile/Leaders/charles_chaplin|SpriteTile/CardImages/Leader/leader_3_03.png
+3-Mahatma Gandhi|Leader|SpriteTile/Leaders/mahatma_gandhi|SpriteTile/CardImages/Leader/leader_3_04.png
+3-Sid Meier|Leader|SpriteTile/Leaders/sid_meier|SpriteTile/CardImages/Leader/leader_3_05.png
+3-Winston Churchill|Leader|SpriteTile/Leaders/winston_churchill|SpriteTile/CardImages/Leader/leader_3_06.png
+3-Air Forces|MilitaryTechAirForce|SpriteTile/MilitaryTechAirForces/air_forces|SpriteTile/CardImages/MilitaryTech/militarytechairforce_3.png
+2-Cannon|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/cannon|SpriteTile/CardImages/MilitaryTech/militarytechartillery_2.png
+3-Rockets|MilitaryTechArtillery|SpriteTile/MilitaryTechArtillerys/rockets|SpriteTile/CardImages/MilitaryTech/militarytechartillery_3.png
+1-Knights|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/knights|SpriteTile/CardImages/MilitaryTech/militarytechcavalry_1.png
+2-Cavalrymen|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/cavalrymen|SpriteTile/CardImages/MilitaryTech/militarytechcavalry_2.png
+3-Tanks|MilitaryTechCavalry|SpriteTile/MilitaryTechCavalrys/tanks|SpriteTile/CardImages/MilitaryTech/militarytechcavalry_3.png
+1-Swordsmen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/swordsmen|SpriteTile/CardImages/MilitaryTech/militarytechinfantry_1.png
+2-Riflemen|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/riflemen|SpriteTile/CardImages/MilitaryTech/militarytechinfantry_2.png
+3-Modern Infantry|MilitaryTechInfantry|SpriteTile/MilitaryTechInfantrys/modern_infantry|SpriteTile/CardImages/MilitaryTech/militarytechinfantry_3.png
+1-Irrigation|ResourceTechFarm|SpriteTile/ResourceTechFarms/irrigation|SpriteTile/CardImages/ResourceTech/resourcetechfarm_1.png
+2-Selective Breeding|ResourceTechFarm|SpriteTile/ResourceTechFarms/selective_breeding|SpriteTile/CardImages/ResourceTech/resourcetechfarm_2.png
+3-Mechanized Agriculture|ResourceTechFarm|SpriteTile/ResourceTechFarms/mechanized_agriculture|SpriteTile/CardImages/ResourceTech/resourcetechfarm_3.png
+1-Iron|ResourceTechMine|SpriteTile/ResourceTechMines/iron|SpriteTile/CardImages/ResourceTech/resourcetechmine_1.png
+2-Coal|ResourceTechMine|SpriteTile/ResourceTechMines/coal|SpriteTile/CardImages/ResourceTech/resourcetechmine_2.png
+3-Oil|ResourceTechMine|SpriteTile/ResourceTechMines/oil|SpriteTile/CardImages/ResourceTech/resourcetechmine_3.png
+1-Code of Laws|SpecialTechCivil|SpriteTile/SpecialTechCivils/code_of_laws|SpriteTile/CardImages/SpecialTech/specialtechcivil_1.png
+2-Justice System|SpecialTechCivil|SpriteTile/SpecialTechCivils/justice_system|SpriteTile/CardImages/SpecialTech/specialtechcivil_2.png
+3-Civil Service|SpecialTechCivil|SpriteTile/SpecialTechCivils/civil_service|SpriteTile/CardImages/SpecialTech/specialtechcivil_3.png
+1-Masonry|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/masonry|SpriteTile/CardImages/SpecialTech/specialtechengineering_1.png
+2-Architecture|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/architecture|SpriteTile/CardImages/SpecialTech/specialtechengineering_2.png
+3-Engineering|SpecialTechEngineering|SpriteTile/SpecialTechEngineerings/engineering|SpriteTile/CardImages/SpecialTech/specialtechengineering_3.png
+1-Cartography|SpecialTechExploration|SpriteTile/SpecialTechExplorations/cartography|SpriteTile/CardImages/SpecialTech/specialtechexploration_1.png
+2-Navigation|SpecialTechExploration|SpriteTile/SpecialTechExplorations/navigation|SpriteTile/CardImages/SpecialTech/specialtechexploration_2.png
+3-Satellites|SpecialTechExploration|SpriteTile/SpecialTechExplorations/satellites|SpriteTile/CardImages/SpecialTech/specialtechexploration_3.png
+1-Warfare|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/warfare|SpriteTile/CardImages/SpecialTech/specialtechmilitary_1.png
+2-Strategy|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/strategy|SpriteTile/CardImages/SpecialTech/specialtechmilitary_2.png
+3-Military Theory|SpecialTechMilitary|SpriteTile/SpecialTechMilitarys/military_theory|SpriteTile/CardImages/SpecialTech/specialtechmilitary_3.png
+1-Bread & Circuses|UrbanTechArena|SpriteTile/UrbanTechArenas/bread_&_circuses|SpriteTile/CardImages/UrbanTech/urbantecharena_1.png
+2-Team Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/team_sports|SpriteTile/CardImages/UrbanTech/urbantecharena_2.png
+3-Professional Sports|UrbanTechArena|SpriteTile/UrbanTechArenas/professional_sports|SpriteTile/CardImages/UrbanTech/urbantecharena_3.png
+1-Alchemy|UrbanTechLab|SpriteTile/UrbanTechLabs/alchemy|SpriteTile/CardImages/UrbanTech/urbantechlab_1.png
+2-Scientific Method|UrbanTechLab|SpriteTile/UrbanTechLabs/scientific_method|SpriteTile/CardImages/UrbanTech/urbantechlab_2.png
+3-Computers|UrbanTechLab|SpriteTile/UrbanTechLabs/computers|SpriteTile/CardImages/UrbanTech/urbantechlab_3.png
+1-Printing Press|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/printing_press|SpriteTile/CardImages/UrbanTech/urbantechlibrary_1.png
+2-Journalism|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/journalism|SpriteTile/CardImages/UrbanTech/urbantechlibrary_2.png
+3-Multimedia|UrbanTechLibrary|SpriteTile/UrbanTechLibrarys/multimedia|SpriteTile/CardImages/UrbanTech/urbantechlibrary_3.png
+1-Theology|UrbanTechTemple|SpriteTile/UrbanTechTemples/theology|SpriteTile/CardImages/UrbanTech/urbantechtemple_1.png
+2-Organized Religion|UrbanTechTemple|SpriteTile/UrbanTechTemples/organized_religion|SpriteTile/CardImages/UrbanTech/urbantechtemple_2.png
+1-Drama|UrbanTechTheater|SpriteTile/UrbanTechTheaters/drama|SpriteTile/CardImages/UrbanTech/urbantechtheater_1.png
+2-Opera|UrbanTechTheater|SpriteTile/UrbanTechTheaters/opera|SpriteTile/CardImages/UrbanTech/urbantechtheater_2.png
+3-Movies|UrbanTechTheater|SpriteTile/UrbanTechTheaters/movies|SpriteTile/CardImages/UrbanTech/urbantechtheater_3.png
+0-Colossus|Wonder|SpriteTile/Wonders/colossus|SpriteTile/CardImages/Wonder/wonder_0_01.png
+0-Hanging Gardens|Wonder|SpriteTile/Wonders/hanging_gardens|SpriteTile/CardImages/Wonder/wonder_0_02.png
+0-Library of Alexandria|Wonder|SpriteTile/Wonders/library_of_alexandria|SpriteTile/CardImages/Wonder/wonder_0_03.png
+0-Pyramids|Wonder|SpriteTile/Wonders/pyramids|SpriteTile/CardImages/Wonder/wonder_0_04.png
+1-Great Wall|Wonder|SpriteTile/Wonders/great_wall|SpriteTile/CardImages/Wonder/wonder_1_01.png
+1-St. Peter's Basilica|Wonder|SpriteTile/Wonders/st._peter's_basilica|SpriteTile/CardImages/Wonder/wonder_1_02.png
+1-Taj Mahal|Wonder|SpriteTile/Wonders/taj_mahal|SpriteTile/CardImages/Wonder/wonder_1_03.png
+1-Universitas Carolina|Wonder|SpriteTile/Wonders/universitas_carolina|SpriteTile/CardImages/Wonder/wonder_1_04.png
+2-Eiffel Tower|Wonder|SpriteTile/Wonders/eiffel_tower|SpriteTile/CardImages/Wonder/wonder_2_01.png
+2-Kremlin|Wonder|SpriteTile/Wonders/kremlin|SpriteTile/CardImages/Wonder/wonder_2_02.png
+2-Ocean Liner|Wonder|SpriteTile/Wonders/ocean_liner|SpriteTile/CardImages/Wonder/wonder_2_03.png
+2-Transcontinental Railroad|Wonder|SpriteTile/Wonders/transcontinental_railroad|SpriteTile/CardImages/Wonder/wonder_2_04.png
+3-Fast Food Chains|Wonder|SpriteTile/Wonders/fast_food_chains|SpriteTile/CardImages/Wonder/wonder_3_01.png
+3-First Space Flight|Wonder|SpriteTile/Wonders/first_space_flight|SpriteTile/CardImages/Wonder/wonder_3_02.png
+3-Hollywood|Wonder|SpriteTile/Wonders/hollywood|SpriteTile/CardImages/Wonder/wonder_3_03.png
+3-Internet|Wonder|SpriteTile/Wonders/internet|SpriteTile/CardImages/Wonder/wonder_3_04.png

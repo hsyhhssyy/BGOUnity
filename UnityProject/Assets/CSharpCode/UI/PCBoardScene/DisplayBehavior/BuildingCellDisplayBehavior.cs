@@ -38,10 +38,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 //显示图片
                 var cellInfo = Cells[ages[i]];
 
-                var civilCard = UnityResources.GetSprite("Card-Small-" + cellInfo.Card.InternalId);
+                var civilCard = UnityResources.GetSprite(cellInfo.Card.NormalImage);
                 if (civilCard != null)
                 {
-                    Frames[i].GetComponent<SpriteRenderer>().sprite = civilCard;
+                    Frames[i].FindObject("PCBoardCard-Small").GetComponent<PCBoardCardSmallDisplayBehaviour>()
+                        .Bind(cellInfo.Card);
                 }
 
                 //显示黄点
@@ -51,10 +52,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 //显示蓝点
                 var bluePrefab = Resources.Load<GameObject>("Dynamic-PC/BlueMarker");
                 DisplayMarker(cellInfo.Storage, bluePrefab, Frames[i].FindObject("BlueMarkers"));
-
-                var popCollider=Frames[i].GetComponent<CardNormalImagePopupCollider>();
-                popCollider.CardInternalId = cellInfo.Card.InternalId;
-                popCollider.popup = CardPopupFrame;
+                
             }
         }
 

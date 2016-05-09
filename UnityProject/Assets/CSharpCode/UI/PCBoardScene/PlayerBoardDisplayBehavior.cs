@@ -32,13 +32,28 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public GameObject CompletedWondersFrame;
         public GameObject ConstructingWonderFrame;
 
+        public GameObject ColonyFrame;
+
         public GameObject CardNormalImagePopup;
 
         public GameObject BuildingCellFrame;
 
         public SpecialTechDisplayBehavior SpecialTechFrame;
 
+        public TacticsPopupDisplayBehaviour TacticFrame;
+
         public CardRowDisplayBehaviour CardRowFrame;
+
+        public EventsDisplayBehaviour EventsFrame;
+
+        public GameObject CivilCardLeft;
+        public GameObject MilitaryCardLeft;
+        public GameObject CivilCardAge;
+        public GameObject MilitaryCardAge;
+
+        public GameJournalDisplayBehaviour JournalFrame;
+
+        public GameObject WarningFrame;
 
         [UsedImplicitly]
         //用update会导致弹出窗口的OnMouseExit捕捉不到
@@ -58,10 +73,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
 
             DisplayCardRow(SceneTransporter.CurrentGame.CardRow);
+            DisplayEventsAndCardCounts(SceneTransporter.CurrentGame);
 
             var backgroundSpriteName = "SpriteTile/PCBoard/pc-board-player-background-" + "orange,purple,green,grey".Split(",".ToCharArray())[BoardBehavior.CurrentPlayerNo];
             var backgroundsp = UnityResources.GetSprite(backgroundSpriteName);
             BackgroundSpriteGo.GetComponent<SpriteRenderer>().sprite = backgroundsp;
+
+            JournalFrame.Refresh();
 
             //展示用代码
             //Colliders 是独立的文件
@@ -77,12 +95,27 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             DisplayMilitaryHandCard(board);
 
             DisplayWonders(board);
+            DisplayColony(board);
 
             DisplayBuildings(board);
 
             DisplaySpecialTech(board);
+
+            DisplayWarnings(board);
+
+            DisplayTactics(board);
         }
 
+        private void DisplayEventsAndCardCounts(TtaGame game)
+        {
+            EventsFrame.Refresh();
+
+            CivilCardLeft.GetComponent<TextMesh>().text = game.CivilCardsRemain.ToString();
+            MilitaryCardLeft.GetComponent<TextMesh>().text = game.MilitaryCardsRemain.ToString();
+
+            CivilCardAge.GetComponent<TextMesh>().text = game.CurrentAge.ToString();
+            MilitaryCardAge.GetComponent<TextMesh>().text = game.CurrentAge.ToString();
+        }
         private void DisplayCardRow(List<CardRowCardInfo> cardRow)
         {
             CardRowFrame.CardRow = cardRow;
@@ -92,22 +125,23 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         private void DisplayGovenrment(TtaBoard board)
         {
             GovernmentFrame.FindObject("Name").GetComponent<TextMesh>().text = board.Government.CardName;
-            GovernmentFrame.GetComponent<CardNormalImagePopupCollider>().CardInternalId =
-                board.Government.InternalId;
+            GovernmentFrame.GetComponent<CardNormalImagePreviewCollider>().Card =
+                board.Government;
         }
 
         private void DisplayLeader(TtaBoard board)
         {
             if (board.Leader == null)
             {
-                LeaderFrame.GetComponent<CardNormalImagePopupCollider>().CardInternalId = null;
+                LeaderFrame.GetComponent<CardNormalImagePreviewCollider>().Card = null;
+                LeaderFrame.GetComponent<SpriteRenderer>().sprite = UnityResources.GetSprite("leader_image_no_leader");
             }
             else
             {
                 var sprite = UnityResources.GetSprite(board.Leader.SpecialImage) ??
                              UnityResources.GetSprite("leader_unknown");
                 LeaderFrame.GetComponent<SpriteRenderer>().sprite = sprite;
-                LeaderFrame.GetComponent<CardNormalImagePopupCollider>().CardInternalId = board.Leader.InternalId;
+                LeaderFrame.GetComponent<CardNormalImagePreviewCollider>().Card = board.Leader;
             }
 
         }
@@ -252,7 +286,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         private void DisplayCivilHandCard(TtaBoard board)
         {
-            var unknownCardPrefab = Resources.Load<GameObject>("Dynamic-PC/UnknownCard-Small");
+            var unknownCardPrefab = Resources.Load<GameObject>("Dynamic-PC/PCBoardCard-Small");
 
             foreach (Transform child in CivilHandCardFrame.transform)
             {
@@ -267,33 +301,14 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             for (int i = 0; i < board.CivilCards.Count; i++)
             {
-                GameObject cardGo = Instantiate(unknownCardPrefab);
-
-                var card = board.CivilCards[i];
-                Sprite civilCard = UnityResources.GetSprite("Card-Small-"+card.InternalId);
-
-                if (civilCard != null)
-                {
-                    cardGo.GetComponent<SpriteRenderer>().sprite = civilCard;
-                }
-                else
-                {
-                    cardGo.FindObject("AgeText").GetComponent<TextMesh>().text = card.CardAge.ToString();
-                    cardGo.FindObject("NameText").GetComponent<TextMesh>().text = card.CardName.WordWrap(10);
-                }
-
-                cardGo.transform.SetParent(CivilHandCardFrame.transform);
-                cardGo.transform.localPosition = new Vector3(i * incr, 0);
-
-                CardNormalImagePopupCollider popupCollider = cardGo.GetComponent<CardNormalImagePopupCollider>();
-                popupCollider.popup = CardNormalImagePopup;
-                popupCollider.CardInternalId = card.InternalId;
+                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardSmallDisplayBehaviour>()
+                    .Bind(board.CivilCards[i], CivilHandCardFrame.transform, new Vector3(i*incr, 0));
 
             }
         }
         private void DisplayMilitaryHandCard(TtaBoard board)
         {
-            var unknownCardPrefab = Resources.Load<GameObject>("Dynamic-PC/UnknownCard-Small");
+            var unknownCardPrefab = Resources.Load<GameObject>("Dynamic-PC/PCBoardCard-Small");
 
             foreach (Transform child in MilitaryHandCardFrame.transform)
             {
@@ -308,27 +323,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             for (int i = 0; i < board.MilitaryCards.Count; i++)
             {
-                GameObject cardGo = Instantiate(unknownCardPrefab);
-
-                var card = board.MilitaryCards[i];
-                Sprite civilCard = UnityResources.GetSprite("Card-Small-" + card.InternalId);
-
-                if (civilCard != null)
-                {
-                    cardGo.GetComponent<SpriteRenderer>().sprite = civilCard;
-                }
-                else
-                {
-                    cardGo.FindObject("AgeText").GetComponent<TextMesh>().text = card.CardAge.ToString();
-                    cardGo.FindObject("NameText").GetComponent<TextMesh>().text = card.CardName.WordWrap(10);
-                }
-
-                cardGo.transform.SetParent(MilitaryHandCardFrame.transform);
-                cardGo.transform.localPosition = new Vector3(i * incr, 0);
-
-                CardNormalImagePopupCollider popupCollider= cardGo.GetComponent<CardNormalImagePopupCollider>();
-                popupCollider.popup = CardNormalImagePopup;
-                popupCollider.CardInternalId = card.InternalId;
+                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardSmallDisplayBehaviour>()
+                    .Bind(board.MilitaryCards[i], MilitaryHandCardFrame.transform, new Vector3(i * incr, 0));
             }
         }
 
@@ -357,9 +353,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 ConstructingWonderFrame.FindObject("WonderStep").GetComponent<TextMesh>().text =
                     buildStr;
 
-                CardNormalImagePopupCollider popupCollider = ConstructingWonderFrame.GetComponent<CardNormalImagePopupCollider>();
-                popupCollider.popup = CardNormalImagePopup;
-                popupCollider.CardInternalId = board.ConstructingWonder.InternalId;
+                CardNormalImagePreviewCollider popupCollider = ConstructingWonderFrame.GetComponent<CardNormalImagePreviewCollider>();
+                popupCollider.Card = board.ConstructingWonder;
             }
             else
             {
@@ -384,9 +379,15 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 cardGo.transform.SetParent(CompletedWondersFrame.transform);
                 cardGo.transform.localPosition = new Vector3(0, -0.27f * i);
 
-                CardNormalImagePopupCollider popupCollider = cardGo.FindObject("Mask").GetComponent<CardNormalImagePopupCollider>();
-                popupCollider.popup = CardNormalImagePopup;
-                popupCollider.CardInternalId = wonderCard.InternalId;
+                CardNormalImagePreviewCollider popupCollider =
+                    cardGo.FindObject("Mask").GetComponent<CardNormalImagePreviewCollider>();
+                popupCollider.Card = wonderCard;
+
+                var sp = UnityResources.GetSprite(wonderCard.SpecialImage);
+                if (sp != null)
+                {
+                    cardGo.FindObject("Image").GetComponent<SpriteRenderer>().sprite = sp;
+                }
             }
         }
 
@@ -437,7 +438,30 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         private void DisplayColony(TtaBoard board)
         {
-            
+            var colonyPrefab = Resources.Load<GameObject>("Dynamic-PC/Colony");
+
+            foreach (Transform child in ColonyFrame.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            for (int i = 0; i < board.Colonies.Count; i++)
+            {
+                var colonyCard = board.Colonies[i];
+
+                GameObject cardGo = Instantiate(colonyPrefab);
+                var sp = UnityResources.GetSprite(colonyCard.SpecialImage);
+                if (sp != null)
+                {
+                    cardGo.GetComponent<SpriteRenderer>().sprite = sp;
+                }
+
+                cardGo.transform.SetParent(ColonyFrame.transform);
+                cardGo.transform.localPosition = new Vector3(0, -0.205f * i);
+
+                CardNormalImagePreviewCollider popupCollider = cardGo.GetComponent<CardNormalImagePreviewCollider>();
+                popupCollider.Card = colonyCard;
+            }
         }
 
         private void DisplaySpecialTech(TtaBoard board)
@@ -446,6 +470,37 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             SpecialTechFrame.Refresh();
             
+        }
+
+        private void DisplayTactics(TtaBoard board)
+        {
+            TacticFrame.MyTacticsID = board.Tactic==null?null: board.Tactic.InternalId;
+
+            TacticFrame.Refresh();
+
+        }
+
+        private void DisplayWarnings(TtaBoard board)
+        {
+            var warningPrefab = Resources.Load<GameObject>("Dynamic-PC/Warning");
+
+            foreach (Transform child in WarningFrame.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            for (int i = 0; i < board.Warnings.Count; i++)
+            {
+                var warningMsg = board.Warnings[i];
+
+                GameObject cardGo = Instantiate(warningPrefab);
+                
+
+                cardGo.transform.SetParent(WarningFrame.transform);
+                cardGo.transform.localPosition = new Vector3(0.21f*i, 0);
+
+                cardGo.FindObject("Text").GetComponent<TextMesh>().text = warningMsg;
+            }
         }
     }
 }

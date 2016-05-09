@@ -24,6 +24,8 @@ namespace Assets.CSharpCode.Entity
         public List<String> Players; 
         public List<TtaBoard> Boards;
 
+        public List<CardInfo> SharedTactics; 
+
         public List<CardRowCardInfo> CardRow;
 
         public List<PlayerAction> PossibleActions;

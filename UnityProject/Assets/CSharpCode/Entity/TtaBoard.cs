@@ -19,7 +19,7 @@ namespace Assets.CSharpCode.Entity
         public CardInfo Government;
         public CardInfo Leader;
 
-        public String Tactic;
+        public CardInfo Tactic;
 
         public List<String> Warnings;
 
@@ -27,8 +27,8 @@ namespace Assets.CSharpCode.Entity
 
         public List<CardInfo> MilitaryCards;
 
-        public List<String> CurrentEventPlayed;
-        public List<String> FutureEventPlayed;
+        public List<CardInfo> CurrentEventPlayed;
+        public List<CardInfo> FutureEventPlayed;
         
         public Dictionary<BuildingType, Dictionary<Age, BuildingCell>> Buildings;
 

@@ -52,8 +52,21 @@ namespace Assets.CSharpCode.Civilopedia
                 info.CardType = (CardType)Enum.Parse(typeof (CardType), sp[1]);
                 info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).WordWrap(7).Trim();
                 info.CardAge = (Age)Convert.ToInt32(info.InternalId.Split("-".ToCharArray(), 2)[0]);
-                info.SmallImage = sp[2];
+                info.SmallImage = sp[3].Replace(".png","")+"_small";
+                info.NormalImage = sp[3].Replace(".png","");
 
+                UnityResources.LazyLoadSprite(info.SmallImage, () =>
+                {
+                    var smallSp=UnityResources.GetSprite(info.NormalImage);
+                    if (smallSp != null)
+                    {
+                        return smallSp.CloneResize(new Vector2(0f, 1.05f), 0.7f/1.8f);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                });
                 civilopedia.cardInfos[info.InternalId] = info;
                 
             }

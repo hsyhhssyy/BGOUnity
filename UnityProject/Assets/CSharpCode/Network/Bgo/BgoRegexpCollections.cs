@@ -13,6 +13,12 @@ namespace Assets.CSharpCode.Network.Bgo
         /// 这个Regex可以查找P标签
         /// </summary>
         public static readonly Regex FindP = new Regex(@"<p.*?>(.*?)</p>");
+        /// <summary>
+        /// 这个用于分析UL(也就是鼠标悬停提示）box内的东西
+        /// </summary>
+        //p class=.ageCarte ageCarte20.>([^<]*?)<[\s\S]*?p class=.tta_event1 nomCarte nomCarteMilitaire.>([^<]*?)<
+        public static readonly Regex FindCardInfoFromUnorderedList = new Regex(@"p class=.ageCarte ageCarte20.>([^<]*?)<[\s\S]*?p class=.tta_event1 nomCarte nomCarteMilitaire.>([^<]*?)<");
+
         //happy.png
         //unhappy.png
         public static readonly Regex ExtractPlayerNameAndResourceHappy = new Regex(@"/happy.png");
@@ -104,15 +110,15 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractCurrentEvent=new Regex(@"<p class=""titre3"">Current[\s\S]*?((<p class=""ageDosCarte"">(.*?)</p>)|(<p class=""ageCarte ageCarte20"">(.*?)</p>[\s\S]*?class=""nomCarte"">(.*?)<br))[\s\S]*?<p class=""nombre"">(.*?)</p>");
 
         //<p class="titre3">Future[\s\S]*?<p class="ageDosCarte">(.*?)</p>[\s\S]*?<p class="nombre">(.*?)</p>
-        //未来事件，3是分布数字，注意如果group2的Length>4（暂定），那么就表示里面是img，就是那个none.img
+        //未来事件，2是分布数字，注意如果group1的Length>1（暂定），那么就表示里面是img，就是那个none.img
         public static readonly Regex ExtractFutureEvent=new Regex(@"<p class=""titre3"">Future[\s\S]*?<p class=""ageDosCarte"">(.*?)</p>[\s\S]*?<p class=""nombre"">(.*?)</p>");
 
         //<p class="titre3">Civil[\s\S]*?<p class="ageDosCarte">(.*?)</p>[\s\S]*?<p class="nombre">(.*?)</p>
         //内政卡剩余，3是分布数字，注意如果group2的Length>4（暂定），那么就表示里面是img，就是那个none.img
-        public static readonly Regex ExtractCivilCardRemains = new Regex(@"<p class=""titre3"">Future[\s\S]*?<p class=""ageDosCarte"">(.*?)</p>[\s\S]*?<p class=""nombre"">(.*?)</p>");
+        public static readonly Regex ExtractCivilCardRemains = new Regex(@"<p class=""titre3"">Civil[\s\S]*?<p class=""ageDosCarte"">(.*?)</p>[\s\S]*?<p class=""nombre"">(.*?)</p>");
         //军事卡剩余，3是分布数字，注意如果group2的Length>4（暂定），那么就表示里面是img，就是那个none.img
         //<p class="titre3">Military[\s\S]*?<p class="ageDosCarte">(.*?)</p>[\s\S]*?<p class="nombre">(.*?)</p>
-        public static readonly Regex ExtractMilitryCardRemains = new Regex(@"<p class=""titre3"">Future[\s\S]*?<p class=""ageDosCarte"">(.*?)</p>[\s\S]*?<p class=""nombre"">(.*?)</p>");
+        public static readonly Regex ExtractMilitryCardRemains = new Regex(@"<p class=""titre3"">Military[\s\S]*?<p class=""ageDosCarte"">(.*?)</p>[\s\S]*?<p class=""nombre"">(.*?)</p>");
 
 
         //<a [^>]*?><img class="imageLeader".*? alt="(.*?)"
@@ -172,6 +178,13 @@ namespace Assets.CSharpCode.Network.Bgo
         //nbsp;((<img [^>]*?>)|\d)(&|<)
         public static readonly Regex ExtractWondeBuildStatus=new Regex(@"nbsp;((<img [^>]*?>)|\d)(&|<)");
         /// <summary>
+        /// 这个用于拆出ColonyBox （Group1）
+        /// </summary>
+        //td class=.colonyBox dataBox.[^<]*?<table([\s\S]*?)</table>
+        public static readonly Regex ExtractColonyBox = new Regex(@"td class=.colonyBox dataBox.[^<]*?<table([\s\S]*?)</table>");
+
+        
+        /// <summary>
         /// 特殊科技单元格，用下面的解析group1得到具体科技
         /// </summary>
         //<td class=[^>]*?specTechsBox[\s\S]*?<table([\s\S]*?)</table></td>
@@ -182,13 +195,7 @@ namespace Assets.CSharpCode.Network.Bgo
         /// </summary>
         //<p class=[^>]*?special1[^>]*?>(.*?)<
         public static readonly Regex ExtractSpecialTechName = new Regex(@"<p class=[^>]*?special1[^>]*?>(.*?)<");
-
-        /// <summary>
-        /// 殖民地单元格，用下面的解析group1得到具体殖民地
-        /// </summary>
-        //<td class=[^>]*?colonyBox[\s\S]*?<table([\s\S]*?)</table></td>
-        public static readonly Regex ExtractColony=new Regex(@"<td class=[^>]*?colonyBox[\s\S]*?<table([\s\S]*?)</table></td>");
-
+        
         //手牌
         //<div id=.cartes_joueur\d.>[\s\S]*?<table class=.tableau\d. width=.90%.>([\s\S]*?)</table>
         public static readonly Regex ExtractHandCivilCard=new Regex(@"<div id=.cartes_joueur\d.>[\s\S]*?<table class=.tableau\d. width=.90%.>([\s\S]*?)</table>");
@@ -199,7 +206,27 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractHandMilitaryCard = new Regex(@"<div id=.cartes_joueur\d.>[\s\S]*?<table class=.tableau\d. width=.90%.>[\s\S]*?<table class=.tableau\d. width=.90%.>([\s\S]*?)</table>");
         //已打出的当前事件
         //已打出的未来事件
+        public static readonly  Regex ExtractPlayedEvents=new Regex(@"Events&nbsp;played([\s\S]*?)</table>");
+        
+        //tdMidC[^>]*?>((<[\s\S]*?ageDosCarte.>([^<]*?)</p>[\s\S]*?)|(&nbsp[\s\S]*?))</td>
+        public static readonly Regex ExtractPlayedEventsItem=new Regex(@"tdMidC[^>]*?>((<[\s\S]*?ageDosCarte.>([^<]*?)</p>[\s\S]*?)|(&nbsp[\s\S]*?))</td>");
 
+        public static readonly Regex ExtractPlayedEventsVisible = new Regex(@"Current&nbsp;events&nbsp;played([\s\S]*?)Future events played([\s\S]*?)</table");
+
+
+        /// <summary>
+        /// 状态栏
+        /// </summary>
+        public static readonly Regex ExtractWarning = new Regex(@"div id=.statusBar.[^>]*?>([\s\S]*?)</div");
+        
+        public static readonly Regex ExtractWarningItem = new Regex(@"title=""([^""]*?)""");
+
+        //class="tdMidC"><center><table class="tableau4"[^/]*?tactic0[\s\S]*?p class=.ageCarte ageCarte25.>([^<]*?)</[\s\S]*?nomCarte.>([^<]*?)<
+        public static readonly Regex ExtractTactics = new Regex(@"class=.tdMidC.><center><table class=.tableau4.[^/]*?tactic0[\s\S]*?p class=.ageCarte ageCarte25.>([^<]*?)</[\s\S]*?nomCarte.>([^<]*?)<");
+        //共享阵型框
+        public static readonly Regex ExtractSharedTactics = new Regex(@"tta_tactic0 dataBox.>([\s\S]*?)<form");
+        //p class=.ageCarte ageCarte25.>([^<]*?)</p>[^>]*?>[^>]*?nomCarte.>([^<]*?)<
+        public static readonly Regex ExtractSharedTacticsItem = new Regex(@"p class=.ageCarte ageCarte25.>([^<]*?)</p>[^>]*?>[^>]*?nomCarte.>([^<]*?)<");
 
         //<option value=.(.*?).>(.*?)</option>
         public static readonly Regex ExtractActions = new Regex(@"<option value=.(.*?).>(.*?)</option>");

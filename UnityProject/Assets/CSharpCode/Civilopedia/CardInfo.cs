@@ -8,19 +8,54 @@ namespace Assets.CSharpCode.Civilopedia
 {
     public class CardInfo
     {
-        /// <summary>
-        /// 0-Frugality
-        /// 1-Frederick Barbarossa
-        /// 2-Napoleon Bonaparte
-        /// 3-Impact of Architecture
-        /// </summary>
+        public static CardInfo UnknownMilitaryCard(Age age)
+        {
+            return new CardInfo
+            {
+                CardName =
+                    "Unknown Military Card",
+                InternalId = ((int)(age)).ToString()+"-Unknown",
+                CardType = CardType.Unknown,
+                CardAge = age
+            };
+        }
+
+        #region 基本数据
         public String InternalId;
-
-        public Age CardAge;
-        public String CardName;
         public CardType CardType;
+        public Age CardAge;
+        #endregion
 
-        //Arts
+        #region 文本
+        public String CardName;
+        public String Description;
+        #endregion
+
+        public String Package;
+
+        #region 游戏性数据
+
+        public List<int> ResearchCost=new List<int>();
+        public List<int> BuildCost = new List<int>();
+        public List<int> RedMarkerCost    =new List<int>();
+
+        public List<CardEffect> ImmediateEffects = new List<CardEffect>();
+
+        public List<CardEffect> OneTimeEffects = new List<CardEffect>();
+        public List<CardEffect> SustainedEffects=new List<CardEffect>();
+
+        public List<CardEffect> WinnerEffects = new List<CardEffect>();
+        public List<CardEffect> LoserEffects = new List<CardEffect>();
+
+        public List<int> TacticComposition=new List<int>();
+        public List<int> TacticValue = new List<int>();
+        
+        public List<CardEffect> LeaderActiveSkill = new List<CardEffect>();
+        public List<CardEffect> LeaderPassiveSkill = new List<CardEffect>();
+
+        #endregion
+
+        #region 美术
         /// <summary>
         /// 这张牌的牌面的70*105缩小版Sprite
         /// </summary>
@@ -37,17 +72,22 @@ namespace Assets.CSharpCode.Civilopedia
         /// 其他：空字符串
         /// </summary>
         public String SpecialImage;
-
-        //ServerData
-        public Dictionary<String,Object> ServerData=new Dictionary<string, object>();
-
-
-
+        #endregion
+        
         public CardInfo Clone()
         {
             CardInfo clone = (CardInfo)MemberwiseClone();
-            clone.ServerData = new Dictionary<string, object>();
             return clone;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is CardInfo))
+            {
+                return false;
+            }
+            return InternalId.Equals(((CardInfo)obj).InternalId);
+        }
     }
+    
 }

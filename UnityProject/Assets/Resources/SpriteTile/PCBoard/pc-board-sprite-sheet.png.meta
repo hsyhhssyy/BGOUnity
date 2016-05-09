@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e67874b290e91404ca3bd5b1435c5ba8
-timeCreated: 1462372675
+timeCreated: 1462614724
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -17,6 +17,22 @@ TextureImporter:
     21300020: special_tech_civil
     21300022: special_tech_engineering
     21300024: special_tech_military
+    21300026: unknown_colony
+    21300028: joan_of_arc_preview_background
+    21300030: game_journal_mask
+    21300032: game_journal_item_1
+    21300034: hidden_event
+    21300036: event_seperator
+    21300038: pc-board-small-card-background
+    21300040: pc-board-small-card-governement-background
+    21300042: pc-board-small-card-government-urban-limit-4
+    21300044: pc-board-small-card-government-urban-limit-3
+    21300046: pc-board-small-card-government-urban-limit-2
+    21300048: pc-board-small-card-legend-white-marker-1
+    21300050: pc-board-small-card-legend-red-marker-1
+    21300052: pc-board-card-small-bolder
+    21300054: pc-board-card-resource-cost
+    21300056: pc-board-card-tech-cost
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -63,17 +79,6 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: player-brief-plate-orange
-      rect:
-        serializedVersion: 2
-        x: 12
-        y: 1745
-        width: 96
-        height: 146
-      alignment: 1
-      pivot: {x: 0, y: 1}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
     - name: player-name-plate-orange
       rect:
         serializedVersion: 2
@@ -286,6 +291,155 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+    - name: unknown_colony
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 333
+        width: 71
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: joan_of_arc_preview_background
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 623
+        width: 46
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: game_journal_mask
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 370
+        width: 156
+        height: 241
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 241}
+        - {x: 0, y: 0}
+        - {x: 156, y: 0}
+        - {x: 156, y: 241}
+    - name: game_journal_item_1
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 336
+        width: 156
+        height: 31
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: hidden_event
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 632
+        width: 36
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: event_seperator
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 631
+        width: 3
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: pc-board-small-card-background
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 220
+        width: 70
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -33, y: 52.5}
+        - {x: -35, y: 50.5}
+        - {x: -35, y: -50.5}
+        - {x: -33, y: -52.5}
+        - {x: 33, y: -52.5}
+        - {x: 35, y: -50.5}
+        - {x: 35, y: 50.5}
+        - {x: 33, y: 52.5}
+    - name: pc-board-card-small-bolder
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 109
+        width: 70
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -33, y: 52.5}
+        - {x: -35, y: 50.5}
+        - {x: -35, y: -50.5}
+        - {x: -33, y: -52.5}
+        - {x: 33, y: -52.5}
+        - {x: 35, y: -50.5}
+        - {x: 35, y: 50.5}
+        - {x: 33, y: 52.5}
+      - - {x: -29, y: -44.5}
+        - {x: -29, y: 44.5}
+        - {x: 29, y: 44.5}
+        - {x: 27, y: -46.5}
+    - name: pc-board-card-resource-cost
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 201
+        width: 85
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -29.5, y: 30}
+        - {x: -42.5, y: 17}
+        - {x: -42.5, y: -23}
+        - {x: -40.5, y: -30}
+        - {x: 32.5, y: -30}
+        - {x: 42.5, y: -29}
+        - {x: 42.5, y: 7}
+        - {x: 9.5, y: 30}
+    - name: pc-board-card-tech-cost
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 200
+        width: 85
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -42.5, y: 30}
+        - {x: -42.5, y: -29}
+        - {x: -38.5, y: -30}
+        - {x: 38.5, y: -30}
+        - {x: 42.5, y: -25}
+        - {x: 42.5, y: 24}
+        - {x: 39.5, y: 30}
     outline: []
   spritePackingTag: 
   userData: 

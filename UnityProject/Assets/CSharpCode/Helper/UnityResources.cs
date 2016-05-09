@@ -10,7 +10,9 @@ namespace Assets.CSharpCode.Helper
     {
         private static bool _loaded=false;
 
-        private readonly static Dictionary<String, Sprite> _Sprites = new Dictionary<string, Sprite>(); 
+        private readonly static Dictionary<String, Sprite> _Sprites = new Dictionary<string, Sprite>();
+
+        private static readonly Dictionary<String, Func<Sprite>> lazyLoadSprites=new Dictionary<string, Func<Sprite>>(); 
 
         private static void LoadResource()
         {
@@ -24,6 +26,22 @@ namespace Assets.CSharpCode.Helper
             LoadSprite("SpriteTile/CardRow_Sprite_CardBackground");
             LoadSprite("SpriteTile/SpriteSheet1");
             LoadSprite("SpriteTile/PCBoard/pc-board-sprite-sheet");
+
+            LazyLoadSprite("pc-board-card-small-government-background",
+                ()=>ZoomSprite("SpriteTile/UI/government", new Vector2(0.5f, 0.5f),70f/297f));
+            LazyLoadSprite("pc-board-card-small-urban-background",
+                () => ZoomSprite("SpriteTile/UI/urban", new Vector2(0.5f, 0.5f), 70f / 297f));
+        }
+
+        private static Sprite ZoomSprite(String spName,Vector2 pviot,float scale)
+        {
+            var smallSp = UnityResources.GetSprite(spName);
+            return smallSp != null ? smallSp.CloneResize(pviot, scale) : null;
+        }
+
+        public static void LazyLoadSprite(String key, Func<Sprite> func)
+        {
+            lazyLoadSprites[key] = func;
         }
 
         public static Sprite GetSprite(String key)
@@ -36,7 +54,27 @@ namespace Assets.CSharpCode.Helper
             {
                 LoadResource();
             }
-            return _Sprites.ContainsKey(key) ? _Sprites[key] : Resources.Load<Sprite>(key);
+            if (_Sprites.ContainsKey(key))
+            {
+                return _Sprites[key];
+            }
+
+            if (lazyLoadSprites.ContainsKey(key))
+            {
+                var spriteFunc = lazyLoadSprites[key];
+
+                lazyLoadSprites.Remove(key);
+                var sprite = spriteFunc();
+
+                if (sprite != null)
+                {
+                    _Sprites[key] = sprite;
+                }
+
+                return sprite;
+            }
+
+             return Resources.Load<Sprite>(key);
         }
 
         private static void LoadSprite(String resourcePath)
@@ -48,5 +86,6 @@ namespace Assets.CSharpCode.Helper
                 _Sprites[sp.name]=sp;
             }
         }
+        
     }
 }

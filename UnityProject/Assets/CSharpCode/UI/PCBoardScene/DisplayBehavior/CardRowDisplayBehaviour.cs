@@ -41,17 +41,15 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
                 if (cardRowInfo.Card != null)
                 {
-                    var sprite = UnityResources.GetSprite(cardRowInfo.Card.SmallImage);
+                    var sprite = UnityResources.GetSprite(cardRowInfo.Card.NormalImage);
                     if (sprite != null)
                     {
                         if (cardRowInfo.CanPutBack != true)
                         {
-                            itemFrame.GetComponent<SpriteRenderer>().sprite = sprite;
+                            itemFrame.FindObject("PCBoardCard-Small").GetComponent<PCBoardCardSmallDisplayBehaviour>().Bind(cardRowInfo.Card);
                         }
                     }
 
-                    itemFrame.GetComponent<CardNormalImagePopupCollider>().CardInternalId =
-                        cardRowInfo.Card.InternalId;
 
                     if (cardRowInfo.CivilActionCost > 0)
                     {

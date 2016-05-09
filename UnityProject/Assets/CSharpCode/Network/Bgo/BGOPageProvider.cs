@@ -58,7 +58,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 BgoGame game=new BgoGame();
                 game.GameId = match.Groups[1].Value;
                 game.Nat = match.Groups[3].Value;
-                
+                game.Version = "2.0";
                 game.Name = UTF8Decoder(match.Groups[4].Value);
                 games.Add(game);
 
@@ -154,6 +154,8 @@ namespace Assets.CSharpCode.Network.Bgo
 
             var html = www.text;
 
+            Debug.Log("Board page received");
+
             FillGameBoard(html, game);
 
             if (callback != null)
@@ -229,15 +231,15 @@ namespace Assets.CSharpCode.Network.Bgo
 
             //未来事件
             var matchFutureEvent = BgoRegexpCollections.ExtractFutureEvent.Match(html);
-            if (matchFutureEvent.Groups[2].Value.Length > 4)
+            if (matchFutureEvent.Groups[1].Value.Length > 4)
             {
                 game.FutureEventAge = Age.A;
                 game.FutureEventCount = "0";
             }
             else
             {
-                game.FutureEventAge = (Age)Enum.Parse(typeof(Age), matchFutureEvent.Groups[2].Value);
-                game.FutureEventCount = matchFutureEvent.Groups[3].Value; 
+                game.FutureEventAge = (Age)Enum.Parse(typeof(Age), matchFutureEvent.Groups[1].Value);
+                game.FutureEventCount = matchFutureEvent.Groups[2].Value; 
             }
 
             //卡牌剩余
@@ -251,7 +253,18 @@ namespace Assets.CSharpCode.Network.Bgo
             game.CurrentAge = (Age)Enum.Parse(typeof (Age), matchAgeAndRound.Groups[1].Value);
             game.CurrentRound = Convert.ToInt32(matchAgeAndRound.Groups[2].Value);
 
-
+            //可抄袭阵型
+            var sharedTacticsMatch = BgoRegexpCollections.ExtractSharedTactics.Match(html);
+            game.SharedTactics=new List<CardInfo>();
+            foreach (Match m in BgoRegexpCollections.ExtractSharedTacticsItem.Matches(sharedTacticsMatch.Groups[1].Value))
+            {
+                if (m.Groups[1].Value == "&nbsp;")
+                {
+                    continue;
+                }
+                var internalId = (int)(Age)Enum.Parse(typeof(Age), m.Groups[1].Value) + "-" + m.Groups[2].Value;
+                game.SharedTactics.Add(civilopedia.GetCardInfo(internalId));
+            }
 
             //拆开玩家面板
 
@@ -483,6 +496,16 @@ namespace Assets.CSharpCode.Network.Bgo
                 }
             }
 
+            //殖民地
+            var colonyMatch = BgoRegexpCollections.ExtractColonyBox.Match(htmlShade);
+            board.Colonies = new List<CardInfo>();
+            foreach (Match m in BgoRegexpCollections.FindCardInfoFromUnorderedList.Matches(colonyMatch.Groups[1].Value))
+            {
+                var internalID=((int)Enum.Parse(typeof(Age), m.Groups[1].Value)) + "-" + m.Groups[2].Value;
+                var card=civilopedia.GetCardInfo(internalID);
+                board.Colonies.Add(card);
+            }
+
             //特殊科技
             var matchSpecialTech = BgoRegexpCollections.ExtractSpecialTech.Match(htmlShade);
             String tech=matchSpecialTech.Groups[1].Value;
@@ -509,6 +532,65 @@ namespace Assets.CSharpCode.Network.Bgo
             {
                 var internalId = (int)(Age)Enum.Parse(typeof(Age), m.Groups[1].Value) + "-" + m.Groups[2].Value;
                 board.MilitaryCards.Add(civilopedia.GetCardInfo(internalId));
+            }
+
+            //警告
+            var warningMatch = BgoRegexpCollections.ExtractWarning.Match(htmlShade);
+            board.Warnings=new List<string>();
+            foreach (Match m in BgoRegexpCollections.ExtractWarningItem.Matches(warningMatch.Groups[1].Value))
+            {
+                board.Warnings.Add(m.Groups[1].Value);
+            }
+
+            //阵型
+            var matchTactic = BgoRegexpCollections.ExtractTactics.Match(htmlShade);
+            board.Tactic = matchTactic.Success
+                ? civilopedia.GetCardInfo((int) (Age) Enum.Parse(typeof (Age), matchTactic.Groups[1].Value) + "-" +
+                                          matchTactic.Groups[2].Value)
+                : null;
+
+            board.CurrentEventPlayed = new List<CardInfo>();
+            board.FutureEventPlayed = new List<CardInfo>();
+
+            //已打出的事件(未知内容）,success就表示有，那么就肯定没有已知内容
+            var matchPlayedEvents = BgoRegexpCollections.ExtractPlayedEvents.Match(htmlShade);
+            if (matchPlayedEvents.Success)
+            {
+                string eventStr = matchPlayedEvents.Groups[1].Value;
+                var collection = board.CurrentEventPlayed;
+                foreach (Match m in BgoRegexpCollections.ExtractPlayedEventsItem.Matches(eventStr))
+                {
+                    var ageStr = m.Groups[3].Value;
+                    if (ageStr == "")
+                    {
+                        collection = board.FutureEventPlayed;
+                        continue;
+                    }
+                    var unknownCard = CardInfo.UnknownMilitaryCard((Age) Enum.Parse(typeof (Age), ageStr));
+                    collection.Add(unknownCard);
+                }
+            }else if (
+                (matchPlayedEvents = BgoRegexpCollections.ExtractPlayedEventsVisible.Match(htmlShade)).Success)
+                //已打出的事件(已知内容）,success就表示有
+            {
+                string currentEventStr = matchPlayedEvents.Groups[1].Value;
+                string futureEventStr = matchPlayedEvents.Groups[2].Value;
+                
+                foreach (Match m in BgoRegexpCollections.FindCardInfoFromUnorderedList.Matches(currentEventStr))
+                {
+                    var card =
+                        civilopedia.GetCardInfo((int) (Age) Enum.Parse(typeof (Age), m.Groups[1].Value) + "-" +
+                                                m.Groups[2].Value);
+                    board.CurrentEventPlayed.Add(card);
+                }
+
+                foreach (Match m in BgoRegexpCollections.FindCardInfoFromUnorderedList.Matches(futureEventStr))
+                {
+                    var card =
+                        civilopedia.GetCardInfo((int)(Age)Enum.Parse(typeof(Age), m.Groups[1].Value) + "-" +
+                                                m.Groups[2].Value);
+                    board.FutureEventPlayed.Add(card);
+                }
             }
         }
 

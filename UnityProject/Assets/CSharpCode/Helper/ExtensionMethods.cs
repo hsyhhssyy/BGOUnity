@@ -15,6 +15,11 @@ namespace Assets.CSharpCode.Helper
         #region 中英文混排自动折行
         public static String WordWrap(this String strToConvert, int length)
         {
+            if (strToConvert == null)
+            {
+                return null;
+            }
+
                 StringBuilder xmlString = new StringBuilder();
                 string trimedSourceStr = strToConvert.Trim();
                 if ((trimedSourceStr.Length / length + 1) > 1)
@@ -123,6 +128,15 @@ namespace Assets.CSharpCode.Helper
             return Storage.ContainsKey(path) ? (List<T>) Storage[path] : new List<T>();
         }
 
+        #endregion
+
+        #region 缩放Sprite
+
+        public static Sprite CloneResize(this Sprite sp, Vector2 pivot,float scale)
+        {
+            var sprite = Sprite.Create(sp.texture, sp.rect, pivot, sp.pixelsPerUnit / scale);
+            return sprite;
+        }
         #endregion
     }
 }
