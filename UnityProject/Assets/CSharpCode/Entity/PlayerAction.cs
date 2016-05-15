@@ -6,11 +6,23 @@ using Assets.CSharpCode.Civilopedia;
 
 namespace Assets.CSharpCode.Entity
 {
+
     public class PlayerAction
     {
         public PlayerActionType ActionType;
 
         public Dictionary<Int32,Object> Data=new Dictionary<int, object>();
+
+        public PlayerAction()
+        {
+            
+        }
+
+        public PlayerAction(Action act)
+        {
+            ActionType = PlayerActionType.ProgramDelegateAction;
+            Data[0] = act;
+        }
 
         public override string ToString()
         {

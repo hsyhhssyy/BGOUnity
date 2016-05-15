@@ -17,7 +17,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Collider
         {
             if (Popup != null)
             {
-                Popup.transform.localPosition = new Vector3(-1.93f,-1.1f,-2f);
+                Popup.transform.localPosition = new Vector3(-1.93f,-1.1f,-5f);
                 toggled = !toggled;
                 Popup.SetActive(toggled);
             }

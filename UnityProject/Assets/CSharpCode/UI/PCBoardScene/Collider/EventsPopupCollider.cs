@@ -14,7 +14,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Collider
         {
             if (EventsPopup != null)
             {
-                EventsPopup.transform.position = new Vector3(2f,1.5f,-2f);
+                EventsPopup.transform.position = new Vector3(2f,1.5f,-5f);
 
                 EventsPopup.SetActive(true);
             }

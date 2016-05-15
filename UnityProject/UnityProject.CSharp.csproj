@@ -71,7 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CSharpCode\Civilopedia\CardFunctioncs.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\CardEffect.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
@@ -83,6 +83,7 @@
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoActionFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoPostProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoRegexpCollections.cs" />
@@ -98,8 +99,10 @@
     <Compile Include="Assets\CSharpCode\UI\BoardScene\PlayerBoardColliderBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\BuildingCellCollider.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardNormalImagePreviewCollider.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\BuildingCellActionBinder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\CardRowActionBinder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\PCBoardBindedActionClickTrigger.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ButtonRingPopup.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardRowCardClickCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\EventsPopupCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\GameJournalScrollCollider.cs" />
@@ -109,17 +112,24 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\EventsDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\EventsPopupDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\GameJournalDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PCBoardCardDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PlayerBriefPlateDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\SpecialTechDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\TacticsPopupDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\WarningDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardCardSmallDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoradBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\BuildingMenuAnimationBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenu.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenuButton.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardActionBinder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoardDisplayBehavior.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBriefPlateBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
     <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneColliders.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\InterfaceDefinition.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\LogRecorder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\TextOutline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Materials\FontStencilDrawin.shader" />

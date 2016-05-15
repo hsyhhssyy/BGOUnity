@@ -21,7 +21,8 @@ namespace Assets.CSharpCode.Entity
         public int CivilCardsRemain;
         public int MilitaryCardsRemain;
 
-        public List<String> Players; 
+        public int MyPlayerIndex = -1;
+
         public List<TtaBoard> Boards;
 
         public List<CardInfo> SharedTactics; 

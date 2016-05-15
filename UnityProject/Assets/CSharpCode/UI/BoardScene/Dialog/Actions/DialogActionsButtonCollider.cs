@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.BoardScene.Dialog.Actions
 {
+    [Obsolete]
     public class DialogActionsButtonCollider:MonoBehaviour
     {
         public BoardUIBehaviour BoardGameObject;

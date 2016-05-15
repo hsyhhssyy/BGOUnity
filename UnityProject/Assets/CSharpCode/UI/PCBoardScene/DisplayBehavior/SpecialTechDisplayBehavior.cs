@@ -51,7 +51,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
                 frame.SetActive(true);
                 frame.FindObject("AgeText").GetComponent<TextMesh>().text = info.CardAge.ToString();
-                frame.GetComponent<CardNormalImagePreviewCollider>().Card=info;
+                frame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(info);
             }
         }
     }

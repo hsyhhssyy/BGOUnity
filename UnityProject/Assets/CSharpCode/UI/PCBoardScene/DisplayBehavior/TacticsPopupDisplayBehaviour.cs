@@ -11,27 +11,23 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 {
     public class TacticsPopupDisplayBehaviour:MonoBehaviour
     {
-        public GameObject MyTactics;
+        public GameObject MyTacticFrame;
 
-        public String MyTacticsID;
+        public CardInfo MyTactic;
 
         public GameObject SharedTacticsFrame;
-
-        public GameObject CardImagePopup;
-
+        
         public void Refresh()
         {
             //Your 
-            if (MyTacticsID != null)
+            if (MyTactic != null)
             {
-                var card = TtaCivilopedia.GetCivilopedia(SceneTransporter.CurrentGame.Version)
-                    .GetCardInfo(MyTacticsID);
-                MyTactics.GetComponent<PCBoardCardSmallDisplayBehaviour>().Bind(card);
-                MyTactics.SetActive(true);
+                MyTacticFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(MyTactic);
+                MyTacticFrame.SetActive(true);
             }
             else
             {
-                MyTactics.SetActive(false);
+                MyTacticFrame.SetActive(false);
             }
 
             var prefab=Resources.Load<GameObject>("Dynamic-PC/PCBoardCard-Small");
@@ -43,7 +39,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
             for (int i = 0; i < SceneTransporter.CurrentGame.SharedTactics.Count; i++)
             {
-                Instantiate(prefab).GetComponent<PCBoardCardSmallDisplayBehaviour>()
+                Instantiate(prefab).GetComponent<PCBoardCardDisplayBehaviour>()
                     .Bind(SceneTransporter.CurrentGame.SharedTactics[i], SharedTacticsFrame.transform,
                         new Vector3(0.72f*i, 0f));
             }

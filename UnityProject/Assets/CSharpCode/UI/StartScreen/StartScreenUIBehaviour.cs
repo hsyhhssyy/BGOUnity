@@ -17,13 +17,13 @@ namespace Assets.CSharpCode.UI.StartScreen
         void Start () {
             TtaTranslation.LoadDictionary();
 
-            Debug.Log("App Loaded");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("App Loaded");
         }
 
         [UsedImplicitly] 
         public void LoginButton_Clicked()
         {
-            Debug.Log("LoginButton!");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("LoginButton!");
             //LoginButton
 
             LoginButton.GetComponent<Button>().interactable = false;
@@ -31,7 +31,7 @@ namespace Assets.CSharpCode.UI.StartScreen
             SceneTransporter.Server = new BgoServer();
             StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
             {
-                Debug.Log("Logged in!");
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
 
                 SceneManager.LoadScene("Scene/LobbyScene");
@@ -41,7 +41,7 @@ namespace Assets.CSharpCode.UI.StartScreen
         [UsedImplicitly]
         public void EngineerModeButton_Clicked()
         {
-            Debug.Log("Engineer!");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("Engineer!");
            
             SceneManager.LoadScene("Scene/TestScene");
             

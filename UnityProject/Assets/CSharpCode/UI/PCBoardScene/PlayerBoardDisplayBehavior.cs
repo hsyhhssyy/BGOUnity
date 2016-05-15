@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.Collider;
@@ -13,7 +14,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 {
     public class PlayerBoardDisplayBehavior:MonoBehaviour
     {
-        public PCBoradBehavior BoardBehavior;
+        public PCBoardBehavior BoardBehavior;
 
         public GameObject BackgroundSpriteGo;
 
@@ -34,7 +35,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         public GameObject ColonyFrame;
 
-        public GameObject CardNormalImagePopup;
 
         public GameObject BuildingCellFrame;
 
@@ -70,8 +70,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
 
             TtaBoard board = SceneTransporter.CurrentGame.Boards[BoardBehavior.CurrentPlayerNo];
-
-
+            
             DisplayCardRow(SceneTransporter.CurrentGame.CardRow);
             DisplayEventsAndCardCounts(SceneTransporter.CurrentGame);
 
@@ -115,6 +114,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             CivilCardAge.GetComponent<TextMesh>().text = game.CurrentAge.ToString();
             MilitaryCardAge.GetComponent<TextMesh>().text = game.CurrentAge.ToString();
+            
         }
         private void DisplayCardRow(List<CardRowCardInfo> cardRow)
         {
@@ -125,15 +125,14 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         private void DisplayGovenrment(TtaBoard board)
         {
             GovernmentFrame.FindObject("Name").GetComponent<TextMesh>().text = board.Government.CardName;
-            GovernmentFrame.GetComponent<CardNormalImagePreviewCollider>().Card =
-                board.Government;
+            GovernmentFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(board.Government);
         }
 
         private void DisplayLeader(TtaBoard board)
         {
             if (board.Leader == null)
             {
-                LeaderFrame.GetComponent<CardNormalImagePreviewCollider>().Card = null;
+                LeaderFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(null);
                 LeaderFrame.GetComponent<SpriteRenderer>().sprite = UnityResources.GetSprite("leader_image_no_leader");
             }
             else
@@ -141,7 +140,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 var sprite = UnityResources.GetSprite(board.Leader.SpecialImage) ??
                              UnityResources.GetSprite("leader_unknown");
                 LeaderFrame.GetComponent<SpriteRenderer>().sprite = sprite;
-                LeaderFrame.GetComponent<CardNormalImagePreviewCollider>().Card = board.Leader;
+                LeaderFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(board.Leader);
             }
 
         }
@@ -149,7 +148,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         private void DisplayYellowBlueBank(TtaBoard board)
         {
             //蓝点
-            int blueMarkerOwn = board.ResourceQuantity[ResourceType.BlueMarker];
+            int blueMarkerOwn = board.Resource[ResourceType.BlueMarker];
             for (int blueMarkerDisplay = 15;
                 blueMarkerOwn >= 0 || blueMarkerDisplay >= 0;
                 blueMarkerDisplay--, blueMarkerOwn--)
@@ -167,7 +166,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
 
             //黄点
-            int yellowMarkerOwn = board.ResourceQuantity[ResourceType.YellowMarker];
+            int yellowMarkerOwn = board.Resource[ResourceType.YellowMarker];
             for (int yellowMarkerDisplay = 17;
                 yellowMarkerOwn >= 0 || yellowMarkerDisplay >= 0;
                 yellowMarkerDisplay--, yellowMarkerOwn--)
@@ -188,18 +187,20 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         private void DisplayWhiteRedMarkers(TtaBoard board)
         {
             //framename是指ActionPoint的frame
-            var missingPrefab = Resources.Load<GameObject>("MissingMarker");
-            var whitePrefab = Resources.Load<GameObject>("WhiteMarker");
-            var redPrefab = Resources.Load<GameObject>("RedMarker");
+            var missingPrefab = Resources.Load<GameObject>("Dynamic-PC/MissingMarker");
+            var whitePrefab = Resources.Load<GameObject>("Dynamic-PC/WhiteMarker");
+            var redPrefab = Resources.Load<GameObject>("Dynamic-PC/RedMarker");
 
-            DisplayActionPoint(WhiteMarkerFrame, board.ResourceFluctuation[ResourceType.WhiteMarker],
-                board.ResourceQuantity[ResourceType.WhiteMarker], whitePrefab, missingPrefab);
+            DisplayActionPoint(WhiteMarkerFrame,
+                board.Resource[ResourceType.WhiteMarkerMax] - board.Resource[ResourceType.WhiteMarker],
+                board.Resource[ResourceType.WhiteMarker], whitePrefab, missingPrefab);
 
-            DisplayActionPoint(RedMarkerFrame, board.ResourceFluctuation[ResourceType.RedMarker],
-                board.ResourceQuantity[ResourceType.RedMarker], redPrefab, missingPrefab);
+            DisplayActionPoint(RedMarkerFrame,
+                board.Resource[ResourceType.RedMarkerMax] - board.Resource[ResourceType.RedMarker],
+                board.Resource[ResourceType.RedMarker], redPrefab, missingPrefab);
         }
 
-        private void DisplayActionPoint(GameObject civilActionFrame, int markerFluctuation, int markerQuantity,
+        private void DisplayActionPoint(GameObject civilActionFrame, int missingCount, int markerCount,
             GameObject whitePrefab, GameObject missingPrefab)
         {
             foreach (Transform child in civilActionFrame.transform)
@@ -208,7 +209,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
             //确定第一行
 
-            var markerTotal = markerFluctuation + markerQuantity;
+            var markerTotal = missingCount + markerCount;
 
             if (markerTotal > 6)
             {
@@ -216,35 +217,36 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 for (int i = 0; i < 6; i++)
                 {
                     GameObject prefeb = null;
-                    if (markerQuantity > 0)
+                    if (markerCount > 0)
                     {
-                        markerQuantity--;
+                        markerCount--;
                         prefeb = whitePrefab;
                     }
                     else
                     {
-                        markerFluctuation--;
+                        missingCount--;
                         prefeb = missingPrefab;
                     }
                     var mSp = Instantiate(prefeb);
                     mSp.transform.SetParent(civilActionFrame.transform);
                     mSp.transform.localPosition = new Vector3(0.02f + i * 0.15f, -0.075f);
+                    mSp.transform.localScale = new Vector3(0.5f,0.5f,1f);
                 }
 
                 //第二行
-                var initate = 0.02f + (6 - markerQuantity - markerFluctuation) * 0.075f;
+                var initate = 0.02f + (6 - markerCount - missingCount) * 0.075f;
 
                 for (int i = 0; i < 6; i++)
                 {
                     GameObject prefeb;
-                    if (markerQuantity > 0)
+                    if (markerCount > 0)
                     {
-                        markerQuantity--;
+                        markerCount--;
                         prefeb = whitePrefab;
                     }
-                    else if (markerFluctuation > 0)
+                    else if (missingCount > 0)
                     {
-                        markerFluctuation--;
+                        missingCount--;
                         prefeb = missingPrefab;
                     }
                     else
@@ -254,23 +256,24 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                     var mSp = Instantiate(prefeb);
                     mSp.transform.SetParent(civilActionFrame.transform);
                     mSp.transform.localPosition = new Vector3(initate + i * 0.15f, -0.225f);
+                    mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                 }
             }
             else
             {
-                var initate = 0.02f + (6 - markerQuantity - markerFluctuation) * 0.075f;
+                var initate = 0.02f + (6 - markerCount - missingCount) * 0.075f;
 
                 for (int i = 0; i < 6; i++)
                 {
                     GameObject prefeb;
-                    if (markerQuantity > 0)
+                    if (markerCount > 0)
                     {
-                        markerQuantity--;
+                        markerCount--;
                         prefeb = whitePrefab;
                     }
-                    else if (markerFluctuation > 0)
+                    else if (missingCount > 0)
                     {
-                        markerFluctuation--;
+                        missingCount--;
                         prefeb = missingPrefab;
                     }
                     else
@@ -280,6 +283,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                     var mSp = Instantiate(prefeb);
                     mSp.transform.SetParent(civilActionFrame.transform);
                     mSp.transform.localPosition = new Vector3(initate + i * 0.15f, -0.15f);
+                    mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                 }
             }
         }
@@ -301,8 +305,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             for (int i = 0; i < board.CivilCards.Count; i++)
             {
-                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardSmallDisplayBehaviour>()
-                    .Bind(board.CivilCards[i], CivilHandCardFrame.transform, new Vector3(i*incr, 0));
+                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardDisplayBehaviour>()
+                    .Bind(board.CivilCards[i], CivilHandCardFrame.transform, new Vector3(i*incr, 0,-0.1f*i));
 
             }
         }
@@ -323,8 +327,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             for (int i = 0; i < board.MilitaryCards.Count; i++)
             {
-                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardSmallDisplayBehaviour>()
-                    .Bind(board.MilitaryCards[i], MilitaryHandCardFrame.transform, new Vector3(i * incr, 0));
+                Instantiate(unknownCardPrefab).GetComponent<PCBoardCardDisplayBehaviour>()
+                    .Bind(board.MilitaryCards[i], MilitaryHandCardFrame.transform, new Vector3(i * incr, 0, -0.1f * i));
             }
         }
 
@@ -353,8 +357,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 ConstructingWonderFrame.FindObject("WonderStep").GetComponent<TextMesh>().text =
                     buildStr;
 
-                CardNormalImagePreviewCollider popupCollider = ConstructingWonderFrame.GetComponent<CardNormalImagePreviewCollider>();
-                popupCollider.Card = board.ConstructingWonder;
+                ConstructingWonderFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(board.ConstructingWonder);
             }
             else
             {
@@ -378,10 +381,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
                 cardGo.transform.SetParent(CompletedWondersFrame.transform);
                 cardGo.transform.localPosition = new Vector3(0, -0.27f * i);
-
-                CardNormalImagePreviewCollider popupCollider =
-                    cardGo.FindObject("Mask").GetComponent<CardNormalImagePreviewCollider>();
-                popupCollider.Card = wonderCard;
+                
+                cardGo.FindObject("Mask").GetComponent<PCBoardCardDisplayBehaviour>().Bind(wonderCard);
 
                 var sp = UnityResources.GetSprite(wonderCard.SpecialImage);
                 if (sp != null)
@@ -426,7 +427,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 GameObject cellGo = Instantiate(buildingPrefab);
                 BuildingCellDisplayBehavior bds = cellGo.GetComponent<BuildingCellDisplayBehavior>();
                 bds.Cells = buildings;
-                bds.CardPopupFrame = CardNormalImagePopup;
+                
 
                 cellGo.transform.SetParent(BuildingCellFrame.transform);
                 cellGo.transform.localPosition=new Vector3(-3.926f+ incr * i, 0.726f,-0.1f*i);
@@ -459,8 +460,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 cardGo.transform.SetParent(ColonyFrame.transform);
                 cardGo.transform.localPosition = new Vector3(0, -0.205f * i);
 
-                CardNormalImagePreviewCollider popupCollider = cardGo.GetComponent<CardNormalImagePreviewCollider>();
-                popupCollider.Card = colonyCard;
+                cardGo.GetComponent<PCBoardCardDisplayBehaviour>().Bind(colonyCard);
             }
         }
 
@@ -474,7 +474,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         private void DisplayTactics(TtaBoard board)
         {
-            TacticFrame.MyTacticsID = board.Tactic==null?null: board.Tactic.InternalId;
+            TacticFrame.MyTactic = board.Tactic;
 
             TacticFrame.Refresh();
 
@@ -495,12 +495,12 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
                 GameObject cardGo = Instantiate(warningPrefab);
                 
-
                 cardGo.transform.SetParent(WarningFrame.transform);
                 cardGo.transform.localPosition = new Vector3(0.21f*i, 0);
-
+                
                 cardGo.FindObject("Text").GetComponent<TextMesh>().text = warningMsg;
             }
         }
+
     }
 }

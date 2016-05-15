@@ -27,11 +27,21 @@ namespace Assets.CSharpCode.Helper
             LoadSprite("SpriteTile/SpriteSheet1");
             LoadSprite("SpriteTile/PCBoard/pc-board-sprite-sheet");
 
-            LazyLoadSprite("pc-board-card-small-government-background",
-                ()=>ZoomSprite("SpriteTile/UI/government", new Vector2(0.5f, 0.5f),70f/297f));
-            LazyLoadSprite("pc-board-card-small-urban-background",
-                () => ZoomSprite("SpriteTile/UI/urban", new Vector2(0.5f, 0.5f), 70f / 297f));
+            var cardBackgrounds = new String[]
+            {
+                "action", "urban", "production", "military", "special", "leader", "government", "wonder", "tactic", "war",
+                "event", "aggression", "pact","defend"
+            };
+            foreach (String t in cardBackgrounds)
+            {
+                String s = t;
+                LazyLoadSprite("pc-board-card-small-"+s+"-background",
+                () => ZoomSprite("SpriteTile/UI/"+s, new Vector2(0.5f, 0.5f), 70f / 297f));
+                LazyLoadSprite("pc-board-card-normal-" + s + "-background",
+                () => ZoomSprite("SpriteTile/UI/" + s, new Vector2(0.5f, 0.5f), 210f / 297f));
+            }
         }
+        
 
         private static Sprite ZoomSprite(String spName,Vector2 pviot,float scale)
         {

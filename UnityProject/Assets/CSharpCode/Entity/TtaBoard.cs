@@ -32,8 +32,7 @@ namespace Assets.CSharpCode.Entity
         
         public Dictionary<BuildingType, Dictionary<Age, BuildingCell>> Buildings;
 
-        public readonly Dictionary<ResourceType, int> ResourceQuantity=new Dictionary<ResourceType, int>();
-        public readonly Dictionary<ResourceType, int> ResourceFluctuation=new Dictionary<ResourceType, int>();
+        public readonly Dictionary<ResourceType, int> Resource=new Dictionary<ResourceType, int>();
     }
 
     public class BuildingCell

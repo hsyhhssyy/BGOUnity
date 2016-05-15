@@ -17,12 +17,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
         public GameObject[] Frames;
 
         public Dictionary<Age, BuildingCell> Cells;
-
-        public GameObject CardPopupFrame;
+        
 
         public void Refresh()
         {
-            var civilopedia = TtaCivilopedia.GetCivilopedia(SceneTransporter.CurrentGame.Version);
             Age[] ages = {Age.A, Age.I, Age.II, Age.III};
 
             for (int i = 0; i < 4; i++)
@@ -37,13 +35,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
                 //显示图片
                 var cellInfo = Cells[ages[i]];
-
-                var civilCard = UnityResources.GetSprite(cellInfo.Card.NormalImage);
-                if (civilCard != null)
-                {
-                    Frames[i].FindObject("PCBoardCard-Small").GetComponent<PCBoardCardSmallDisplayBehaviour>()
+                
+                Frames[i].FindObject("CardDisplay").GetComponent<PCBoardCardDisplayBehaviour>()
                         .Bind(cellInfo.Card);
-                }
+                
+
 
                 //显示黄点
                 var yellowPrefab = Resources.Load<GameObject>("Dynamic-PC/YellowMarker");
@@ -53,6 +49,39 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 var bluePrefab = Resources.Load<GameObject>("Dynamic-PC/BlueMarker");
                 DisplayMarker(cellInfo.Storage, bluePrefab, Frames[i].FindObject("BlueMarkers"));
                 
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (Frames[i].activeSelf == false)
+                {
+                    continue;
+                }
+                var cellInfo = Cells[ages[i]];
+                if (i == 3 || Frames[i + 1].activeSelf != true)
+                {
+                    Frames[i].FindObject("AgeText").SetActive(true);
+                    Frames[i].FindObject("NameText").SetActive(true);
+                    Frames[i].FindObject("SideName").SetActive(false);
+
+                    Frames[i].FindObject("AgeText").GetComponent<TextMesh>().text = cellInfo.Card.CardAge.ToString();
+                    Frames[i].FindObject("NameText").GetComponent<TextMesh>().text = cellInfo.Card.CardName.WordWrap(4);
+                }
+                else
+                {
+                    Frames[i].FindObject("AgeText").SetActive(false);
+                    Frames[i].FindObject("NameText").SetActive(false);
+                    Frames[i].FindObject("SideName").SetActive(true);
+
+                    Frames[i].FindObject("SideName").GetComponent<TextMesh>().text = cellInfo.Card.CardName.WordWrap(4);
+                }
+
+                var imageSp = UnityResources.GetSprite(cellInfo.Card.NormalImage);
+                if (imageSp != null)
+                {
+                    Frames[i].FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
+                }
+
             }
         }
 
@@ -70,7 +99,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 {
                     var mSp = Instantiate(markerPrefab);
                     mSp.transform.SetParent(frame.transform);
-                    mSp.transform.localPosition = new Vector3( i * 0.15f, 0);
+                    mSp.transform.localPosition = new Vector3( i * -0.07f, 0);
+                    mSp.transform.localScale = new Vector3(0.5f,0.5f,1f);
                 }
 
                 //第二行
@@ -80,7 +110,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 {
                     var mSp = Instantiate(markerPrefab);
                     mSp.transform.SetParent(frame.transform);
-                    mSp.transform.localPosition = new Vector3(i * 0.15f, -0.15f);
+                    mSp.transform.localPosition = new Vector3(i * -0.07f, -0.15f,-0.01f*i);
+                    mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                 }
             }
             else

@@ -30,7 +30,7 @@ namespace Assets.CSharpCode.UI.LobbyScene
             {
                 _games = gamesReturn;
 
-                Debug.Log("List Get!");
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("List Get!");
 
                 SceneTransporter.LastListedGames = new List<TtaGame>();
 

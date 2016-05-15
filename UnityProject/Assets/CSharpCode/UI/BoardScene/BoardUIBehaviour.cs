@@ -15,6 +15,7 @@ using UnityEngine.UI;
 
 namespace Assets.CSharpCode.UI.BoardScene
 {
+    [Obsolete]
     [UsedImplicitly]
     public class BoardUIBehaviour : MonoBehaviour
     {
@@ -32,6 +33,7 @@ namespace Assets.CSharpCode.UI.BoardScene
         public UnityEngine.UI.Dropdown UnknownActionDropDown;
         #endregion
 
+        /**
         //private TtaCivilopedia civilopedia;
 
         [UsedImplicitly]
@@ -235,7 +237,7 @@ namespace Assets.CSharpCode.UI.BoardScene
                 mSp.transform.localPosition = new Vector3(workerPoolX, -2.4f);
                 workerPoolX += 0.225f;
             }
-            Debug.Log("Total Worker:"+ board.ResourceQuantity[ResourceType.WorkerPool]+" "+ board.ResourceFluctuation[ResourceType.WorkerPool]);
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("Total Worker:"+ board.ResourceQuantity[ResourceType.WorkerPool]+" "+ board.ResourceFluctuation[ResourceType.WorkerPool]);
 
             //奇迹
             DisplayWonders(board);
@@ -493,7 +495,7 @@ namespace Assets.CSharpCode.UI.BoardScene
                 }
                 else
                 {
-                    Debug.Log("No sprite for:"+ wonder.SmallImage);
+                   Assets.CSharpCode.UI.Util.LogRecorder.Log("No sprite for:"+ wonder.SmallImage);
                 }
 
                 cWonderGo.transform.parent = frameGo.transform;
@@ -609,7 +611,7 @@ namespace Assets.CSharpCode.UI.BoardScene
             var item = SceneTransporter.CurrentGame.CardRow[Position];
             if ((!item.CanTake)&&(!item.CanPutBack))
             {
-                Debug.Log("Error:Can't take/put this card");
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("Error:Can't take/put this card");
                 return;
             }
             //然后提交给服务器
@@ -626,7 +628,7 @@ namespace Assets.CSharpCode.UI.BoardScene
 
         public void PopupDialog(String dialog)
         {
-            //Debug.Log("Open Dialog - "+dialog);
+            //LogRecorder.Log("Open Dialog - "+dialog);
             GameObject dialogFrame = null;
             switch (dialog)
             {
@@ -639,7 +641,7 @@ namespace Assets.CSharpCode.UI.BoardScene
             }
             if (dialogFrame == null)
             {
-                Debug.Log("Can't Find Dialog - "+dialog);
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("Can't Find Dialog - "+dialog);
                 return;
             }
 
@@ -667,7 +669,7 @@ namespace Assets.CSharpCode.UI.BoardScene
 
             if (actionFound != null)
             {
-                Debug.Log("Go!Action:"+ str);
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("Go!Action:"+ str);
                 LoadingGo.SetActive(true);
                 StartCoroutine(SceneTransporter.Server.TakeAction(SceneTransporter.CurrentGame, actionFound,
                     BackgroundRefresh));
@@ -676,10 +678,12 @@ namespace Assets.CSharpCode.UI.BoardScene
 
         private void BackgroundRefresh()
         {
-            Debug.Log("Background Refresh");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("Background Refresh");
             //StartCoroutine(RefreshBoard());
             DisplayGameBoard(SceneTransporter.CurrentGame);
             LoadingGo.SetActive(false);
         }
+
+    **/
     }
 }

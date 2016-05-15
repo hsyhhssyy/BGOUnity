@@ -31,7 +31,7 @@ namespace Assets.CSharpCode.Helper
                 //Switch Scene
                 SceneTransporter.LastError = condition+"\n"+stackTrace;
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Scene/TestScene");
-                Debug.Log("ExceptionReceived");
+               Assets.CSharpCode.UI.Util.LogRecorder.Log("ExceptionReceived");
             }
         }
         internal static void ReportCrash(string message, string stack)
@@ -85,7 +85,7 @@ Unity Version {16}",
             ServicePointManager.ServerCertificateValidationCallback =
                 (s, certificate, chain, sslPolicyErrors) => true;
             smtpServer.Send(mail);
-            Debug.Log("success");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("success");
             
         }
 

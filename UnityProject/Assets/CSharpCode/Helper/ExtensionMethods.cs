@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Entity;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Assets.CSharpCode.Helper
 {
     public static class ExtensionMethods
     {
-        private const string _newline = "\r\n";
-        
         #region 中英文混排自动折行
         public static String WordWrap(this String strToConvert, int length)
         {
@@ -30,10 +30,19 @@ namespace Assets.CSharpCode.Helper
                     for (int i = 0; i < subCount; i++)
                     {
                         string oneOfVal = SubStrLenth(trimedSourceStr, startIndex, subLen * 2);
-                        if (oneOfVal != "")
+                        if (oneOfVal.Trim() != "")
                         {
-                            xmlString.AppendLine(oneOfVal);
-                            startIndex += GetStrByteLength(oneOfVal);
+                            if (oneOfVal.Contains("\n"))
+                            {
+                                int index = oneOfVal.IndexOf("\n");
+                                xmlString.AppendLine(oneOfVal.Substring(0, index+1).TrimEnd());
+                                startIndex += GetStrByteLength(oneOfVal.Substring(0, index + 1));
+                            }
+                            else
+                            {
+                                xmlString.AppendLine(oneOfVal);
+                                startIndex += GetStrByteLength(oneOfVal);
+                            }
                         }
                         else
                         {
@@ -47,16 +56,11 @@ namespace Assets.CSharpCode.Helper
                     xmlString.AppendLine( trimedSourceStr);
                 }
 
+
             return xmlString.ToString().Trim();
             
         }
-
-        public static bool IsChinese(char c)
-        {
-            System.Text.Encoding.Default.GetByteCount(new char[]{c});
-            return (int)c >= 0x4E00 && (int)c <= 0x9FA5;
-        }
-
+        
         private static int GetStrByteLength(string str)
         {
             return System.Text.Encoding.Default.GetByteCount(str);
@@ -104,6 +108,29 @@ namespace Assets.CSharpCode.Helper
         }
 
         #endregion
+
+        [UsedImplicitly]
+        public static String CutBetween(this String origin, String prefix, String suffix)
+        {
+            var index1 = origin.IndexOf(prefix, StringComparison.Ordinal);
+            var index2= origin.IndexOf(suffix, StringComparison.Ordinal);
+            var cutPiece=origin.Substring(index1 + prefix.Length, index2 - index1 - prefix.Length);
+            return cutPiece;
+        }
+        [UsedImplicitly]
+        public static String CutAfter(this String origin, String prefix)
+        {
+            var index1 = origin.IndexOf(prefix, StringComparison.Ordinal);
+            var cutPiece = origin.Substring(index1 + prefix.Length, origin.Length-index1-prefix.Length);
+            return cutPiece;
+        }
+        [UsedImplicitly]
+        public static String CutBefore(this String origin, String suffix)
+        {
+            var index2 = origin.IndexOf(suffix, StringComparison.Ordinal);
+            var cutPiece = origin.Substring(0, index2);
+            return cutPiece;
+        }
 
         public static GameObject FindObject(this GameObject parent, string name)
         {

@@ -8,12 +8,15 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.BoardScene
 {
+    [Obsolete]
     public class PlayerBoardColliderBehaviour:MonoBehaviour
     {
         public BoardUIBehaviour BehaviourController;
         public String Action;
         public String Data;
         public GameObject Go;
+
+        /**
 
         #region Actions
 
@@ -25,7 +28,7 @@ namespace Assets.CSharpCode.UI.BoardScene
         [UsedImplicitly]
         public void OnMouseUpAsButton()
         {
-            Debug.Log("ColliderAction:"+Action);
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("ColliderAction:"+Action);
             switch (Action)
             {
                 case ActionSwitchBoard:
@@ -38,10 +41,10 @@ namespace Assets.CSharpCode.UI.BoardScene
                     BehaviourController.TakeCard(Convert.ToInt32(Data));
                     break;
                 default:
-                    Debug.Log("Unknown Action:"+Action);
+                   Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown Action:"+Action);
                     break;
             }
         }
-        
+        **/
     }
 }

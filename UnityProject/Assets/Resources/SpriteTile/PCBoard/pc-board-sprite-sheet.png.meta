@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: e67874b290e91404ca3bd5b1435c5ba8
-timeCreated: 1462614724
+timeCreated: 1463292063
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: player-brief-plate-orange
-    21300002: player-name-plate-orange
+    21300002: pc-board-card-tactic-artillery
     21300004: no-card-image-small
     21300006: no-card-image-normal
     21300008: completed-wonder-mask
@@ -33,6 +33,17 @@ TextureImporter:
     21300052: pc-board-card-small-bolder
     21300054: pc-board-card-resource-cost
     21300056: pc-board-card-tech-cost
+    21300058: pc-board-card-normal-bolder
+    21300060: pc-board-card-extra-science-cost
+    21300062: pc-board-card-urban-limit
+    21300064: pc-board-card-strengh-main
+    21300066: pc-board-card-strength-addition
+    21300068: pc-board-card-tactic-icon-artillery
+    21300070: pc-board-card-tactic-icon-cavalry
+    21300072: pc-board-card-tactic-icon-infantry
+    21300074: pc-board-menu-build-upgrade
+    21300076: pc-board-buildings-menu-item
+    21300078: pc-board-buildings-menu
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -79,7 +90,7 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: player-name-plate-orange
+    - name: pc-board-card-tactic-artillery
       rect:
         serializedVersion: 2
         x: 12
@@ -312,7 +323,11 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
+      outline:
+      - - {x: -23, y: 18}
+        - {x: -23, y: -18}
+        - {x: 23, y: -18}
+        - {x: 23, y: 18}
     - name: game_journal_mask
       rect:
         serializedVersion: 2
@@ -440,6 +455,211 @@ TextureImporter:
         - {x: 42.5, y: -25}
         - {x: 42.5, y: 24}
         - {x: 39.5, y: 30}
+    - name: pc-board-card-normal-bolder
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 443
+        width: 210
+        height: 315
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -105, y: 157.5}
+        - {x: -105, y: -157.5}
+        - {x: 105, y: -157.5}
+        - {x: 105, y: 157.5}
+      - - {x: -99, y: 150.5}
+        - {x: 99, y: 150.5}
+        - {x: 99, y: -150.5}
+        - {x: -98, y: -150.5}
+    - name: pc-board-card-extra-science-cost
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 273
+        width: 55
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25.5, y: 22.5}
+        - {x: -27.5, y: 18.5}
+        - {x: -27.5, y: -19.5}
+        - {x: -20.5, y: -22.5}
+        - {x: 20.5, y: -22.5}
+        - {x: 27.5, y: -15.5}
+        - {x: 27.5, y: 10.5}
+        - {x: 16.5, y: 22.5}
+    - name: pc-board-card-urban-limit
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 270
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -19, y: 25}
+        - {x: -25, y: 17}
+        - {x: -25, y: -20}
+        - {x: -15, y: -25}
+        - {x: 14, y: -25}
+        - {x: 25, y: -18}
+        - {x: 25, y: 23}
+        - {x: 18, y: 25}
+    - name: pc-board-card-strengh-main
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 85
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -42, y: 44}
+        - {x: -42, y: -44}
+        - {x: 40, y: -44}
+        - {x: 42, y: -41}
+        - {x: 42, y: 44}
+      - - {x: 42, y: -22}
+        - {x: 45, y: -21}
+        - {x: 45, y: -18}
+        - {x: 42, y: -17}
+        - {x: 40, y: -19}
+    - name: pc-board-card-strength-addition
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 95
+        width: 60
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 35}
+        - {x: -30, y: 15}
+        - {x: -30, y: -32}
+        - {x: -21, y: -34}
+        - {x: 30, y: -34}
+        - {x: 30, y: 35}
+    - name: pc-board-card-tactic-icon-artillery
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 94
+        width: 70
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -35, y: 2}
+        - {x: -35, y: -30}
+        - {x: 23, y: -30}
+        - {x: 35, y: -20}
+        - {x: 35, y: 32}
+        - {x: 18, y: 32}
+        - {x: -29, y: 22}
+    - name: pc-board-card-tactic-icon-cavalry
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 94
+        width: 70
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 40}
+        - {x: -31, y: -3}
+        - {x: -31, y: -40}
+        - {x: 6, y: -40}
+        - {x: 30, y: 2}
+        - {x: 30, y: 19}
+        - {x: 13, y: 40}
+    - name: pc-board-card-tactic-icon-infantry
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 94
+        width: 70
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: -37}
+        - {x: 20, y: -36}
+        - {x: 22, y: -22}
+        - {x: 22, y: 24}
+        - {x: 18, y: 39}
+        - {x: 15, y: 37}
+        - {x: 12, y: 34}
+        - {x: 7, y: 39}
+        - {x: -8, y: 39}
+        - {x: -25, y: 20}
+        - {x: -26, y: 17}
+        - {x: -26, y: -33}
+        - {x: -18, y: -39}
+        - {x: -6, y: -39}
+        - {x: -6, y: -27}
+        - {x: -6, y: -33}
+    - name: pc-board-menu-build-upgrade
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 329
+        width: 60
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 26, y: 30}
+        - {x: -20, y: 30}
+        - {x: -30, y: 28}
+        - {x: -30, y: -30}
+        - {x: 18, y: -30}
+        - {x: 30, y: -20}
+        - {x: 30, y: 21}
+        - {x: 28, y: 29}
+    - name: pc-board-buildings-menu-item
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 740
+        width: 123
+        height: 18
+      alignment: 1
+      pivot: {x: 0, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: pc-board-buildings-menu
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 625
+        width: 195
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -95.5, y: 55}
+        - {x: -97.5, y: 53}
+        - {x: -97.5, y: -53}
+        - {x: -95.5, y: -55}
+        - {x: 97.5, y: -55}
+        - {x: 97.5, y: 55}
     outline: []
   spritePackingTag: 
   userData: 

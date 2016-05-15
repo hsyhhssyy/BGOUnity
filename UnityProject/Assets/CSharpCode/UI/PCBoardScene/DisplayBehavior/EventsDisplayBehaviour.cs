@@ -19,6 +19,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
         public GameObject JoanOfArcAgeTextGo;
         public GameObject JoanOfArcNameTextGo;
 
+        public EventsPopupDisplayBehaviour Popup;
+
         public void Refresh()
         {
             if (!SceneTransporter.IsCurrentGameRefreshed())
@@ -48,6 +50,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 SceneTransporter.CurrentGame.CurrentEventCount);
             Fill(FutureEventCountGOs, SceneTransporter.CurrentGame.CurrentAge,
                 SceneTransporter.CurrentGame.FutureEventCount);
+
+            Popup.Refresh();
         }
 
         private void Fill(GameObject[] frames, Age CurrentAge, String CardStr)

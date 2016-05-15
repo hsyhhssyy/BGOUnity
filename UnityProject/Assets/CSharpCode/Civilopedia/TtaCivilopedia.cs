@@ -33,10 +33,10 @@ namespace Assets.CSharpCode.Civilopedia
 
             var dictStr = textAsset.text;
 
-            Civilopedias =new Dictionary<string, TtaCivilopedia>();
+            Civilopedias = new Dictionary<string, TtaCivilopedia>();
 
             var civilopedia = new TtaCivilopedia();
-            civilopedia.cardInfos=new Dictionary<string, CardInfo>();
+            civilopedia.cardInfos = new Dictionary<string, CardInfo>();
 
             var rows = dictStr.Split("\n".ToCharArray());
 
@@ -49,26 +49,24 @@ namespace Assets.CSharpCode.Civilopedia
                 }
                 CardInfo info = new CardInfo();
                 info.InternalId = sp[0];
-                info.CardType = (CardType)Enum.Parse(typeof (CardType), sp[1]);
-                info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).WordWrap(7).Trim();
+                info.CardType = (CardType)Enum.Parse(typeof(CardType), sp[1]);
+                info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).Trim();
                 info.CardAge = (Age)Convert.ToInt32(info.InternalId.Split("-".ToCharArray(), 2)[0]);
-                info.SmallImage = sp[3].Replace(".png","")+"_small";
-                info.NormalImage = sp[3].Replace(".png","");
 
-                UnityResources.LazyLoadSprite(info.SmallImage, () =>
-                {
-                    var smallSp=UnityResources.GetSprite(info.NormalImage);
-                    if (smallSp != null)
-                    {
-                        return smallSp.CloneResize(new Vector2(0f, 1.05f), 0.7f/1.8f);
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                });
+                info.SmallImage = sp[3].Replace(".png","")+"_small";
+                info.NormalImage = sp[3].Replace(".png", "");
+
+                info.ResearchCost = new List<int> { 1,1 };
+                info.BuildCost = new List<int> { 1 };
+                info.RedMarkerCost = new List<int> { 3};
+
+                info.TacticComposition = new List<int> {1,2, 3 };
+                info.TacticValue = new List<int> { 1, 2 };
+
+                info.Description = "Test";
+
                 civilopedia.cardInfos[info.InternalId] = info;
-                
+
             }
 
             Civilopedias.Add("2.0", civilopedia);
@@ -79,26 +77,70 @@ namespace Assets.CSharpCode.Civilopedia
 
         private Dictionary<String, CardInfo> cardInfos;
 
-        public CardInfo GetCardInfo(String internalId)
+        public CardInfo GetCardInfoById(String internalId)
         {
-            var cardInfo = (new[] {"", "0-", "1-", "2-", "3-"})
-                .Select(x => x + internalId)
-                .Intersect(cardInfos.Keys)
-                .Select(x => cardInfos[x])
-                .FirstOrDefault();
-            
+            CardInfo cardInfo;
+            if (!cardInfos.ContainsKey(internalId))
+            {
+                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown internal id " + internalId);
+                cardInfo = new CardInfo
+                {
+                    CardName = "Unknown Card " + internalId,
+                    InternalId = internalId,
+                    CardType = CardType.Unknown,
+                    CardAge = Age.A
+                };
+            }
+            else
+            {
+                cardInfo = cardInfos[internalId];
+                cardInfo = cardInfo.Clone();
+            }
+
+            return cardInfo;
+        }
+
+        public CardInfo GetCardInfoByName(Age age, String name)
+        {
+            var translatedName = TtaTranslation.GetTranslatedText(name);
+            var cardInfo = cardInfos.FirstOrDefault(info => info.Value.CardAge == age && (info.Value.CardName == name || info.Value.CardName == translatedName)).Value;
 
             if (cardInfo == null)
             {
-                Debug.Log("Unknown internal id "+ internalId);
+                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown age and name pair:" + name);
                 cardInfo = new CardInfo
                 {
                     CardName =
-                        TtaTranslation.GetTranslatedText(internalId.Split("-".ToCharArray(), 2).Last())
-                            .WordWrap(7)
-                            .Trim(),
-                    InternalId = internalId,
-                    CardType = CardType.Action,
+                        TtaTranslation.GetTranslatedText(name).Trim(),
+                    InternalId = "Unknown!",
+                    CardType = CardType.Unknown,
+                    CardAge = age
+                };
+            }
+            else
+            {
+                cardInfo = cardInfo.Clone();
+            }
+
+            return cardInfo;
+        }
+
+        public CardInfo GetCardInfoByName(String name)
+        {
+            var translatedName = TtaTranslation.GetTranslatedText(name);
+            var cardInfo =
+                cardInfos.FirstOrDefault(info => info.Value.CardName == name || info.Value.CardName == translatedName)
+                    .Value;
+
+            if (cardInfo == null)
+            {
+                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown age and name pair:" + name);
+                cardInfo = new CardInfo
+                {
+                    CardName =
+                        TtaTranslation.GetTranslatedText(name).Trim(),
+                    InternalId = "Unknown!",
+                    CardType = CardType.Unknown,
                     CardAge = Age.A
                 };
             }

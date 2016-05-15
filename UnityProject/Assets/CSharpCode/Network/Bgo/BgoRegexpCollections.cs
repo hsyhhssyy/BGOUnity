@@ -27,6 +27,11 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractGovenrmentAndActionPointsMissing = new Regex(@"/missing");
 
         /// <summary>
+        /// 这个可以测试我的名字，但是要注意需要替换&nbsp;
+        /// </summary>
+        public static readonly Regex ExtractMyName = new Regex(@"connect_ok[^<]*?<[^>]*?>([^<]*?)<");
+
+        /// <summary>
         /// 这个可以匹配卡牌列. Group 2 是 post url, 3 是 idNote ，4是a的class，5是 age， 6是card name
         /// 8是需要的CA，没有CA可能是免费拿
         /// postUrl为空就是拿不了的卡

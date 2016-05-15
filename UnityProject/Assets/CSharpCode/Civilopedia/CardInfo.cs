@@ -6,7 +6,7 @@ using Assets.CSharpCode.Entity;
 
 namespace Assets.CSharpCode.Civilopedia
 {
-    public class CardInfo
+    public class CardInfo : IEquatable<CardInfo>
     {
         public static CardInfo UnknownMilitaryCard(Age age)
         {
@@ -40,8 +40,6 @@ namespace Assets.CSharpCode.Civilopedia
         public List<int> RedMarkerCost    =new List<int>();
 
         public List<CardEffect> ImmediateEffects = new List<CardEffect>();
-
-        public List<CardEffect> OneTimeEffects = new List<CardEffect>();
         public List<CardEffect> SustainedEffects=new List<CardEffect>();
 
         public List<CardEffect> WinnerEffects = new List<CardEffect>();
@@ -80,14 +78,31 @@ namespace Assets.CSharpCode.Civilopedia
             return clone;
         }
 
-        public override bool Equals(object obj)
+        #region Equality Members
+
+        public bool Equals(CardInfo other)
         {
-            if (!(obj is CardInfo))
-            {
-                return false;
-            }
-            return InternalId.Equals(((CardInfo)obj).InternalId);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(InternalId, other.InternalId);
         }
+
+        public override int GetHashCode()
+        {
+            return (InternalId != null ? InternalId.GetHashCode() : 0);
+        }
+
+        public static bool operator ==(CardInfo left, CardInfo right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(CardInfo left, CardInfo right)
+        {
+            return !Equals(left, right);
+        }
+
+        #endregion
     }
-    
+
 }

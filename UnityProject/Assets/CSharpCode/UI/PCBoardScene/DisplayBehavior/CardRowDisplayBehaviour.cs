@@ -14,10 +14,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
         public List<CardRowCardInfo> CardRow;
 
         public GameObject[] CardRowGameObjectItems;
+        public GameObject[] CardRowCardItems;
 
         public void Refresh()
         {
-            var whitePrefab = Resources.Load<GameObject>("WhiteMarker");
+            var whitePrefab = Resources.Load<GameObject>("Dynamic-PC/WhiteMarker");
+
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("CardRow count:"+CardRow.Count);
 
             int i = 0;
             for (; i < CardRow.Count; i++)
@@ -27,6 +30,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                 //DisplayCard
                 //cardRowInfo.Card;
                 var itemFrame=CardRowGameObjectItems[i];
+                var cardFrame = CardRowCardItems[i];
                 var civilCostFrame = itemFrame.FindObject("CivilActionCost");
 
                 if (i > 2)
@@ -41,13 +45,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
                 if (cardRowInfo.Card != null)
                 {
-                    var sprite = UnityResources.GetSprite(cardRowInfo.Card.NormalImage);
-                    if (sprite != null)
+                    if (cardRowInfo.CanPutBack != true)
                     {
-                        if (cardRowInfo.CanPutBack != true)
-                        {
-                            itemFrame.FindObject("PCBoardCard-Small").GetComponent<PCBoardCardSmallDisplayBehaviour>().Bind(cardRowInfo.Card);
-                        }
+                        cardFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(cardRowInfo.Card);
                     }
 
 
@@ -59,6 +59,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
                             var mSp = Instantiate(whitePrefab);
                             mSp.transform.SetParent(civilCostFrame.transform);
                             mSp.transform.localPosition = new Vector3(init + j * 0.15f, 0f);
+                            mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                         }
                     }
                 }

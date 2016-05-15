@@ -24,7 +24,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Collider
         void OnMouseDrag()
         {
             Vector3 distance = Camera.main.ScreenToWorldPoint(Input.mousePosition) - lastMousePosition;
-            //Debug.Log("The mouse moved " + distance.magnitude + " pixels");
+            //LogRecorder.Log("The mouse moved " + distance.magnitude + " pixels");
             
             //distance = Camera.main.ScreenToWorldPoint(distance);
 

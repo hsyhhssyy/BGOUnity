@@ -17,7 +17,7 @@ namespace Assets.CSharpCode.UI.TestScene
             Animaion1Go.transform.localPosition = new Vector3(1, 0);
             var anime = Animaion1Go.GetComponent<Animator>();
             anime.SetTrigger("Play");
-            Debug.Log("AnimationDone");
+           Assets.CSharpCode.UI.Util.LogRecorder.Log("AnimationDone");
         }
     }
 }

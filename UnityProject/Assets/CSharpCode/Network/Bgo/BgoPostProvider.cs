@@ -19,9 +19,14 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.TakeCardFromCardRow:
                 case PlayerActionType.PutBackCard:
                     return SendTakePutBackCardPostMessage(sessionObject, game,action.Data[3].ToString(),action.Data[2].ToString(),callback);
+                case PlayerActionType.IncreasePopulation:
+                    return UnknownAction(sessionObject, game, action.Data[2].ToString(), callback);
+                case PlayerActionType.BuildBuilding:
+                    return UnknownAction(sessionObject, game, action.Data[2].ToString(), callback);
                 case PlayerActionType.Unknown:
-                default:
                     return UnknownAction(sessionObject, game, action.Data[1].ToString(),  callback);
+                default:
+                    return null;
             }
         }
 
@@ -53,7 +58,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
             if (www.error != null)
             {
-                Debug.Log(www.error);
+               Assets.CSharpCode.UI.Util.LogRecorder.Log(www.error);
 
                 yield break;
             }
@@ -87,7 +92,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
             if (www.error != null)
             {
-                Debug.Log(www.error);
+               Assets.CSharpCode.UI.Util.LogRecorder.Log(www.error);
 
                 yield break;
             }
@@ -113,7 +118,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
             if (www.error != null)
             {
-                Debug.Log(www.error);
+               Assets.CSharpCode.UI.Util.LogRecorder.Log(www.error);
 
                 yield break;
             }
