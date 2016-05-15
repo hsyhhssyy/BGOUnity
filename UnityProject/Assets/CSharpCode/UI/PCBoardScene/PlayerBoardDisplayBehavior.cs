@@ -64,17 +64,17 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 return;
             }
 
-            if (SceneTransporter.CurrentGame.Boards.Count <= BoardBehavior.CurrentPlayerNo)
+            if (SceneTransporter.CurrentGame.Boards.Count <= BoardBehavior.CurrentPlayerBoardIndex)
             {
                 return;
             }
 
-            TtaBoard board = SceneTransporter.CurrentGame.Boards[BoardBehavior.CurrentPlayerNo];
+            TtaBoard board = SceneTransporter.CurrentGame.Boards[BoardBehavior.CurrentPlayerBoardIndex];
             
             DisplayCardRow(SceneTransporter.CurrentGame.CardRow);
             DisplayEventsAndCardCounts(SceneTransporter.CurrentGame);
 
-            var backgroundSpriteName = "SpriteTile/PCBoard/pc-board-player-background-" + "orange,purple,green,grey".Split(",".ToCharArray())[BoardBehavior.CurrentPlayerNo];
+            var backgroundSpriteName = "SpriteTile/PCBoard/pc-board-player-background-" + "orange,purple,green,grey".Split(",".ToCharArray())[BoardBehavior.CurrentPlayerBoardIndex];
             var backgroundsp = UnityResources.GetSprite(backgroundSpriteName);
             BackgroundSpriteGo.GetComponent<SpriteRenderer>().sprite = backgroundsp;
 
@@ -430,7 +430,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 
 
                 cellGo.transform.SetParent(BuildingCellFrame.transform);
-                cellGo.transform.localPosition=new Vector3(-3.926f+ incr * i, 0.726f,-0.1f*i);
+                cellGo.transform.localPosition=new Vector3(-3.926f+ incr * i, 0.726f,-1f+0.1f*i);
 
                 bds.Refresh();
                 i ++;

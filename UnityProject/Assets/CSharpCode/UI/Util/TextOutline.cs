@@ -62,7 +62,7 @@ namespace Assets.CSharpCode.UI.Util
                 Vector3 worldPoint = Camera.main.ScreenToWorldPoint(screenPoint + pixelOffset);
                 other.transform.position = worldPoint;
 
-                other.transform.localPosition = new Vector3(other.transform.localPosition.x, other.transform.localPosition.y, 0.001f);
+                other.transform.localPosition = new Vector3(other.transform.localPosition.x, other.transform.localPosition.y, 0.00001f);
 
                 //MeshRenderer otherMeshRenderer = transform.GetChild(i).GetComponent<MeshRenderer>();
                 //otherMeshRenderer.sortingLayerID = meshRenderer.sortingLayerID;

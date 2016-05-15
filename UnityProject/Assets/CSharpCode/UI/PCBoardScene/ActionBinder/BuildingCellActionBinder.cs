@@ -14,23 +14,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 {
     public class BuildingCellActionBinder : MonoBehaviour, TtaActionBinder
     {
-        public PCBoardBehavior BoardBehavior;
         public BuildingCellDisplayBehavior DisplayBehavior;
 
-        public GameObject MenuFrame;
+        public BuildingMenuAnimationBehaviour MenuFrame;
+
         
-
-        private GameObject BuildUpgradeMenu;
-
         public void Start()
         {
-            if (BuildUpgradeMenu == null)
-            {
-                var prefab = Resources.Load<GameObject>("Dynamic-PC/Menu/BuildUpgradeMenu");
-                BuildUpgradeMenu = Instantiate(prefab);
-                BuildUpgradeMenu.transform.parent = this.gameObject.transform;
-                BuildUpgradeMenu.SetActive(false);
-            }
         }
 
         public void Update()
@@ -38,8 +28,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 
         }
 
-        public void BindAction()
+        public void BindAction(PCBoardBehavior boardBehavior)
         {
+            if (boardBehavior == null)
+            {
+                return;
+            }
+            
             var cells = DisplayBehavior.Cells;
 
             if (cells == null)
@@ -59,78 +54,74 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
                 //显示图片
                 var cellInfo = cells[ages[i]];
 
-                BindCell(DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<PCBoardBindedActionClickTrigger>(), cellInfo);
+                BindCell(boardBehavior,DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<PCBoardBindedActionClickTrigger>(),i, cellInfo);
 
             }
         }
 
-        private void BindCell(PCBoardBindedActionClickTrigger trigger, BuildingCell cell)
+        public void Unbind()
+        {
+            foreach (GameObject frame in DisplayBehavior.Frames)
+            {
+                frame.FindObject("CardDisplay").GetComponent<PCBoardBindedActionClickTrigger>().Action = null;
+            }
+        }
+
+        private void BindCell(PCBoardBehavior BoardBehavior,PCBoardBindedActionClickTrigger trigger,int index, BuildingCell cell)
         {
             trigger.Action = null;
 
-            if (BoardBehavior.interAction == null)
+            if (BoardBehavior.InterAction == null)
             {
                 //将点击建筑物面板作为主操作的，只有两个可能
                 //1、升级建筑物
                 //2、建造新的建筑物
+                //3、拆除和摧毁
+                if (BoardBehavior.CurrentPlayerBoardIndex != SceneTransporter.CurrentGame.MyPlayerIndex)
+                {
+                    //不是自己的面板不显示操作菜单
+                    return;
+                }
 
                 //因此按下的时候应该触发轮盘按钮
                 //
                 trigger.Action = new PlayerAction(() =>
                 {
+                    //匿名方法参数传递
+                    int localIndex = index;
+                    LogRecorder.Log("Popup Building Menu");
+                    List<PlayerAction> acceptedActions = new List<PlayerAction>();
 
-                    var buildingCell = cell;
-                    BuildUpgradeMenu.SetActive(true);
-                    BuildUpgradeMenu.GetComponent<ColliderMenu>().Actions = new Dictionary<int, Func<bool>>
+
+                    foreach (var action in SceneTransporter.CurrentGame.PossibleActions)
                     {
+                        if (action.ActionType == PlayerActionType.BuildBuilding &&
+                            ((CardInfo) action.Data[0]).InternalId == cell.Card.InternalId)
                         {
-                            0, () =>
-                            {
-                                List<PlayerAction> acceptedActions =
-                                    SceneTransporter.CurrentGame.PossibleActions.Where(
-                                        action =>
-                                            action.ActionType == PlayerActionType.BuildBuilding).ToList();
-                                
-                                foreach (var action in acceptedActions)
-                                {
-                                    var card = action.Data[0] as CardInfo;
-                                    //LogRecorder.Log("Build "+card.InternalId);
-                                    if (card.InternalId == buildingCell.Card.InternalId)
-                                    {
-                                        BoardBehavior.TakeAction(action);
-                                        return true;
-                                    }
-                                }
+                            acceptedActions.Add(action);
+                        }
 
-                                LogRecorder.Log("No Such Action "+buildingCell.Card.InternalId+".");
-                                return false;
-                            }
-                        },
+                        if (action.ActionType == PlayerActionType.UpgradeBuilding)
                         {
-                            1, () =>
+                            if (((CardInfo) action.Data[0]).InternalId == cell.Card.InternalId ||
+                                ((CardInfo) action.Data[1]).InternalId == cell.Card.InternalId)
                             {
-                                List<PlayerAction> acceptedActions =
-                                    SceneTransporter.CurrentGame.PossibleActions.Where(
-                                        action =>
-                                            action.ActionType == PlayerActionType.UpgradeBuilding).ToList();
-
-                                foreach (var action in acceptedActions)
-                                {
-                                    var card = action.Data[0] as CardInfo;
-
-                                    if (card == buildingCell.Card)
-                                    {
-                                        BoardBehavior.interAction = action;
-                                        return true;
-                                    }
-                                }
-                                 LogRecorder.Log("No Such Action");
-                                return false;
+                                acceptedActions.Add(action);
                             }
                         }
-                    };
+                        if (action.ActionType == PlayerActionType.Disband ||
+                            action.ActionType == PlayerActionType.Destory)
+                        {
+                            if (((CardInfo) action.Data[0]).InternalId == cell.Card.InternalId)
+                            {
+                                acceptedActions.Add(action);
+                            }
+                        }
 
-                    BuildUpgradeMenu.GetComponent<ColliderMenu>().Popup();
+
+                    }
+
+                    MenuFrame.Popup(localIndex, acceptedActions,BoardBehavior);
                 });
             }
             else

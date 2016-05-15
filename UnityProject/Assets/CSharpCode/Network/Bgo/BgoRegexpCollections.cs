@@ -241,5 +241,9 @@ namespace Assets.CSharpCode.Network.Bgo
         //(<select.*?name="(.*?)")|(<input type="hidden"[^>]*?name="(.*?)"[^>]*?value="(.*?)")
         public static readonly Regex ExtractSubmitFormDetail = new Regex(@"(<select.*?name=""(.*?)"")|(<input type=""hidden""[^>]*?name=""(.*?)""[^>]*?value=""(.*?)"")");
 
+        public static Regex ExtractSubDropDown(string dropdown)
+        {
+            return new Regex(@"<select.*?name="""+dropdown+@""".*?>([\s\S]*?)</select>");
+        } 
     }
 }

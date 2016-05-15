@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.UI.Util;
 
 namespace Assets.CSharpCode.Network.Bgo
 {
@@ -66,6 +67,12 @@ namespace Assets.CSharpCode.Network.Bgo
                     callback();
                 }
             };
+
+            if (bgoAction == null)
+            {
+                LogRecorder.Log("Null Action!");
+                return null;
+            }
             
             return BgoPostProvider.PostAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
             

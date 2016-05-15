@@ -114,6 +114,10 @@ namespace Assets.CSharpCode.Helper
         {
             var index1 = origin.IndexOf(prefix, StringComparison.Ordinal);
             var index2= origin.IndexOf(suffix, StringComparison.Ordinal);
+            if (index1 == -1|| index2==-1)
+            {
+                return origin.Substring(index1==-1?0: index1 + prefix.Length, index2==-1? origin .Length- index1 - prefix.Length : index2 - prefix.Length);
+            }
             var cutPiece=origin.Substring(index1 + prefix.Length, index2 - index1 - prefix.Length);
             return cutPiece;
         }
@@ -121,6 +125,10 @@ namespace Assets.CSharpCode.Helper
         public static String CutAfter(this String origin, String prefix)
         {
             var index1 = origin.IndexOf(prefix, StringComparison.Ordinal);
+            if (index1 == -1)
+            {
+                return origin;
+            }
             var cutPiece = origin.Substring(index1 + prefix.Length, origin.Length-index1-prefix.Length);
             return cutPiece;
         }
@@ -128,6 +136,10 @@ namespace Assets.CSharpCode.Helper
         public static String CutBefore(this String origin, String suffix)
         {
             var index2 = origin.IndexOf(suffix, StringComparison.Ordinal);
+            if (index2 == -1)
+            {
+                return origin;
+            }
             var cutPiece = origin.Substring(0, index2);
             return cutPiece;
         }

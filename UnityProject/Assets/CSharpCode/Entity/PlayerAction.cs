@@ -24,6 +24,23 @@ namespace Assets.CSharpCode.Entity
             Data[0] = act;
         }
 
+        public String GetDescription()
+        {
+            switch (ActionType)
+            {
+                case PlayerActionType.BuildBuilding:
+                    return "建造[" + ((CardInfo) Data[0]).CardName + "]";
+                case PlayerActionType.UpgradeBuilding:
+                    return "升级[" + ((CardInfo) Data[0]).CardName + "] -> [" + ((CardInfo) Data[1]).CardName + "]";
+                case PlayerActionType.Destory:
+                    return "摧毁[" + ((CardInfo) Data[0]).CardName + "]";
+                case PlayerActionType.Disband:
+                    return "拆除[" + ((CardInfo)Data[0]).CardName + "]";
+                default:
+                    return this.ToString();
+            }
+        }
+
         public override string ToString()
         {
             String actionString = "";

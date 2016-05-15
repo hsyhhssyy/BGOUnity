@@ -12,19 +12,19 @@ namespace Assets.CSharpCode.UI.PCBoardScene
     public class PCBoardBehavior : MonoBehaviour
     {
 
-        public int CurrentPlayerNo;
+        public int CurrentPlayerBoardIndex;
 
         public GameObject LoadingGo;
         public PlayerBoardDisplayBehavior PlayerBoardDisplay;
-        public PCBoardActionBinder actionBinder;
+        public PCBoardActionBinder ActionBinder;
 
         /// <summary>
         /// 用于执行两段式命令，触发两段式命令的方式就是先写入interAction
-        /// 然后执行BindAction
+        /// 然后执行BindAction（不需要Unbind）
         /// Binder因为interAction不同，而Band到不同的Action
         /// 执行完以后，记得要把interAction设为空
         /// </summary>
-        public PlayerAction interAction;
+        public PlayerAction InterAction;
 
         public bool BackgroundRefreshing=false;
 
@@ -43,9 +43,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             StartCoroutine(SceneTransporter.Server.RefreshBoard(SceneTransporter.CurrentGame, () =>
             {
-                CurrentPlayerNo = SceneTransporter.CurrentGame.MyPlayerIndex;
+                CurrentPlayerBoardIndex = SceneTransporter.CurrentGame.MyPlayerIndex;
                 PlayerBoardDisplay.Refresh();
-                actionBinder.BindAction();
+                ActionBinder.BindAction(this);
 
                 LoadingGo.SetActive(false);
             }));
@@ -58,7 +58,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             {
                 LoadingGo.SetActive(true);
                 PlayerBoardDisplay.Refresh();
-                actionBinder.BindAction();
+                ActionBinder.BindAction(this);
                 LoadingGo.SetActive(false);
                 BackgroundRefreshing = false;
             }));
@@ -76,8 +76,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 return;
             }
 
-            CurrentPlayerNo = no;
+            CurrentPlayerBoardIndex = no;
+            ActionBinder.Unbind();
             PlayerBoardDisplay.Refresh();
+            ActionBinder.BindAction(this);
         }
 
         public void TakeAction(PlayerAction action)

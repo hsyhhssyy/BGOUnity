@@ -78,6 +78,16 @@ namespace Assets.CSharpCode.Entity
         /// 2. Price
         /// </summary>
         UpgradeBuilding,
+        /// <summary>
+        /// 解除一个士兵（用红点）
+        /// 0. CardInfo
+        /// </summary>
+        Disband,
+        /// <summary>
+        /// 摧毁一座建筑物
+        /// 0. CardInfo
+        /// </summary>
+        Destory,
         #endregion
 
         #region 常见政治行动

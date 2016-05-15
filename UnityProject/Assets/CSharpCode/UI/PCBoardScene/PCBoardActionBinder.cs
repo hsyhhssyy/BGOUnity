@@ -6,14 +6,13 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.Util;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
 {
-    public class PCBoardActionBinder:MonoBehaviour
+    public class PCBoardActionBinder:MonoBehaviour, TtaActionBinder
     {
-        public PCBoardBehavior BoardBehavior;
-
         public CardRowActionBinder CardRowBinder;
 
         public PCBoardBindedActionClickTrigger WorkerBankActionTrigger;
@@ -22,13 +21,27 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         public GameObject UnknownActionFrame;
 
-        public void BindAction()
+        public void BindAction(PCBoardBehavior BoardBehavior)
         {
             BindCardRow();
+
+
+
             BindWorkerBank(SceneTransporter.CurrentGame.PossibleActions);
             BindUnknown(SceneTransporter.CurrentGame.PossibleActions);
 
-            BindBuildings(SceneTransporter.CurrentGame.PossibleActions);
+            BindBuildings(SceneTransporter.CurrentGame.PossibleActions,BoardBehavior);
+        }
+
+        public void Unbind()
+        {
+            WorkerBankActionTrigger.Action = null;
+
+            foreach (Transform child in BuildingCellFrame.transform)
+            {
+                var frame = child.gameObject.GetComponent<BuildingCellActionBinder>();
+                frame.Unbind();
+            }
         }
 
         private void BindCardRow()
@@ -46,13 +59,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         }
 
-        private void BindBuildings(List<PlayerAction> actions)
+        private void BindBuildings(List<PlayerAction> actions, PCBoardBehavior BoardBehavior)
         {
             foreach (Transform child in BuildingCellFrame.transform)
             {
                 var frame=child.gameObject.GetComponent<BuildingCellActionBinder>();
-                frame.BoardBehavior = BoardBehavior;
-                frame.BindAction();
+                
+                frame.BindAction(BoardBehavior);
             }
         }
 

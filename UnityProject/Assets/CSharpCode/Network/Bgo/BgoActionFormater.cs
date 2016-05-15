@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
@@ -58,6 +59,76 @@ namespace Assets.CSharpCode.Network.Bgo
                     else
                     {
                         //以Build开头的其他无意义选项
+                    }
+                }else if (bgoStr.StartsWith("Upgrade"))
+                {
+                    //Upgrade Agriculture -> Irrigation (2R)
+                    var card1 = bgoStr.CutBetween("Upgrade ", " ->");
+                    var card2 = bgoStr.CutBetween("> ", " (");
+                    var resCost= bgoStr.CutBetween("(", "R)");
+
+                    action.ActionType = PlayerActionType.UpgradeBuilding;
+                    action.Data[0] = civilopedia.GetCardInfoByName(card1);
+                    action.Data[1] = civilopedia.GetCardInfoByName(card2);
+                    action.Data[2] = resCost;
+                    action.Data[3] = optValue;
+                }
+            }
+
+            //---删除多余 / 一拆多
+            var disband =
+                game.PossibleActions.FirstOrDefault(
+                    action =>
+                        action.ActionType == PlayerActionType.Unknown &&
+                        action.Data[0].ToString() == "Disband / Destroy");
+            if (disband != null)
+            {
+                //为每个建筑物建立自己的disband/destory
+                game.PossibleActions.Remove(disband);
+                var subDropdown = BgoRegexpCollections.ExtractSubDropDown("unite").Match(html);
+                if (subDropdown.Success == true)
+                {
+                    foreach (Match match in BgoRegexpCollections.ExtractActions.Matches(subDropdown.Groups[1].Value))
+                    {
+                        //8;9 A/ Agriculture
+                        var optValue = match.Groups[1].Value;
+                        var cardName = match.Groups[2].Value;
+                        var cardAge = cardName.CutBefore("/");
+                        cardName = cardName.CutAfter("/ ");
+
+                        var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof (Age), cardAge), cardName);
+
+                        if (card.CardType == CardType.MilitaryTechAirForce ||
+                            card.CardType == CardType.MilitaryTechArtillery ||
+                            card.CardType == CardType.MilitaryTechCavalry ||
+                            card.CardType == CardType.MilitaryTechInfantry)
+                        {
+                            game.PossibleActions.Add(new BgoPlayerAction()
+                            {
+                                ActionType = PlayerActionType.Disband,
+                                Data = new Dictionary<int, object>
+                                {
+                                    {0,card },
+                                    {1,disband.Data[1]},
+                                    {2,optValue }
+
+                                }
+                            });
+                        }
+                        else
+                        {
+                            game.PossibleActions.Add(new BgoPlayerAction()
+                            {
+                                ActionType = PlayerActionType.Destory,
+                                Data = new Dictionary<int, object>
+                                {
+                                    {0,card },
+                                    {1,disband.Data[1]},
+                                    {2,optValue }
+
+                                }
+                            });
+                        }
                     }
                 }
             }
