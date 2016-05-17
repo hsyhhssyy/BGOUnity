@@ -1,5 +1,7 @@
 ﻿using Assets.CSharpCode.UI.PCBoardScene;
+using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Assets.CSharpCode.UI.Util
 {
@@ -26,5 +28,63 @@ namespace Assets.CSharpCode.UI.Util
     public interface TtaDisplayBehaviour
     {
         void Refresh();
+    }
+
+    public abstract class InputActionTriggerMonoBehaviour: MonoBehaviour
+    {
+        private PCBoardActionTriggerController _controller;
+
+        protected PCBoardActionTriggerController Controller
+        {
+            get { return _controller; }
+            set
+            {
+                if (_controller != null)
+                {
+                    _controller.Unregister(this);
+                }
+
+                _controller = value;
+                if (_controller != null)
+                {
+                    _controller.Register(this);
+                }
+            }
+        }
+
+        public void OnDestory()
+        {
+            if (Controller != null)
+            {
+                Controller.Unregister(this);
+            }
+        }
+
+        public virtual bool OnMouseClick()
+        {
+            return false;
+        }
+
+        public virtual bool OnMouseUp()
+        {
+            return false;
+        }
+        public virtual bool OnMouseDown()
+        {
+            return false;
+        }
+
+        public virtual bool OnMouseEnter()
+        {
+            return false;
+        }
+        public virtual bool OnMouseExit()
+        {
+            return false;
+        }
+        public virtual bool OnMouseClickOutside()
+        {
+            return false;
+        }
     }
 }

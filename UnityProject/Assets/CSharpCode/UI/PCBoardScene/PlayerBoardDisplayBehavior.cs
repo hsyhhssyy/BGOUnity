@@ -16,6 +16,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
     {
         public PCBoardBehavior BoardBehavior;
 
+        #region Unity Game Objects
+
         public GameObject BackgroundSpriteGo;
 
         public GameObject LeaderFrame;
@@ -54,6 +56,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public GameJournalDisplayBehaviour JournalFrame;
 
         public GameObject WarningFrame;
+
+        public GameObject WorkerPoolFrame;
+
+        #endregion
 
         [UsedImplicitly]
         //用update会导致弹出窗口的OnMouseExit捕捉不到
@@ -103,6 +109,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             DisplayWarnings(board);
 
             DisplayTactics(board);
+
+            DisplayWorkerPool(board);
         }
 
         private void DisplayEventsAndCardCounts(TtaGame game)
@@ -341,21 +349,33 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 ConstructingWonderFrame.SetActive(true);
                 ConstructingWonderFrame.FindObject("WonderName").GetComponent<TextMesh>().text =
                     board.ConstructingWonder.CardName;
+                var stepFrame = ConstructingWonderFrame.FindObject("Steps");
 
-                String buildStr = " ";
-                foreach (var str in board.ConstructingWonderSteps)
+                foreach (Transform child in stepFrame.transform)
                 {
+                    Destroy(child.gameObject);
+                }
+
+                var stepPrefab = Resources.Load<GameObject>("Dynamic-PC/WonderBuildingStage");
+
+                float init = -0.16f*board.ConstructingWonderSteps.Count+0.16f;
+                for (int index = 0; index < board.ConstructingWonderSteps.Count; index++)
+                {
+                    var str = board.ConstructingWonderSteps[index];
+
+                    var mSp = Instantiate(stepPrefab);
                     if (str == "X")
                     {
-                        buildStr += "<quad material=1 size=15 x=0 y=0 width=1 height=1 />";
+                        mSp.FindObject("StepText").SetActive(false);
                     }
                     else
                     {
-                        buildStr += " " + str;
+                        mSp.FindObject("BlueMarker").SetActive(false);
+                        mSp.FindObject("StepText").GetComponent<TextMesh>().text = str;
                     }
+                    mSp.transform.parent = stepFrame.transform;
+                    mSp.transform.localPosition = new Vector3(init+0.16f*index, 0,0);
                 }
-                ConstructingWonderFrame.FindObject("WonderStep").GetComponent<TextMesh>().text =
-                    buildStr;
 
                 ConstructingWonderFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(board.ConstructingWonder);
             }
@@ -502,5 +522,36 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
         }
 
+        private void DisplayWorkerPool(TtaBoard board)
+        {
+            var happyPrefab = Resources.Load<GameObject>("Dynamic-PC/HappyWorker");
+            var unhappyPrefab = Resources.Load<GameObject>("Dynamic-PC/UnhappyWorker");
+
+            foreach (Transform child in WorkerPoolFrame.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            float incr = board.Resource[ResourceType.WorkerPool] > 1
+                ? (0.66f/(board.Resource[ResourceType.WorkerPool] - 1))
+                : 0f;
+
+            for (int i = 0; i < board.Resource[ResourceType.WorkerPool]; i++)
+            {
+                GameObject mSp;
+                if (i < board.DisorderValue)
+                {
+                    mSp = Instantiate(unhappyPrefab);
+                }
+                else
+                {
+                    mSp = Instantiate(happyPrefab);
+                }
+
+                mSp.transform.SetParent(WorkerPoolFrame.transform);
+                mSp.transform.localPosition = new Vector3(incr*i, 0);
+            }
+        }
     }
+    
 }

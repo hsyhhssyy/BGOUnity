@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e67874b290e91404ca3bd5b1435c5ba8
-timeCreated: 1463292063
+timeCreated: 1463484233
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -44,6 +44,8 @@ TextureImporter:
     21300074: pc-board-menu-build-upgrade
     21300076: pc-board-buildings-menu-item
     21300078: pc-board-buildings-menu
+    21300080: pc-board-menu-wonder-step-item
+    21300082: pc-board-menu-wonder
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -635,9 +637,9 @@ TextureImporter:
     - name: pc-board-buildings-menu-item
       rect:
         serializedVersion: 2
-        x: 717
-        y: 740
-        width: 123
+        x: 787
+        y: 737
+        width: 187
         height: 18
       alignment: 1
       pivot: {x: 0, y: 1}
@@ -647,19 +649,47 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 717
-        y: 625
-        width: 195
-        height: 110
+        y: 626
+        width: 259
+        height: 109
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -95.5, y: 55}
-        - {x: -97.5, y: 53}
-        - {x: -97.5, y: -53}
-        - {x: -95.5, y: -55}
-        - {x: 97.5, y: -55}
-        - {x: 97.5, y: 55}
+      - - {x: -127.5, y: 54.5}
+        - {x: -129.5, y: 52.5}
+        - {x: -129.5, y: -54.5}
+        - {x: 129.5, y: -54.5}
+        - {x: 129.5, y: 52.5}
+        - {x: 127.5, y: 54.5}
+    - name: pc-board-menu-wonder-step-item
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 586
+        width: 147
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: pc-board-menu-wonder
+      rect:
+        serializedVersion: 2
+        x: 718
+        y: 516
+        width: 151
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -75.5, y: 34.5}
+        - {x: -75.5, y: -32.5}
+        - {x: -73.5, y: -34.5}
+        - {x: 73.5, y: -34.5}
+        - {x: 75.5, y: -32.5}
+        - {x: 75.5, y: 34.5}
     outline: []
   spritePackingTag: 
   userData: 

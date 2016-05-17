@@ -44,7 +44,17 @@ namespace Assets.CSharpCode.Network.Bgo
                     if (bgoStr.IndexOf("stage", StringComparison.Ordinal) == 8 ||
                         bgoStr.IndexOf("stages", StringComparison.Ordinal) == 8)
                     {
-                        //Wonder
+                        var keyword = bgoStr.Contains("stages") ? "stages" : "stage";
+                        //Build X stage of Y (XR)
+                        var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "R)"));
+                        var stageCount = Convert.ToInt32(bgoStr.CutBetween("Build ", " stage"));
+
+                        var wonderName = bgoStr.CutBetween(keyword + " ", " (");
+                        action.ActionType = PlayerActionType.BuildWonder;
+                        action.Data[0] = civilopedia.GetCardInfoByName(wonderName);
+                        action.Data[1] = stageCount;
+                        action.Data[2] = resCost;
+                        action.Data[3] = optValue;
                     }
                     else if (bgoStr.Contains("("))
                     {
@@ -73,9 +83,67 @@ namespace Assets.CSharpCode.Network.Bgo
                     action.Data[2] = resCost;
                     action.Data[3] = optValue;
                 }
+                else if (bgoStr.StartsWith("Play"))
+                {
+                    //Play关键字的出现可能有多种情况。包括
+                    //Play A / Rich Land
+                    //Play event Pestilence
+                    //Play event Developed Territory II
+                    if (bgoStr.Contains("/"))
+                    {
+                        //Play A / Rich Land
+                        var age = bgoStr.CutBetween("Play "," /");
+                        var cardName = bgoStr.CutAfter("/ ");
+                        var card = civilopedia.GetCardInfoByName((Age) Enum.Parse(typeof (Age), age), cardName);
+                        action.ActionType= PlayerActionType.PlayActionCard;
+                        action.Data[0] = card;
+                        action.Data[1] = optValue;
+                    }
+                }
+                else if (bgoStr.StartsWith("Revolution"))
+                {
+                    //Revolution! Change to Constitutional Monarchy (6S)
+                    var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "S)"));
+                    var card = civilopedia.GetCardInfoByName(bgoStr.CutBetween("Change to ", " ("));
+                    action.ActionType = PlayerActionType.Revolution;
+                    action.Data[0] = card;
+                    action.Data[1] = resCost;
+                    action.Data[2] = optValue;
+                }
+                else if (bgoStr.StartsWith("Elect"))
+                {
+                    //Elect leader: Moses
+                    //Elect leader: Joan of Arc (for 1 MA)
+                    if (!bgoStr.Contains("("))
+                    {
+                        var leader = bgoStr.CutAfter(": ");
+                        action.ActionType = PlayerActionType.ElectLeader;
+                        action.Data[0] = civilopedia.GetCardInfoByName(leader);
+                        action.Data[1] = optValue;
+                    }
+                    else {
+                        //MA elect
+                    }
+
+                }
+                else if (bgoStr.StartsWith("Discover"))
+                {
+                    var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "S)"));
+                    var card = civilopedia.GetCardInfoByName(bgoStr.CutBetween("Discover ", " ("));
+                    action.ActionType = PlayerActionType.DevelopTechCard;
+                    action.Data[0] = card;
+                    action.Data[1] = resCost;
+                    action.Data[2] = optValue;
+                }
+                else if (bgoStr.StartsWith("Reset Action Phase"))
+                {
+                    action.ActionType = PlayerActionType.ResetActionPhase;
+                }
             }
 
             //---删除多余 / 一拆多
+            #region disband/destory
+
             var disband =
                 game.PossibleActions.FirstOrDefault(
                     action =>
@@ -131,6 +199,18 @@ namespace Assets.CSharpCode.Network.Bgo
                         }
                     }
                 }
+            }
+
+            #endregion
+
+            var selectaction =
+                game.PossibleActions.FirstOrDefault(
+                    action =>
+                        action.ActionType == PlayerActionType.Unknown &&
+                        action.Data[0].ToString() == "----- Select an action -----");
+            if (selectaction != null)
+            {
+                game.PossibleActions.Remove(selectaction);
             }
         }
     }

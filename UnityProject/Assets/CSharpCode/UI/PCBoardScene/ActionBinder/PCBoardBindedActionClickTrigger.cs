@@ -1,4 +1,5 @@
 ﻿using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.UI.Util;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -6,23 +7,36 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 {
     [UsedImplicitly]
     // ReSharper disable once InconsistentNaming
-    public class PCBoardBindedActionClickTrigger : MonoBehaviour
+    public class PCBoardBindedActionClickTrigger : InputActionTriggerMonoBehaviour
     {
-        public PlayerAction Action;
 
-        public PCBoardBehavior BoardBehavior;
+        private PlayerAction _action;
 
-        [UsedImplicitly]
-        public void OnMouseUpAsButton()
+        private PCBoardBehavior _boardBehavior;
+
+        public void Bind(PlayerAction action, PCBoardBehavior boardBehavior)
         {
-            if (Action == null)
+            Controller = boardBehavior.ActionTriggerController;
+            this._boardBehavior = boardBehavior;
+            this._action = action;
+        }
+
+        public void Unbind()
+        {
+            _action = null;
+            Controller = null;
+        }
+
+        public override bool OnMouseClick()
+        {
+            if (_action == null)
             {
-                return;
+                return false;
             }
 
-            if (Action.ActionType == PlayerActionType.ProgramDelegateAction)
+            if (_action.ActionType == PlayerActionType.ProgramDelegateAction)
             {
-                var act = Action.Data[0] as System.Action;
+                var act = _action.Data[0] as System.Action;
                 if (act != null)
                 {
                     act();
@@ -30,8 +44,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
             }
             else
             {
-                BoardBehavior.TakeAction(Action);
+                _boardBehavior.TakeAction(_action);
             }
+
+            return true;
         }
     }
 }

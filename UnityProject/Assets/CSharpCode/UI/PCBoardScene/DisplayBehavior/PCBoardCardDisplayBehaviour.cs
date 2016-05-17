@@ -17,7 +17,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         private bool _refreshRequired = true;
 
         private GameObject _normalImagePopup;
-        private CardInfo _card;
+        public CardInfo Card { get; private set; }
 
         [UsedImplicitly]
         public bool SmallCard = false;
@@ -42,13 +42,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         [UsedImplicitly]
         public void OnMouseEnter()
         {
-            if (DisablePopup != true && _card != null)
+            if (DisablePopup != true && Card != null)
             {
                 _normalImagePopup = Instantiate(Resources.Load<GameObject>("Dynamic-PC/PCBoardCard-Normal"));
 
                 var beh = _normalImagePopup.GetComponent<PCBoardCardDisplayBehaviour>();
                 beh.DisablePopup = true;
-                beh.Bind(_card);
+                beh.Bind(Card);
 
                 Vector3 pos = Input.mousePosition;
 
@@ -91,6 +91,15 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
         }
 
+        [UsedImplicitly]
+        public void OnMouseUpAsButton()
+        {
+            if (_normalImagePopup != null)
+            {
+                Destroy(_normalImagePopup);
+            }
+        }
+
         #endregion
 
         #region 展示部分的代码-公用
@@ -115,7 +124,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         public void Bind(CardInfo card, Transform parentTransform, Vector3 newLocation)
         {
-            _card = card;
+            Card = card;
             gameObject.transform.SetParent(parentTransform);
             gameObject.transform.localPosition = newLocation;
             _refreshRequired = true;
@@ -123,14 +132,14 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         public void Bind(CardInfo card)
         {
-            _card = card;
+            Card = card;
             _refreshRequired = true;
         }
 
 
         private void Refresh()
         {
-            if (_card == null)
+            if (Card == null)
             {
                 return;
             }
@@ -146,7 +155,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             DefendCardFrame.SetActive(false);
 
 
-            switch (_card.CardType)
+            switch (Card.CardType)
             {
                 case CardType.Action:
                     DisplayAction();
@@ -195,7 +204,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                         DisplayDefend();
                     break;
                 default:
-                   Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown type to display:" + _card.CardType.ToString());
+                   Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown type to display:" + Card.CardType.ToString());
                     DisplayAction();
                     break;
             }
@@ -382,11 +391,11 @@ case ResourceType.Resource:
             ActionCardFrame.SetActive(true);
             ActionCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            ActionCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            ActionCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 6));
+            ActionCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            ActionCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 6));
             if (!SmallCard)
             {
-                ActionCardFrame.FindObject("Description").GetComponent<TextMesh>().text = _card.Description.WordWrap(8);
+                ActionCardFrame.FindObject("Description").GetComponent<TextMesh>().text = Card.Description.WordWrap(8);
             }
 
 
@@ -399,14 +408,14 @@ case ResourceType.Resource:
             LeaderCardFrame.SetActive(true);
             LeaderCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            LeaderCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            LeaderCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 6));
+            LeaderCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            LeaderCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 6));
             if (!SmallCard)
             {
-                LeaderCardFrame.FindObject("Description").GetComponent<TextMesh>().text = _card.Description.WordWrap(10);
+                LeaderCardFrame.FindObject("Description").GetComponent<TextMesh>().text = Card.Description.WordWrap(10);
             }
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 LeaderCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -419,7 +428,7 @@ case ResourceType.Resource:
         {
             //Get action background
             String typeStr = "urban";
-            switch (_card.CardType)
+            switch (Card.CardType)
             {
 
                 case CardType.ResourceTechFarm:
@@ -444,16 +453,16 @@ case ResourceType.Resource:
             BuildingCardFrame.SetActive(true);
             BuildingCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            BuildingCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            BuildingCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 5));
+            BuildingCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            BuildingCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 5));
 
             if (!SmallCard)
             {
-                BuildingCardFrame.FindObject("TechCost").GetComponent<TextMesh>().text = _card.ResearchCost[0].ToString();
-                if (_card.BuildCost.Count > 0 && _card.BuildCost[0] > 0)
+                BuildingCardFrame.FindObject("TechCost").GetComponent<TextMesh>().text = Card.ResearchCost[0].ToString();
+                if (Card.BuildCost.Count > 0 && Card.BuildCost[0] > 0)
                 {
                     BuildingCardFrame.FindObject("ResourceCost").GetComponent<TextMesh>().text =
-                        _card.BuildCost[0].ToString();
+                        Card.BuildCost[0].ToString();
                     BuildingCardFrame.FindObject("ResourceCost").SetActive(true);
                     BuildingCardFrame.FindObject("ResourceCostBackground").SetActive(true);
                 }
@@ -463,18 +472,18 @@ case ResourceType.Resource:
                     BuildingCardFrame.FindObject("ResourceCostBackground").SetActive(false);
                 }
 
-                if (_card.Description != null)
+                if (Card.Description != null)
                 {
                     BuildingCardFrame.FindObject("Description").SetActive(true);
                     BuildingCardFrame.FindObject("Description").GetComponent<TextMesh>().text =
-                        _card.Description.WordWrap(10);
+                        Card.Description.WordWrap(10);
                 }
                 else
                 {
                     BuildingCardFrame.FindObject("Description").SetActive(false);
                 }
 
-                var imageSp = UnityResources.GetSprite(_card.NormalImage);
+                var imageSp = UnityResources.GetSprite(Card.NormalImage);
                 if (imageSp != null)
                 {
                     BuildingCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -482,7 +491,7 @@ case ResourceType.Resource:
                         new Vector3(ChooseParam(0.333f, 1f), ChooseParam(0.333f, 1f), 1f);
                 }
 
-                DisplaySustainedEffects(BuildingCardFrame.FindObject("ProductionFrame"), _card.SustainedEffects,
+                DisplaySustainedEffects(BuildingCardFrame.FindObject("ProductionFrame"), Card.SustainedEffects,
                     ChooseParam(0.44f, 1.40f));
             }
         }
@@ -493,21 +502,21 @@ case ResourceType.Resource:
             WonderCardFrame.SetActive(true);
             WonderCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            WonderCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            WonderCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 7));
+            WonderCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            WonderCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 7));
             if (!SmallCard)
             {
-                WonderCardFrame.FindObject("Description").GetComponent<TextMesh>().text = _card.Description.WordWrap(10);
-                WonderCardFrame.FindObject("Step").GetComponent<TextMesh>().text = _card.BuildCost.Aggregate("", (current, s) => current + (s + "  ")).Trim();
+                WonderCardFrame.FindObject("Description").GetComponent<TextMesh>().text = Card.Description.WordWrap(10);
+                WonderCardFrame.FindObject("Step").GetComponent<TextMesh>().text = Card.BuildCost.Aggregate("", (current, s) => current + (s + "  ")).Trim();
             }
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 WonderCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
             }
 
-            DisplaySustainedEffects(WonderCardFrame.FindObject("ProductionFrame"), _card.SustainedEffects, ChooseParam(0.44f, 1.40f));
+            DisplaySustainedEffects(WonderCardFrame.FindObject("ProductionFrame"), Card.SustainedEffects, ChooseParam(0.44f, 1.40f));
         }
 
         private void DisplayGovernment()
@@ -517,17 +526,17 @@ case ResourceType.Resource:
             GovernmentCardFrame.SetActive(true);
             GovernmentCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            GovernmentCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            GovernmentCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 5));
+            GovernmentCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            GovernmentCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 5));
 
-            GovernmentCardFrame.FindObject("TechCost").GetComponent<TextMesh>().text = _card.ResearchCost[0].ToString();
-            GovernmentCardFrame.FindObject("RevoCost").GetComponent<TextMesh>().text = _card.ResearchCost[1].ToString();
+            GovernmentCardFrame.FindObject("TechCost").GetComponent<TextMesh>().text = Card.ResearchCost[0].ToString();
+            GovernmentCardFrame.FindObject("RevoCost").GetComponent<TextMesh>().text = Card.ResearchCost[1].ToString();
 
             int whiteMarker = 0;
             int redMarker = 0;
             int urbanLimit = 0;
             List<CardEffect> effects = new List<CardEffect>();
-            foreach (var effect in _card.SustainedEffects)
+            foreach (var effect in Card.SustainedEffects)
             {
                 if (effect.FunctionId == CardEffectType.ResourceOfTypeXChangedY)
                 {
@@ -590,7 +599,7 @@ case ResourceType.Resource:
             GovernmentCardFrame.FindObject("RedCount").GetComponent<TextMesh>().text = redMarker.ToString();
             GovernmentCardFrame.FindObject("UrbanLimit").GetComponent<TextMesh>().text = urbanLimit.ToString();
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 GovernmentCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -607,8 +616,8 @@ case ResourceType.Resource:
             TacticCardFrame.SetActive(true);
             TacticCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            TacticCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            TacticCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 5));
+            TacticCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            TacticCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 5));
 
             if (!SmallCard)
             {
@@ -618,11 +627,11 @@ case ResourceType.Resource:
                     Destroy(child.gameObject);
                 }
 
-                float start = _card.TacticComposition.Count * -0.18f + 0.18f;
+                float start = Card.TacticComposition.Count * -0.18f + 0.18f;
 
-                for (int i = 0; i < _card.TacticComposition.Count; i++)
+                for (int i = 0; i < Card.TacticComposition.Count; i++)
                 {
-                    var type = new[] { "infantry", "cavalry", "artillery" }[_card.TacticComposition[i] - 1];
+                    var type = new[] { "infantry", "cavalry", "artillery" }[Card.TacticComposition[i] - 1];
 
 
                     var icon = new GameObject("Image", typeof(SpriteRenderer));
@@ -635,12 +644,12 @@ case ResourceType.Resource:
 
                 }
 
-                TacticCardFrame.FindObject("TacticValue").GetComponent<TextMesh>().text = _card.TacticValue[0].ToString();
-                if (_card.TacticValue.Count > 1)
+                TacticCardFrame.FindObject("TacticValue").GetComponent<TextMesh>().text = Card.TacticValue[0].ToString();
+                if (Card.TacticValue.Count > 1)
                 {
                     TacticCardFrame.FindObject("OutdatedTacticValue").SetActive(true);
                     TacticCardFrame.FindObject("OutdatedTacticValueBackground").SetActive(true);
-                    TacticCardFrame.FindObject("OutdatedTacticValue").GetComponent<TextMesh>().text = _card.TacticValue[1].ToString();
+                    TacticCardFrame.FindObject("OutdatedTacticValue").GetComponent<TextMesh>().text = Card.TacticValue[1].ToString();
                 }
                 else
                 {
@@ -648,7 +657,7 @@ case ResourceType.Resource:
                     TacticCardFrame.FindObject("OutdatedTacticValueBackground").SetActive(false);
                 }
 
-                var imageSp = UnityResources.GetSprite(_card.NormalImage);
+                var imageSp = UnityResources.GetSprite(Card.NormalImage);
                 if (imageSp != null)
                 {
                     TacticCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -661,17 +670,17 @@ case ResourceType.Resource:
         {
             var sp =
                UnityResources.GetSprite("pc-board-card-" + ChooseParam("small", "normal") + "-" +
-               (_card.CardType == CardType.Event ? "event" : "pact") + "-background");
+               (Card.CardType == CardType.Event ? "event" : "pact") + "-background");
             EventColonyPactCardFrame.SetActive(true);
             EventColonyPactCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            EventColonyPactCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            EventColonyPactCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 7));
+            EventColonyPactCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            EventColonyPactCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 7));
 
             if (!SmallCard)
             {
                 EventColonyPactCardFrame.FindObject("Description").SetActive(true);
-                EventColonyPactCardFrame.FindObject("Description").GetComponent<TextMesh>().text = _card.Description.WordWrap(10);
+                EventColonyPactCardFrame.FindObject("Description").GetComponent<TextMesh>().text = Card.Description.WordWrap(10);
 
                 EventColonyPactCardFrame.FindObject("InstantEffects").SetActive(false);
 
@@ -679,7 +688,7 @@ case ResourceType.Resource:
 
             }
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 EventColonyPactCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -691,17 +700,17 @@ case ResourceType.Resource:
         {
             var sp =
               UnityResources.GetSprite("pc-board-card-" + ChooseParam("small", "normal") + "-" +
-              (_card.CardType == CardType.War ? "war" : "aggression") + "-background");
+              (Card.CardType == CardType.War ? "war" : "aggression") + "-background");
             WarAggressionCardFrame.SetActive(true);
             WarAggressionCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            WarAggressionCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            WarAggressionCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 7));
+            WarAggressionCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            WarAggressionCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 7));
 
             if (!SmallCard)
             {
                 WarAggressionCardFrame.FindObject("Description").GetComponent<TextMesh>().text =
-                    _card.Description.WordWrap(10);
+                    Card.Description.WordWrap(10);
 
                 var frame = WarAggressionCardFrame.FindObject("RedDots");
                 foreach (Transform child in frame.transform)
@@ -709,7 +718,7 @@ case ResourceType.Resource:
                     Destroy(child.gameObject);
                 }
 
-                for (int i = 0; i < _card.RedMarkerCost[0]; i++)
+                for (int i = 0; i < Card.RedMarkerCost[0]; i++)
                 {
                     var icon = new GameObject("Image", typeof (SpriteRenderer));
                     icon.transform.parent = frame.transform;
@@ -723,7 +732,7 @@ case ResourceType.Resource:
             }
 
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 WarAggressionCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -737,22 +746,22 @@ case ResourceType.Resource:
             EventColonyPactCardFrame.SetActive(true);
             EventColonyPactCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            EventColonyPactCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            EventColonyPactCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = _card.CardName.WordWrap(ChooseParam(4, 7));
+            EventColonyPactCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            EventColonyPactCardFrame.FindObject("NameText").GetComponent<TextMesh>().text = Card.CardName.WordWrap(ChooseParam(4, 7));
 
             if (!SmallCard)
             {
                 EventColonyPactCardFrame.FindObject("Description").SetActive(false);
 
                 EventColonyPactCardFrame.FindObject("InstantEffects").SetActive(true);
-                DisplaySustainedEffects(EventColonyPactCardFrame.FindObject("InstantEffects"), _card.ImmediateEffects, 2f);
+                DisplaySustainedEffects(EventColonyPactCardFrame.FindObject("InstantEffects"), Card.ImmediateEffects, 2f);
 
                 EventColonyPactCardFrame.FindObject("ProductionFrame").SetActive(true);
-                DisplaySustainedEffects(EventColonyPactCardFrame.FindObject("ProductionFrame"), _card.SustainedEffects,1.3f);
+                DisplaySustainedEffects(EventColonyPactCardFrame.FindObject("ProductionFrame"), Card.SustainedEffects,1.3f);
 
             }
 
-            var imageSp = UnityResources.GetSprite(_card.NormalImage);
+            var imageSp = UnityResources.GetSprite(Card.NormalImage);
             if (imageSp != null)
             {
                 EventColonyPactCardFrame.FindObject("NormalImage").GetComponent<SpriteRenderer>().sprite = imageSp;
@@ -766,9 +775,9 @@ case ResourceType.Resource:
             DefendCardFrame.SetActive(true);
             DefendCardFrame.GetComponent<SpriteRenderer>().sprite = sp;
 
-            DefendCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = _card.CardAge.ToString();
-            DefendCardFrame.FindObject("Defend").GetComponent<TextMesh>().text = (((int)_card.CardAge) * 2).ToString();
-            DefendCardFrame.FindObject("Exploration").GetComponent<TextMesh>().text = (((int)_card.CardAge)).ToString();
+            DefendCardFrame.FindObject("AgeText").GetComponent<TextMesh>().text = Card.CardAge.ToString();
+            DefendCardFrame.FindObject("Defend").GetComponent<TextMesh>().text = (((int)Card.CardAge) * 2).ToString();
+            DefendCardFrame.FindObject("Exploration").GetComponent<TextMesh>().text = (((int)Card.CardAge)).ToString();
 
 
         }

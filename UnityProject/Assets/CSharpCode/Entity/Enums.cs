@@ -88,6 +88,21 @@ namespace Assets.CSharpCode.Entity
         /// 0. CardInfo
         /// </summary>
         Destory,
+        /// <summary>
+        /// 重置内政行动，如果政治行动未做任何事，则回到政治行动选择处。
+        /// 无数据
+        /// </summary>
+        ResetActionPhase,
+        //---------打出一张内政卡---------
+        //0. CardInfo
+        DevelopTechCard, PlayActionCard, ElectLeader,Revolution,
+        /// <summary>
+        /// 建造奇迹
+        /// 0. CardInfo
+        /// 1. 这个行动建造的步数
+        /// 2. 总的资源消耗
+        /// </summary>
+        BuildWonder,
         #endregion
 
         #region 常见政治行动

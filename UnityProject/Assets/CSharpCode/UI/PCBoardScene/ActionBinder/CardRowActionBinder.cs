@@ -31,8 +31,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
             {
                 int position = Convert.ToInt32(action.Data[1]);
 
-                CardRowColliderItems[position].Action = action;
-                CardRowColliderItems[position].BoardBehavior = BoardBehaviour;
+                CardRowColliderItems[position].Bind(action,BoardBehaviour);
             }
         }
     }

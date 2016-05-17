@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.PCBoardScene.Menu;
 using Assets.CSharpCode.UI.Util;
 using UnityEngine;
 
@@ -13,29 +15,41 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 {
     public class PCBoardActionBinder:MonoBehaviour, TtaActionBinder
     {
+        #region Unity GameObjects
+
         public CardRowActionBinder CardRowBinder;
-
         public PCBoardBindedActionClickTrigger WorkerBankActionTrigger;
-
         public GameObject BuildingCellFrame;
-
         public GameObject UnknownActionFrame;
+        public PCBoardBindedActionClickTrigger EndActionPhaseButtonFrame;
+        public GameObject CivilCardFrame ;
+        public GameObject MilitaryCardFrame;
+
+        public SpecificCodeActionTrigger ConstructingWonderFrame;
+        public WonderMenuAnimationBehaviour ConstructingWonderMenuFrame;
+        #endregion
+
+        #region TtaActionBinder
 
         public void BindAction(PCBoardBehavior BoardBehavior)
         {
             BindCardRow();
 
-
-
-            BindWorkerBank(SceneTransporter.CurrentGame.PossibleActions);
+            BindWorkerBank(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
             BindUnknown(SceneTransporter.CurrentGame.PossibleActions);
 
             BindBuildings(SceneTransporter.CurrentGame.PossibleActions,BoardBehavior);
+
+            BindSpriteUIButtons(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
+
+            BindCivilCard(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
+
+            BindConstructingWonder(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
         }
 
         public void Unbind()
         {
-            WorkerBankActionTrigger.Action = null;
+            WorkerBankActionTrigger.Unbind();
 
             foreach (Transform child in BuildingCellFrame.transform)
             {
@@ -44,35 +58,57 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
         }
 
+        #endregion
+
         private void BindCardRow()
         {
             CardRowBinder.BindAction();
         }
 
-        private void BindWorkerBank(List<PlayerAction> actions)
+        private void BindWorkerBank(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
         {
             List<PlayerAction> acceptedActions =
-                SceneTransporter.CurrentGame.PossibleActions.Where(
+                actions.Where(
                     action =>
                         action.ActionType == PlayerActionType.IncreasePopulation).ToList();
-            WorkerBankActionTrigger.Action = acceptedActions.Count > 0 ? acceptedActions[0] : null;
+            WorkerBankActionTrigger.Bind(acceptedActions.Count > 0 ? acceptedActions[0] : null, boardBehavior);
 
         }
 
-        private void BindBuildings(List<PlayerAction> actions, PCBoardBehavior BoardBehavior)
+        private void BindBuildings(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
         {
             foreach (Transform child in BuildingCellFrame.transform)
             {
                 var frame=child.gameObject.GetComponent<BuildingCellActionBinder>();
                 
-                frame.BindAction(BoardBehavior);
+                frame.BindAction(boardBehavior);
             }
+        }
+
+        private void BindConstructingWonder(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
+        {
+            ConstructingWonderFrame.ActionOnMouseClick = () =>
+            {
+                List<PlayerAction> acceptedActions =
+                    actions.Where(
+                        action =>
+                            action.ActionType == PlayerActionType.BuildWonder).ToList();
+
+                acceptedActions.Sort((a, b) => ((int) a.Data[1]).CompareTo(b.Data[0]));
+
+                ConstructingWonderMenuFrame.Popup(acceptedActions, boardBehavior);
+            };
+            ConstructingWonderFrame.ActionOnMouseClickOutside = () =>
+            {
+                ConstructingWonderMenuFrame.Collapse();
+            };
+            ConstructingWonderFrame.BoardBehavior = boardBehavior;
         }
 
         private void BindUnknown(List<PlayerAction> actions)
         {
             List<PlayerAction> acceptedActions =
-                SceneTransporter.CurrentGame.PossibleActions.Where(
+                actions.Where(
                     action =>
                         action.ActionType == PlayerActionType.Unknown).ToList();
 
@@ -99,5 +135,72 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
 
         }
+
+        private void BindCivilCard(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
+        {
+            List<PlayerAction> acceptedActions =
+               actions.Where(
+                   action =>
+                       action.ActionType == PlayerActionType.DevelopTechCard || 
+                       action.ActionType == PlayerActionType.PlayActionCard ||
+                       action.ActionType == PlayerActionType.Revolution ||
+                       action.ActionType == PlayerActionType.ElectLeader).ToList();
+
+            var behaviorList =
+                CivilCardFrame.transform.Cast<Transform>()
+                    .Select(t => t.gameObject.GetComponent<PCBoardCardDisplayBehaviour>())
+                    .Where(behave => behave != null)
+                    .ToList().Where(cardDisplayBehavior => cardDisplayBehavior.Card != null)
+                    .Where(cd => cd.gameObject.activeSelf == true);
+
+
+            var cards = new Dictionary<CardInfo, List<PCBoardCardDisplayBehaviour>>();
+            foreach (var cd in behaviorList)
+            {
+                if (!cards.ContainsKey(cd.Card))
+                {
+                    cards[cd.Card] =new List<PCBoardCardDisplayBehaviour>();
+                }
+
+                cards[cd.Card].Add(cd);
+            }
+
+            foreach (var action in acceptedActions)
+            {
+                var key = action.Data[0] as CardInfo;
+                if (key == null)
+                {
+                    LogRecorder.Log("Wrong Action");
+                    continue;
+                }
+
+                if (!cards.ContainsKey(key))
+                {
+                    LogRecorder.Log("Missing Card");
+                    continue;
+                }
+                foreach (var behavior in cards[key])
+                {
+                    var trg = behavior.gameObject.GetComponent<PCBoardBindedActionClickTrigger>();
+                    trg.Bind(action,boardBehavior);
+                }
+            }
+        }
+
+        private void BindMilitaryCard()
+        {
+            
+        }
+
+        private void BindSpriteUIButtons(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
+        {
+            var acceptedAction =
+                actions.FirstOrDefault(action => action.ActionType == PlayerActionType.ResetActionPhase);
+            if (acceptedAction != null)
+            {
+                EndActionPhaseButtonFrame.Bind(acceptedAction, boardBehavior);
+            }
+        }
+        
     }
 }

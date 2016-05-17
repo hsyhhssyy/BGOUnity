@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
@@ -17,6 +18,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public GameObject LoadingGo;
         public PlayerBoardDisplayBehavior PlayerBoardDisplay;
         public PCBoardActionBinder ActionBinder;
+        public PCBoardActionTriggerController ActionTriggerController;
 
         /// <summary>
         /// 用于执行两段式命令，触发两段式命令的方式就是先写入interAction

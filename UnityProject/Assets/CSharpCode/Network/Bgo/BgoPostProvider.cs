@@ -16,31 +16,44 @@ namespace Assets.CSharpCode.Network.Bgo
         {
             switch (action.ActionType)
             {
+                //Special function
                 case PlayerActionType.TakeCardFromCardRow:
                 case PlayerActionType.PutBackCard:
-                    return SendTakePutBackCardPostMessage(sessionObject, game,action.Data[3].ToString(),action.Data[2].ToString(),callback);
+                    return SendTakePutBackCardPostMessage(sessionObject, game, action.Data[3].ToString(),
+                        action.Data[2].ToString(), callback);
+                //----optvalue is [1]
+                case PlayerActionType.ResetActionPhase:
+                case PlayerActionType.PlayActionCard:
+                case PlayerActionType.ElectLeader:
+                    return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
+                //----optvalue is [2]
                 case PlayerActionType.IncreasePopulation:
-                    return UnknownAction(sessionObject, game, action.Data[2].ToString(), callback);
                 case PlayerActionType.BuildBuilding:
-                    return UnknownAction(sessionObject, game, action.Data[2].ToString(), callback);
-                    case PlayerActionType.UpgradeBuilding:
-                    return UnknownAction(sessionObject, game, action.Data[3].ToString(), callback);
-                    case PlayerActionType.Destory:
-                        case PlayerActionType.Disband:
-                    return UnknownAction(sessionObject, game, action.Data[1].ToString(),
+                case PlayerActionType.Revolution:
+                case PlayerActionType.DevelopTechCard:
+                    return PerformAction(sessionObject, game, action.Data[2].ToString(), callback);
+                //----optvalue is [3]
+                case PlayerActionType.UpgradeBuilding:
+                case PlayerActionType.BuildWonder:
+                    return PerformAction(sessionObject, game, action.Data[3].ToString(), callback);
+                //----has additional form
+                case PlayerActionType.Destory:
+                case PlayerActionType.Disband:
+                    return PerformAction(sessionObject, game, action.Data[1].ToString(),
                         new Dictionary<String, String>
                         {
                             {"unite", action.Data[2].ToString()}
                         },
                         callback);
+                //----Unknown
                 case PlayerActionType.Unknown:
-                    return UnknownAction(sessionObject, game, action.Data[1].ToString(),  callback);
+                    return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
                 default:
                     return null;
             }
         }
 
-        private static IEnumerator UnknownAction(BgoSessionObject sessionObject, BgoGame game, String actionValue,Dictionary<String,String> overrideData, Action callback)
+        private static IEnumerator PerformAction(BgoSessionObject sessionObject, BgoGame game, String actionValue,Dictionary<String,String> overrideData, Action callback)
         {
             var postUrl = RemoveCharacterEntities(game.ActionFormSubmitUrl);
 
@@ -90,7 +103,7 @@ namespace Assets.CSharpCode.Network.Bgo
             }
         }
 
-        private static IEnumerator UnknownAction(BgoSessionObject sessionObject, BgoGame game, String actionValue, Action callback)
+        private static IEnumerator PerformAction(BgoSessionObject sessionObject, BgoGame game, String actionValue, Action callback)
         {
             var postUrl = RemoveCharacterEntities(game.ActionFormSubmitUrl);
 
@@ -166,24 +179,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 callback();
             }
         }
-
-        private static IEnumerator PostData(String url,WWWForm form, BgoSessionObject sessionObject)
-        {
-            var cookieHeaders = form.headers;
-            cookieHeaders.Add("Cookie", "PHPSESSID=" + sessionObject._phpSession + "; identifiant=" + sessionObject._identifiant + "; mot_de_passe=" + sessionObject._motDePasse);
-
-            var www = new WWW(url, form.data, cookieHeaders);
-
-            yield return www;
-
-            if (www.error != null)
-            {
-               Assets.CSharpCode.UI.Util.LogRecorder.Log(www.error);
-
-                yield break;
-            }
-        }
-
+        
         private static String RemoveCharacterEntities(String src)
         {
             src = src.Replace("&amp;", "&");

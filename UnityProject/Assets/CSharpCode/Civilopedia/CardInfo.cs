@@ -8,6 +8,8 @@ namespace Assets.CSharpCode.Civilopedia
 {
     public class CardInfo : IEquatable<CardInfo>
     {
+        public static String UnknownInternalId = "Unknown!";
+
         public static CardInfo UnknownMilitaryCard(Age age)
         {
             return new CardInfo
@@ -84,8 +86,23 @@ namespace Assets.CSharpCode.Civilopedia
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
+            if (InternalId == CardInfo.UnknownInternalId|| other.InternalId == CardInfo.UnknownInternalId)
+            {
+                return string.Equals(CardName  , other.CardName)&&CardAge.Equals(other.CardAge);
+            }
             return string.Equals(InternalId, other.InternalId);
         }
+
+        public override bool Equals(Object other)
+        {
+            if (!(other is CardInfo))
+            {
+                return false;
+            }
+
+            return Equals((CardInfo) other);
+        }
+
 
         public override int GetHashCode()
         {

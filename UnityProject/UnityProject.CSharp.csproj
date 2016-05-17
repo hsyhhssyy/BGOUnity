@@ -102,6 +102,7 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\BuildingCellActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\CardRowActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\PCBoardBindedActionClickTrigger.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\SpecificCodeActionTrigger.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ButtonRingPopup.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardRowCardClickCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\EventsPopupCollider.cs" />
@@ -120,7 +121,9 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\BuildingMenuAnimationBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenu.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenuButton.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\WonderMenuAnimationBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardActionBinder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardActionTriggerController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoardDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />

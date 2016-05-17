@@ -5,16 +5,18 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Menu
 {
+    [UsedImplicitly]
     public class BuildingMenuAnimationBehaviour:MonoBehaviour
     {
         public BuildingCellDisplayBehavior DisplayBehavior;
         public BuildingCellActionBinder ActionBinder;
 
-        private String animateStep = "";
+        private String animateStep = "CollapseComplete";
 
         private int index = 0; 
         private List<PlayerAction> Actions;
@@ -26,7 +28,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
 
         public float popupSpeed=1f;
         public float collapseSpeed = 1f;
-
+        
         public void Start()
         {
             ItemPrefab = Resources.Load<GameObject>("Dynamic-PC/Menu/BuildingMenuItem");
@@ -39,7 +41,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
             if (animateStep == "PreparePopup")
             {
                 transform.localScale = new Vector3(0.3f, 1f, 1f);
-                transform.localPosition = new Vector3(0.054f, DisplayBehavior.Frames[index].transform.localPosition.y + 0.025f, 0f);
+                transform.localPosition = new Vector3(0.286f, DisplayBehavior.Frames[index].transform.localPosition.y + 0.025f, 0f);
 
                 foreach (Transform child in transform)
                 {
@@ -52,7 +54,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
             {
                 //popup menu
                 float scale = transform.localScale.x + (0.8f*Time.deltaTime)* popupSpeed;
-                if (scale >= 1)
+                if (scale >= 1||scale<0)
                 {
                     scale = 1;
                     ItemsToBeListed = 0;
@@ -60,7 +62,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
                     animateStep = "ListItem";
                 }
                 transform.localScale=new Vector3(scale,1f,1f);
-                transform.localPosition= new Vector3(0.817f*scale-0.191f, transform.localPosition.y, 0f);//0.526
+                transform.localPosition= new Vector3(0.952f*scale, transform.localPosition.y, 0f);//0.526
                 
                 //如果有其他frame挡着卡，上移
                 float maxY = DisplayBehavior.Frames[index].transform.localPosition.y + 1.06f;
@@ -89,18 +91,17 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
             if (animateStep == "ListItem")
             {
                 transform.localScale = new Vector3(1f, 1f, 1f);
-                transform.localPosition = new Vector3(0.626f, transform.localPosition.y, 0f);
+                transform.localPosition = new Vector3(0.952f, transform.localPosition.y, 0f);
                 ItemsToBeListed = ItemsToBeListed + (10f*Time.deltaTime)*popupSpeed;
 
                 for (int i = ListedAction; i < ItemsToBeListed&&i< Actions.Count; i++)
                 {
                     var mSp = Instantiate(ItemPrefab);
                     mSp.transform.parent = this.gameObject.transform;
-                    mSp.transform.localPosition=new Vector3(-0.275f,0.45f-0.18f*i,-0.001f);
+                    mSp.transform.localPosition=new Vector3(-0.594f, 0.429f - 0.18f*i,-0.001f);
 
                     mSp.transform.Find("MenuText").GetComponent<TextMesh>().text = Actions[i].GetDescription();
-                    mSp.GetComponent<PCBoardBindedActionClickTrigger>().Action = Actions[i];
-                    mSp.GetComponent<PCBoardBindedActionClickTrigger>().BoardBehavior = BoardBehavior;
+                    mSp.GetComponent<PCBoardBindedActionClickTrigger>().Bind(Actions[i], BoardBehavior);
 
                     ListedAction = i+1;
                 }
@@ -130,13 +131,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
             if (animateStep == "Collapse")
             {
                 float scale = transform.localScale.x - (0.8f * Time.deltaTime) * collapseSpeed;
-                if (scale >= 0.3)
+                if (scale < 0.3)
                 {
                     scale = 0.3f;
                     animateStep = "FrameDisappear";
                 }
                 transform.localScale = new Vector3(scale, 1f, 1f);
-                transform.localPosition = new Vector3(0.817f * scale - 0.191f, transform.localPosition.y, 0f);//0.526
+                transform.localPosition = new Vector3(0.952f * scale, transform.localPosition.y, 0f);//0.526
 
                 //如果上一个frame被移动了，就移动回来
                 float maxY = DisplayBehavior.Frames[index].transform.localPosition.y + 0.53f;
@@ -185,11 +186,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
         public void Popup(int ind,List<PlayerAction> actions, PCBoardBehavior BoardBehavior)
         {
             this.BoardBehavior = BoardBehavior;
-            if (animateStep == "PopupComplete")
+            if (animateStep== "PopupComplete")
             {
                 Collapse();
             }
-            else
+            else if (animateStep == "CollapseComplete")
             {
                 index = ind;
                 animateStep = "PreparePopup";
@@ -200,7 +201,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Menu
 
         public void Collapse()
         {
-            animateStep = "PrepareCollapse";
+            if (animateStep == "PopupComplete")
+            {
+                animateStep = "PrepareCollapse";
+            }
         }
     }
 }

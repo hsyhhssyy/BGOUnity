@@ -300,32 +300,36 @@ namespace Assets.CSharpCode.Network.Bgo
 
 
             //可用行动
-            matches = BgoRegexpCollections.ExtractActions.Matches(html);
-            foreach (Match mc in matches)
+            var subDropdown = BgoRegexpCollections.ExtractSubDropDown("action").Match(html);
+            if (subDropdown.Success)
             {
-                BgoPlayerAction pa = new BgoPlayerAction {ActionType = PlayerActionType.Unknown};
-                pa.Data[0] = mc.Groups[2].Value;
-                pa.Data[1] = mc.Groups[1].Value;
-
-                game.PossibleActions.Add(pa);
-            }
-
-            Match mSubmitForm=BgoRegexpCollections.ExtractSubmitForm.Match(html);
-            game.ActionForm = new Dictionary<string, string>();
-
-            if (mSubmitForm.Success)
-            {
-                game.ActionFormSubmitUrl = mSubmitForm.Groups[1].Value;
-                matches = BgoRegexpCollections.ExtractSubmitFormDetail.Matches(mSubmitForm.Groups[2].Value);
+                matches = BgoRegexpCollections.ExtractActions.Matches(subDropdown.Groups[1].Value);
                 foreach (Match mc in matches)
                 {
-                    if (mc.Groups[2].Value != "")
+                    BgoPlayerAction pa = new BgoPlayerAction {ActionType = PlayerActionType.Unknown};
+                    pa.Data[0] = mc.Groups[2].Value;
+                    pa.Data[1] = mc.Groups[1].Value;
+
+                    game.PossibleActions.Add(pa);
+                }
+
+                Match mSubmitForm = BgoRegexpCollections.ExtractSubmitForm.Match(html);
+                game.ActionForm = new Dictionary<string, string>();
+
+                if (mSubmitForm.Success)
+                {
+                    game.ActionFormSubmitUrl = mSubmitForm.Groups[1].Value;
+                    matches = BgoRegexpCollections.ExtractSubmitFormDetail.Matches(mSubmitForm.Groups[2].Value);
+                    foreach (Match mc in matches)
                     {
-                        game.ActionForm[mc.Groups[2].Value] = "";
-                    }
-                    else
-                    {
-                        game.ActionForm[mc.Groups[4].Value] = mc.Groups[5].Value;
+                        if (mc.Groups[2].Value != "")
+                        {
+                            game.ActionForm[mc.Groups[2].Value] = "";
+                        }
+                        else
+                        {
+                            game.ActionForm[mc.Groups[4].Value] = mc.Groups[5].Value;
+                        }
                     }
                 }
             }

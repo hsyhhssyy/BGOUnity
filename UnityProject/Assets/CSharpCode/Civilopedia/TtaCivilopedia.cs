@@ -112,7 +112,7 @@ namespace Assets.CSharpCode.Civilopedia
                 {
                     CardName =
                         TtaTranslation.GetTranslatedText(name).Trim(),
-                    InternalId = "Unknown!",
+                    InternalId = CardInfo.UnknownInternalId,
                     CardType = CardType.Unknown,
                     CardAge = age
                 };
@@ -139,7 +139,7 @@ namespace Assets.CSharpCode.Civilopedia
                 {
                     CardName =
                         TtaTranslation.GetTranslatedText(name).Trim(),
-                    InternalId = "Unknown!",
+                    InternalId = CardInfo.UnknownInternalId,
                     CardType = CardType.Unknown,
                     CardAge = Age.A
                 };

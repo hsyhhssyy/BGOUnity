@@ -54,7 +54,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
                 //显示图片
                 var cellInfo = cells[ages[i]];
 
-                BindCell(boardBehavior,DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<PCBoardBindedActionClickTrigger>(),i, cellInfo);
+                BindCell(boardBehavior,DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<SpecificCodeActionTrigger>(),i, cellInfo);
 
             }
         }
@@ -63,13 +63,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
         {
             foreach (GameObject frame in DisplayBehavior.Frames)
             {
-                frame.FindObject("CardDisplay").GetComponent<PCBoardBindedActionClickTrigger>().Action = null;
+                frame.FindObject("CardDisplay").GetComponent<SpecificCodeActionTrigger>().BoardBehavior=null;
             }
         }
 
-        private void BindCell(PCBoardBehavior BoardBehavior,PCBoardBindedActionClickTrigger trigger,int index, BuildingCell cell)
+        private void BindCell(PCBoardBehavior BoardBehavior,SpecificCodeActionTrigger trigger,int index, BuildingCell cell)
         {
-            trigger.Action = null;
+            trigger.BoardBehavior = null;
 
             if (BoardBehavior.InterAction == null)
             {
@@ -85,7 +85,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 
                 //因此按下的时候应该触发轮盘按钮
                 //
-                trigger.Action = new PlayerAction(() =>
+                trigger.ActionOnMouseClick= () =>
                 {
                     //匿名方法参数传递
                     int localIndex = index;
@@ -120,9 +120,15 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 
 
                     }
-
+                    MenuFrame.Collapse();
                     MenuFrame.Popup(localIndex, acceptedActions,BoardBehavior);
-                });
+                };
+
+                trigger.ActionOnMouseClickOutside = () =>
+                {
+                    MenuFrame.Collapse();
+                };
+                trigger.BoardBehavior = BoardBehavior;
             }
             else
             {
