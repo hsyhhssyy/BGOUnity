@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Assets.CSharpCode.Entity;
 using UnityEngine;
 
@@ -23,8 +24,12 @@ namespace Assets.CSharpCode.Network.Bgo
                         action.Data[2].ToString(), callback);
                 //----optvalue is [1]
                 case PlayerActionType.ResetActionPhase:
+                case PlayerActionType.PassPoliticalPhase:
+                case PlayerActionType.EndActionPhase:
                 case PlayerActionType.PlayActionCard:
                 case PlayerActionType.ElectLeader:
+                case PlayerActionType.SetupTactic:
+                case PlayerActionType.AdoptTactic:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
                 //----optvalue is [2]
                 case PlayerActionType.IncreasePopulation:
@@ -48,6 +53,18 @@ namespace Assets.CSharpCode.Network.Bgo
                 //----Unknown
                 case PlayerActionType.Unknown:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
+                default:
+                    return null;
+            }
+        }
+
+        public static IEnumerator PostInternalAction(BgoSessionObject sessionObject, BgoGame game, BgoPlayerAction action,
+             Action<List<PlayerAction>> callback)
+        {
+            switch (action.ActionType)
+            {
+                case PlayerActionType.BuildWonder:
+                    return Perform2StepAction(sessionObject, game, action.Data[3].ToString(), callback);
                 default:
                     return null;
             }
@@ -100,6 +117,68 @@ namespace Assets.CSharpCode.Network.Bgo
             if (callback != null)
             {
                 callback();
+            }
+        }
+
+        private static IEnumerator Perform2StepAction(BgoSessionObject sessionObject, BgoGame game, String actionValue,
+            Action<List<PlayerAction>> callback)
+        {
+            var postUrl = RemoveCharacterEntities(game.ActionFormSubmitUrl);
+
+            WWWForm myPostData = new WWWForm();
+            foreach (var pair in game.ActionForm)
+            {
+                if (pair.Key == "action")
+                {
+                    myPostData.AddField("action", actionValue);
+                }
+                else
+                {
+                    myPostData.AddField(pair.Key, pair.Value);
+                }
+            }
+
+            var cookieHeaders = myPostData.headers;
+            cookieHeaders.Add("Cookie", "PHPSESSID=" + sessionObject._phpSession + "; identifiant=" + sessionObject._identifiant + "; mot_de_passe=" + sessionObject._motDePasse);
+
+            //var data = Encoding.UTF8.GetString(myPostData.data);
+
+            var www = new WWW(BgoBaseUrl + postUrl, myPostData.data, cookieHeaders);
+
+            yield return www;
+
+            if (www.error != null)
+            {
+                Assets.CSharpCode.UI.Util.LogRecorder.Log(www.error);
+
+                yield break;
+            }
+
+            var responseText = www.text;
+
+            //Step1 Complete
+
+            var labelMatches = BgoRegexpCollections.ExtractActionChoice.Matches(responseText);
+            if (labelMatches.Count <= 0)
+            {
+                yield break;
+            }
+            var actions = new List<PlayerAction>();
+            foreach (Match m in labelMatches)
+            {
+                var msg = m.Groups[2].Value;
+                var optValue = m.Groups[1].Value;
+
+                BgoPlayerAction pa = new BgoPlayerAction { ActionType = PlayerActionType.Unknown };
+                pa.Data[0] = msg;
+                pa.Data[1] = optValue;
+                actions.Add(pa);
+            }
+            BgoActionFormater.FormatInternalAction(actions,responseText);
+
+            if (callback != null)
+            {
+                callback(actions);
             }
         }
 

@@ -7,9 +7,19 @@ namespace Assets.CSharpCode.Civilopedia
 {
     public class CardEffect
     {
-        public CardEffectType FunctionId;
+        public CardEffectType FunctionId { get; set; }
 
-        public List<int> Data;
+        public List<int> Data=new List<int>();
+    }
+
+    public class ChooseOneCardEffect: CardEffect
+    {
+        public ChooseOneCardEffect()
+        {
+            FunctionId = CardEffectType.ChooseOne;
+        }
+
+        public List<CardEffect> Candidate=new List<CardEffect>();
     }
 
     /// <summary>
@@ -17,8 +27,11 @@ namespace Assets.CSharpCode.Civilopedia
     /// </summary>
     public enum CardEffectType
     {
+        Unknown=0,
         //-------------E100------
        ResourceOfTypeXChangedY = 100,
-       
+
+       //-----------Program Effect ---------
+       ChooseOne = 1000,
     }
 }

@@ -7,6 +7,7 @@ using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog;
 using Assets.CSharpCode.UI.PCBoardScene.Menu;
 using Assets.CSharpCode.UI.Util;
 using UnityEngine;
@@ -25,26 +26,40 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public GameObject CivilCardFrame ;
         public GameObject MilitaryCardFrame;
 
+        public HandCardMenuBehaviour HandCardMenuFrame;
+
         public SpecificCodeActionTrigger ConstructingWonderFrame;
         public WonderMenuAnimationBehaviour ConstructingWonderMenuFrame;
+
+        public PoliticalPhaseDialogDisplayBehaviour PoliticalPhaseDialogFrame;
         #endregion
 
         #region TtaActionBinder
 
-        public void BindAction(PCBoardBehavior BoardBehavior)
+        public void BindAction(List<PlayerAction> actions,PCBoardBehavior boardBehavior)
         {
             BindCardRow();
 
-            BindWorkerBank(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
-            BindUnknown(SceneTransporter.CurrentGame.PossibleActions);
+            BindWorkerBank(actions, boardBehavior);
+            BindUnknown(actions);
 
-            BindBuildings(SceneTransporter.CurrentGame.PossibleActions,BoardBehavior);
+            BindBuildings(actions, boardBehavior);
 
-            BindSpriteUIButtons(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
+            BindSpriteUIButtons(actions, boardBehavior);
 
-            BindCivilCard(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
+            BindHandCard(actions.Where(
+                   action =>
+                       action.ActionType == PlayerActionType.DevelopTechCard ||
+                       action.ActionType == PlayerActionType.PlayActionCard ||
+                       action.ActionType == PlayerActionType.Revolution ||
+                       action.ActionType == PlayerActionType.ElectLeader).ToList(),CivilCardFrame, boardBehavior);
+            BindHandCard(actions.Where(
+                   action =>
+                       action.ActionType == PlayerActionType.SetupTactic).ToList(), MilitaryCardFrame, boardBehavior);
 
-            BindConstructingWonder(SceneTransporter.CurrentGame.PossibleActions, BoardBehavior);
+            BindConstructingWonder(actions, boardBehavior);
+
+            PoliticalPhaseDialogFrame.BindAction(actions, boardBehavior);
         }
 
         public void Unbind()
@@ -81,7 +96,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             {
                 var frame=child.gameObject.GetComponent<BuildingCellActionBinder>();
                 
-                frame.BindAction(boardBehavior);
+                frame.BindAction(actions,boardBehavior);
             }
         }
 
@@ -136,18 +151,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
         }
 
-        private void BindCivilCard(List<PlayerAction> actions, PCBoardBehavior boardBehavior)
+        private void BindHandCard(List<PlayerAction> acceptedActions, GameObject cardFrame,PCBoardBehavior boardBehavior)
         {
-            List<PlayerAction> acceptedActions =
-               actions.Where(
-                   action =>
-                       action.ActionType == PlayerActionType.DevelopTechCard || 
-                       action.ActionType == PlayerActionType.PlayActionCard ||
-                       action.ActionType == PlayerActionType.Revolution ||
-                       action.ActionType == PlayerActionType.ElectLeader).ToList();
 
             var behaviorList =
-                CivilCardFrame.transform.Cast<Transform>()
+                cardFrame.transform.Cast<Transform>()
                     .Select(t => t.gameObject.GetComponent<PCBoardCardDisplayBehaviour>())
                     .Where(behave => behave != null)
                     .ToList().Where(cardDisplayBehavior => cardDisplayBehavior.Card != null)
@@ -182,14 +190,17 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 foreach (var behavior in cards[key])
                 {
                     var trg = behavior.gameObject.GetComponent<PCBoardBindedActionClickTrigger>();
-                    trg.Bind(action,boardBehavior);
+                    var actionAsync = action;
+                    trg.Bind(new PlayerAction()
+                    {
+                       ActionType = PlayerActionType.ProgramDelegateAction,
+                       Data=new Dictionary<int, object>() { { 0, new Action(() =>
+                       {
+                           HandCardMenuFrame.Popup(actionAsync,trg.gameObject,boardBehavior);
+                       })} }
+                    }, boardBehavior);
                 }
             }
-        }
-
-        private void BindMilitaryCard()
-        {
-            
         }
 
         private void BindSpriteUIButtons(List<PlayerAction> actions, PCBoardBehavior boardBehavior)

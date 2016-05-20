@@ -14,7 +14,9 @@ namespace Assets.CSharpCode.Network
         IEnumerator ListGames(Action<List<TtaGame>> callback);
         IEnumerator RefreshBoard(TtaGame game,Action callback);
 
-        IEnumerator TakeAction(TtaGame game, PlayerAction action,Action callback);
+        IEnumerator TakeAction(TtaGame game, PlayerAction action, Action callback);
+        IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>> callback);
+
     }
 
 }

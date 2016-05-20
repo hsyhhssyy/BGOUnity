@@ -1,5 +1,6 @@
-﻿using Assets.CSharpCode.UI.PCBoardScene;
-using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+﻿using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.UI.PCBoardScene;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Assets.CSharpCode.UI.Util
         /// <summary>
         /// 除非特殊需要，否则在执行Bind之前都要考虑执行一个Unbind
         /// </summary>
-        void BindAction(PCBoardBehavior BoardBehavior);
+        void BindAction(List<PlayerAction> actions,PCBoardBehavior boardBehavior);
 
         /// <summary>
         /// <para>BoardBehavior在下列情况会考虑执行最高层的Unbind</para>
@@ -18,7 +19,7 @@ namespace Assets.CSharpCode.UI.Util
         /// 2、Scene要被销毁<para/>
         /// 3、玩家面板被刷新<para/>
         /// 在下列情况下不会执行最高层的Unbind<para/>
-        /// 1、写入了InterAction（然后会立刻执行一个Bind但是不会先Unbind）<para/>
+        /// 1、写入了InterAction（然后会立刻执行一个Bind但是不会先Unbind，并且不会refresh board）<para/>
         /// 具体会不会执行Unbind取决于你的父级ActionBinder有没有在他的Unbind里调用你的Unbind<para/>
         /// </summary>
         [UsedImplicitly]
@@ -29,35 +30,28 @@ namespace Assets.CSharpCode.UI.Util
     {
         void Refresh();
     }
-
+    
     public abstract class InputActionTriggerMonoBehaviour: MonoBehaviour
     {
-        private PCBoardActionTriggerController _controller;
+        public static readonly List<InputActionTriggerMonoBehaviour> RegisteredTriggers = new List<InputActionTriggerMonoBehaviour>();
 
-        protected PCBoardActionTriggerController Controller
+        public static void Register(InputActionTriggerMonoBehaviour candidate)
         {
-            get { return _controller; }
-            set
-            {
-                if (_controller != null)
-                {
-                    _controller.Unregister(this);
-                }
+            RegisteredTriggers.Add(candidate);
+        }
+        public static void Unregister(InputActionTriggerMonoBehaviour candidate)
+        {
+            RegisteredTriggers.Remove(candidate);
+        }
 
-                _controller = value;
-                if (_controller != null)
-                {
-                    _controller.Register(this);
-                }
-            }
+        protected InputActionTriggerMonoBehaviour()
+        {
+            Register(this);
         }
 
         public void OnDestory()
         {
-            if (Controller != null)
-            {
-                Controller.Unregister(this);
-            }
+           Unregister(this);
         }
 
         public virtual bool OnMouseClick()
@@ -83,6 +77,11 @@ namespace Assets.CSharpCode.UI.Util
             return false;
         }
         public virtual bool OnMouseClickOutside()
+        {
+            return false;
+        }
+
+        public virtual bool OnMouseDrag()
         {
             return false;
         }

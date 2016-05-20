@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e67874b290e91404ca3bd5b1435c5ba8
-timeCreated: 1463484233
+timeCreated: 1463638157
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -46,6 +46,11 @@ TextureImporter:
     21300078: pc-board-buildings-menu
     21300080: pc-board-menu-wonder-step-item
     21300082: pc-board-menu-wonder
+    21300084: pc-board-hand-card-menu
+    21300086: pc-board-hand-card-menu-button-2
+    21300088: pc-board-hand-card-menu-button-3
+    21300090: pc-board-worker-outline
+    21300092: pc-board-warning-text-frame
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -517,24 +522,19 @@ TextureImporter:
     - name: pc-board-card-strengh-main
       rect:
         serializedVersion: 2
-        x: 257
-        y: 85
+        x: 450
+        y: 260
         width: 90
         height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -42, y: 44}
-        - {x: -42, y: -44}
-        - {x: 40, y: -44}
-        - {x: 42, y: -41}
-        - {x: 42, y: 44}
-      - - {x: 42, y: -22}
-        - {x: 45, y: -21}
-        - {x: 45, y: -18}
-        - {x: 42, y: -17}
-        - {x: 40, y: -19}
+      - - {x: -45, y: 45}
+        - {x: -45, y: 29}
+        - {x: -7, y: 29}
+        - {x: -3, y: 33}
+        - {x: -3, y: 45}
     - name: pc-board-card-strength-addition
       rect:
         serializedVersion: 2
@@ -690,6 +690,76 @@ TextureImporter:
         - {x: 73.5, y: -34.5}
         - {x: 75.5, y: -32.5}
         - {x: 75.5, y: 34.5}
+    - name: pc-board-hand-card-menu
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 186
+        width: 107
+        height: 139
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -53.5, y: 69.5}
+        - {x: -53.5, y: -69.5}
+        - {x: 52.5, y: -69.5}
+        - {x: 53.5, y: -68.5}
+        - {x: 53.5, y: 69.5}
+      - - {x: -30.5, y: -42.5}
+        - {x: -30.5, y: 48.5}
+        - {x: -28.5, y: 50.5}
+        - {x: 29.5, y: 48.5}
+        - {x: 27.5, y: -44.5}
+        - {x: -27.5, y: -44.5}
+    - name: pc-board-hand-card-menu-button-2
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 328
+        width: 89
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: pc-board-hand-card-menu-button-3
+      rect:
+        serializedVersion: 2
+        x: 649
+        y: 347
+        width: 89
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: pc-board-worker-outline
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 46
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -22.5, y: 22.5}
+        - {x: -22.5, y: -22.5}
+        - {x: 22.5, y: -22.5}
+        - {x: 22.5, y: 22.5}
+    - name: pc-board-warning-text-frame
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 12
+        width: 128
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 

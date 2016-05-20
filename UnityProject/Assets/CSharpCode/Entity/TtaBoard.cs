@@ -22,7 +22,7 @@ namespace Assets.CSharpCode.Entity
 
         public CardInfo Tactic;
 
-        public List<String> Warnings;
+        public List<Warning> Warnings;
 
         public List<CardInfo> CivilCards;
 

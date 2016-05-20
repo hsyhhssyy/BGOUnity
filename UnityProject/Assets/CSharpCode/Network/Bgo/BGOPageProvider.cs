@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.Helper;
 using UnityEngine;
 using UnityEngine.Experimental.Networking;
 
@@ -245,6 +246,19 @@ namespace Assets.CSharpCode.Network.Bgo
             game.CivilCardsRemain = Convert.ToInt32(matchCivilRemain.Groups[2].Value);
             var matchMilitaryRemain = BgoRegexpCollections.ExtractMilitryCardRemains.Match(html);
             game.MilitaryCardsRemain = Convert.ToInt32(matchMilitaryRemain.Groups[2].Value);
+
+            //当前阶段
+            var matchPhase = BgoRegexpCollections.ExtractGamePhase.Match(html);
+            var phase = matchPhase.Groups[1].Value;
+            switch (phase.Trim())
+            {
+                case "Political":
+                    game.CurrentPhase = TtaPhase.PoliticalPhase;
+                    break;
+                default:
+                    game.CurrentPhase = TtaPhase.OtherPhase;
+                    break;
+            }
 
             //时代和回合
             var matchAgeAndRound = BgoRegexpCollections.ExtractAgeAndRound.Match(html);
@@ -547,10 +561,52 @@ namespace Assets.CSharpCode.Network.Bgo
 
             //警告
             var warningMatch = BgoRegexpCollections.ExtractWarning.Match(htmlShade);
-            board.Warnings=new List<string>();
+            board.Warnings=new List<Warning>();
+            int corruptionValue = 0;
             foreach (Match m in BgoRegexpCollections.ExtractWarningItem.Matches(warningMatch.Groups[1].Value))
             {
-                board.Warnings.Add(m.Groups[1].Value);
+                var playerColors = new[] { "Unknown", "Orange", "Purple", "Green", "Grey" };
+                var warningStr = m.Groups[1].Value;
+                if (warningStr.StartsWith("War"))
+                {
+                    //War over Territory against Purple
+                    var warName = "WarOver" + warningStr.CutBetween("over ", " against");
+                    WarningType t = (WarningType) Enum.Parse(typeof (WarningType), warName);
+                    Warning w = new Warning
+                    {
+                        Type = t,
+                        Data = Array.IndexOf(playerColors, warningStr.CutAfter("against ")).ToString()
+                    };
+                    board.Warnings.Add(w);
+                }else if (warningStr.StartsWith("Corruption"))
+                {
+                    corruptionValue++;
+                }
+                else if (warningStr.StartsWith("Famine"))
+                {
+                    Warning w = new Warning
+                    {
+                        Type = WarningType.Famine,
+                    };
+                    board.Warnings.Add(w);
+                }
+                else if (warningStr.StartsWith("Civil disorder"))
+                {
+                    Warning w = new Warning
+                    {
+                        Type = WarningType.CivilDisorder,
+                    };
+                    board.Warnings.Add(w);
+                }
+            }
+            if (corruptionValue > 0)
+            {
+                Warning w = new Warning
+                {
+                    Type = WarningType.Corruption,
+                    Data = corruptionValue.ToString()
+                };
+                board.Warnings.Add(w);
             }
 
             //阵型

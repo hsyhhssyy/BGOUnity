@@ -44,12 +44,12 @@ namespace Assets.CSharpCode.Network.Bgo
                     if (bgoStr.IndexOf("stage", StringComparison.Ordinal) == 8 ||
                         bgoStr.IndexOf("stages", StringComparison.Ordinal) == 8)
                     {
-                        var keyword = bgoStr.Contains("stages") ? "stages" : "stage";
+                        //var keyword = bgoStr.Contains("stages") ? "stages" : "stage";
                         //Build X stage of Y (XR)
                         var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "R)"));
                         var stageCount = Convert.ToInt32(bgoStr.CutBetween("Build ", " stage"));
 
-                        var wonderName = bgoStr.CutBetween(keyword + " ", " (");
+                        var wonderName = bgoStr.CutBetween("of ", " (");
                         action.ActionType = PlayerActionType.BuildWonder;
                         action.Data[0] = civilopedia.GetCardInfoByName(wonderName);
                         action.Data[1] = stageCount;
@@ -139,6 +139,30 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     action.ActionType = PlayerActionType.ResetActionPhase;
                 }
+                else if (bgoStr.StartsWith("Pass political phase"))
+                {
+                    action.ActionType = PlayerActionType.PassPoliticalPhase;
+                }
+                else if (bgoStr.StartsWith("End Action Phase"))
+                {
+                    action.ActionType = PlayerActionType.EndActionPhase;
+                }
+                else if (bgoStr.StartsWith("Set up new tactics"))
+                {
+                    //Set up new tactics:  Classic Army
+                    action.ActionType = PlayerActionType.SetupTactic;
+                    var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
+                    action.Data[0] = card;
+                    action.Data[1] = optValue;
+                }
+                else if (bgoStr.StartsWith("Adopt tactics"))
+                {
+                    //Adopt tactics:  Heavy Cavalry
+                    action.ActionType = PlayerActionType.AdoptTactic;
+                    var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
+                    action.Data[0] = card;
+                    action.Data[1] = optValue;
+                }
             }
 
             //---删除多余 / 一拆多
@@ -212,6 +236,27 @@ namespace Assets.CSharpCode.Network.Bgo
             {
                 game.PossibleActions.Remove(selectaction);
             }
+
+            //标记internal
+            foreach (var action in game.PossibleActions)
+            {
+                switch (action.ActionType)
+                {
+                        case PlayerActionType.PlayActionCard:
+                        var card =(CardInfo)action.Data[0];
+
+                        if (card.ImmediateEffects.FirstOrDefault(t=>t.FunctionId== CardEffectType.ChooseOne) != null)
+                        {
+                            action.Internal = true;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public static void FormatInternalAction(List<PlayerAction> action, String html)
+        {
+            
         }
     }
 }

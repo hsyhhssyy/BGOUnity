@@ -6,6 +6,7 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Translation;
+using Assets.CSharpCode.UI.Util;
 using UnityEngine;
 
 namespace Assets.CSharpCode.Civilopedia
@@ -29,7 +30,7 @@ namespace Assets.CSharpCode.Civilopedia
                 return;
             }
 
-            TextAsset textAsset = Resources.Load<TextAsset>("Civilopedia/TTA7");
+            TextAsset textAsset = Resources.Load<TextAsset>("Civilopedia/BGO.2.0");
 
             var dictStr = textAsset.text;
 
@@ -42,36 +43,114 @@ namespace Assets.CSharpCode.Civilopedia
 
             foreach (var row in rows)
             {
-                var sp = row.Trim().Split("|".ToCharArray());
-                if (sp.Length < 2)
+                var csvRow = CsvUtil.SplitRow(row.Trim());
+                if (csvRow.Count != 19)
                 {
                     continue;
                 }
-                CardInfo info = new CardInfo();
-                info.InternalId = sp[0];
-                info.CardType = (CardType)Enum.Parse(typeof(CardType), sp[1]);
-                info.CardName = TtaTranslation.GetTranslatedText(info.InternalId.Split("-".ToCharArray(), 2).Last()).Trim();
-                info.CardAge = (Age)Convert.ToInt32(info.InternalId.Split("-".ToCharArray(), 2)[0]);
 
-                info.SmallImage = sp[3].Replace(".png","")+"_small";
-                info.NormalImage = sp[3].Replace(".png", "");
+                try
+                {
+                    CardInfo info = new CardInfo
+                    {
+                        InternalId = csvRow[0],
+                        CardName = TtaTranslation.GetTranslatedText(csvRow[1]).Trim(),
+                        CardType = (CardType) Convert.ToInt32(csvRow[2]),
+                        CardAge = (Age) Convert.ToInt32(csvRow[3]),
+                        Description = csvRow[4],
+                        NormalImage = "SpriteTile/Cards/" + csvRow[5].Replace(".png", "")
+                    };
 
-                info.ResearchCost = new List<int> { 1,1 };
-                info.BuildCost = new List<int> { 1 };
-                info.RedMarkerCost = new List<int> { 3};
+                    info.SmallImage = info.NormalImage + "_small";
+                    UnityResources.LazyLoadSprite(info.SmallImage,
+                        () => UnityResources.ZoomSprite(info.NormalImage, new Vector2(0.5f, 0.5f), 70f/297f));
 
-                info.TacticComposition = new List<int> {1,2, 3 };
-                info.TacticValue = new List<int> { 1, 2 };
+                    info.SpecialImage = "SpriteTile/Cards/" + csvRow[6].Replace(".png", "");
 
-                info.Description = "Test";
+                    info.Package = csvRow[7];
 
-                civilopedia.cardInfos[info.InternalId] = info;
+                    info.ResearchCost = ToIntList(csvRow[8], "/");
+                    info.BuildCost = ToIntList(csvRow[9], ",");
+                    info.RedMarkerCost = ToIntList(csvRow[10], "|");
 
+                    info.ImmediateEffects = new List<CardEffect>();
+                    info.ImmediateEffects.AddRange(CreateEffects(csvRow[11])); //使用效果（ActionCard专用）
+                    info.ImmediateEffects.AddRange(CreateEffects(csvRow[12])); //一次性效果（ColonyCard专用）
+
+                    info.SustainedEffects = CreateEffects(csvRow[13]); //持续效果
+
+                    info.WinnerEffects = CreateEffects(csvRow[14]);
+                    info.LoserEffects = CreateEffects(csvRow[15]);
+
+                    info.TacticComposition = ToIntList(csvRow[16], ",");
+                    info.TacticValue = string.IsNullOrEmpty(csvRow[17])
+                        ? new List<int>()
+                        : csvRow[17].Split("/".ToCharArray())
+                            .Select(a => Convert.ToInt32(a.Split(",".ToCharArray())[2]))
+                            .ToList();
+
+                    info.ImmediateEffects.AddRange(CreateEffects(csvRow[18])); //领袖技能主动使用效果（LeaderCard专用）
+
+                    civilopedia.cardInfos[info.InternalId] = info;
+                }
+                catch (Exception e)
+                {
+                    LogRecorder.Log(e.Message+" "+row);
+                }
             }
 
             Civilopedias.Add("2.0", civilopedia);
         }
 
+        private static List<int> ToIntList(String str, String spliter)
+        {
+            return string.IsNullOrEmpty(str) ? new List<int>() : str.Split(spliter.ToCharArray()).Select(a => Convert.ToInt32(a)).ToList();
+        }
+
+        private static List<CardEffect> CreateEffects(String str)
+        {
+            str = str.Trim();
+            if (string.IsNullOrEmpty(str))
+            {
+                return new List<CardEffect>();
+            }
+            List<CardEffect> result = new List<CardEffect>();
+            var splites = str.Split("|".ToCharArray());
+            foreach (var s in splites)
+            {
+                if (s.Contains("/"))
+                {
+                    ChooseOneCardEffect che = new ChooseOneCardEffect();
+                    var orSplite = s.Split("/".ToCharArray());
+                    foreach (var sOr in orSplite)
+                    {
+                        var e = CreateEffect(sOr);
+                        che.Candidate.Add(e);
+                    }
+                    result.Add(che);
+                }
+                else
+                {
+                    result.Add(CreateEffect(s));
+                }
+            }
+
+            return result;
+        }
+
+        private static CardEffect CreateEffect(String str)
+        {
+            var s=str.Split(",".ToCharArray());
+            int id= Convert.ToInt32(s[0]);
+            
+            CardEffect e = new CardEffect {FunctionId = (CardEffectType) id};
+            for (int i = 1; i < s.Length; i++)
+            {
+                e.Data.Add(Convert.ToInt32(s[i]));
+            }
+
+            return e;
+        }
 
         //-------------------------------
 
@@ -107,7 +186,7 @@ namespace Assets.CSharpCode.Civilopedia
 
             if (cardInfo == null)
             {
-                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown age and name pair:" + name);
+                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown age and name pair:"+age+" " + name);
                 cardInfo = new CardInfo
                 {
                     CardName =
@@ -134,7 +213,7 @@ namespace Assets.CSharpCode.Civilopedia
 
             if (cardInfo == null)
             {
-                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown age and name pair:" + name);
+                Assets.CSharpCode.UI.Util.LogRecorder.Log("Unknown name:" + translatedName);
                 cardInfo = new CardInfo
                 {
                     CardName =

@@ -28,7 +28,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 
         }
 
-        public void BindAction(PCBoardBehavior boardBehavior)
+        public void BindAction(List<PlayerAction> actions,PCBoardBehavior boardBehavior)
         {
             if (boardBehavior == null)
             {
@@ -54,7 +54,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
                 //显示图片
                 var cellInfo = cells[ages[i]];
 
-                BindCell(boardBehavior,DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<SpecificCodeActionTrigger>(),i, cellInfo);
+                BindCell(actions,boardBehavior, DisplayBehavior.Frames[i].FindObject("CardDisplay").GetComponent<SpecificCodeActionTrigger>(),i, cellInfo);
 
             }
         }
@@ -67,7 +67,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
             }
         }
 
-        private void BindCell(PCBoardBehavior BoardBehavior,SpecificCodeActionTrigger trigger,int index, BuildingCell cell)
+        private void BindCell(List<PlayerAction> actions, PCBoardBehavior BoardBehavior,SpecificCodeActionTrigger trigger,int index, BuildingCell cell)
         {
             trigger.BoardBehavior = null;
 
@@ -89,11 +89,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
                 {
                     //匿名方法参数传递
                     int localIndex = index;
-                    LogRecorder.Log("Popup Building Menu");
+                    var localActions = actions;
+                    
                     List<PlayerAction> acceptedActions = new List<PlayerAction>();
-
-
-                    foreach (var action in SceneTransporter.CurrentGame.PossibleActions)
+                    
+                    foreach (var action in localActions)
                     {
                         if (action.ActionType == PlayerActionType.BuildBuilding &&
                             ((CardInfo) action.Data[0]).InternalId == cell.Card.InternalId)

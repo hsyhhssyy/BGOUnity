@@ -23,6 +23,8 @@ namespace Assets.CSharpCode.Entity
 
         public int MyPlayerIndex = -1;
 
+        public TtaPhase CurrentPhase;
+
         public List<TtaBoard> Boards;
 
         public List<CardInfo> SharedTactics; 
@@ -32,6 +34,12 @@ namespace Assets.CSharpCode.Entity
         public List<PlayerAction> PossibleActions;
 
         public String Version = "2.0";
+    }
+
+    public class Warning
+    {
+        public WarningType Type;
+        public String Data;
     }
 
     public class CardRowCardInfo

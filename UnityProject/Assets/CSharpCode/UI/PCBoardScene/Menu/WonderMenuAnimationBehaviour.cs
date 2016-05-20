@@ -6,7 +6,6 @@ using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Menu

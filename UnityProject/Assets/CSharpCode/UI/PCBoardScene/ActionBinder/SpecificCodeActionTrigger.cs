@@ -22,9 +22,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
             }
             set
             {
-                Controller = null;
                 _boardBehavior = value;
-                Controller = value == null ? null : _boardBehavior.ActionTriggerController;
             }
         }
         

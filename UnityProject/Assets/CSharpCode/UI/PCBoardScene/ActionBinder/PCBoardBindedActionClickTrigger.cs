@@ -16,7 +16,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 
         public void Bind(PlayerAction action, PCBoardBehavior boardBehavior)
         {
-            Controller = boardBehavior.ActionTriggerController;
             this._boardBehavior = boardBehavior;
             this._action = action;
         }
@@ -24,7 +23,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
         public void Unbind()
         {
             _action = null;
-            Controller = null;
         }
 
         public override bool OnMouseClick()
@@ -44,7 +42,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
             }
             else
             {
-                _boardBehavior.TakeAction(_action);
+                _boardBehavior.TakeAction(_action,null);
             }
 
             return true;

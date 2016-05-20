@@ -79,6 +79,7 @@
     <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
+    <Compile Include="Assets\CSharpCode\Helper\CSVUtil.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExceptionHandle.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
@@ -103,35 +104,39 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\CardRowActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\PCBoardBindedActionClickTrigger.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ActionBinder\SpecificCodeActionTrigger.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\ButtonRingPopup.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\CardRowCardClickCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\EventsPopupCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\GameJournalScrollCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Collider\TacticsPopupToggleCollider.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\BuildingCellDisplayBehavior.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CardRowDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\EventsDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\EventsPopupDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\GameJournalDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PCBoardCardDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PlayerBriefPlateDisplayBehavior.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\SpecialTechDisplayBehavior.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\TacticsPopupDisplayBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\WarningDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhaseDialog\PlayerSelectionBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhaseDialog\PoliticalPhaseDialogDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CommonBoard\CardRowDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CommonBoard\EventsDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CommonBoard\EventsPopupDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CommonBoard\GameJournalDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\CommonBoard\PlayerBriefPlateDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PlayerBoard\SpecialTechDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PlayerBoard\TacticsPopupDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\PlayerBoard\WarningDisplayBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\Prefabs\BuildingCellDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\DisplayBehavior\Prefabs\PCBoardCardDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\BuildingMenuAnimationBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenu.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\ColliderMenuButton.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\HandCardMenuBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Menu\WonderMenuAnimationBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardActionTriggerController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardBehavior.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoardDisplayBehavior.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PCBoardDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\SceneTransporter.cs" />
     <Compile Include="Assets\CSharpCode\UI\StartScreen\StartScreenUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneColliders.cs" />
     <Compile Include="Assets\CSharpCode\UI\TestScene\TestSceneUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\InterfaceDefinition.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\LogRecorder.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\TextMeshLayer.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\TextOutline.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -141,5 +146,6 @@
     <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

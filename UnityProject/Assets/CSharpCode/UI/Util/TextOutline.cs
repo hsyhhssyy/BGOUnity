@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace Assets.CSharpCode.UI.Util
 {
@@ -13,6 +14,8 @@ namespace Assets.CSharpCode.UI.Util
         private TextMesh textMesh;
         private MeshRenderer meshRenderer;
 
+
+        private Regex colorReg=new Regex(@"<color[^>]*?>");
         void Start()
         {
             textMesh = GetComponent<TextMesh>();
@@ -45,14 +48,15 @@ namespace Assets.CSharpCode.UI.Util
 
                 TextMesh other = transform.GetChild(i).GetComponent<TextMesh>();
                 other.color = outlineColor;
-                other.text = textMesh.text;
+                other.text = colorReg.Replace(textMesh.text, "").Replace("</color>","");
                 other.alignment = textMesh.alignment;
                 other.anchor = textMesh.anchor;
                 other.characterSize = textMesh.characterSize;
                 other.font = textMesh.font;
                 other.fontSize = textMesh.fontSize;
                 other.fontStyle = textMesh.fontStyle;
-                other.richText = textMesh.richText;
+                //Disabled RichText
+                other.richText = false;
                 other.tabSize = textMesh.tabSize;
                 other.lineSpacing = textMesh.lineSpacing;
                 other.offsetZ = textMesh.offsetZ;

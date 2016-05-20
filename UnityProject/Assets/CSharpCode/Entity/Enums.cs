@@ -35,17 +35,39 @@ namespace Assets.CSharpCode.Entity
         Farm, Mine, Arena, Lab, Library, Temple, Theater, AirForce, Artillery, Cavalry, Infantry,Unknown
     }
 
+    public enum WarningType
+    {
+        WarOverTerritory=1,
+        WarOverCulture=2,
+        WarOverTechnology=3,
+        Famine,
+        LastTurn,
+        Corruption,
+        CivilDisorder,
+        CivilActionRemain,
+    }
+
+    public enum TtaPhase
+    {
+        PoliticalPhase,
+        ActionPhase,
+        DiscardPhase,
+        OtherPhase,
+    }
+
     public enum CardType
     {
-        Action,
-        SpecialTechMilitary, SpecialTechExploration, SpecialTechCivil, SpecialTechEngineering,
-        UrbanTechArena, UrbanTechLab, UrbanTechLibrary, UrbanTechTemple, UrbanTechTheater,
-        ResourceTechFarm,
-        ResourceTechMine,
-        MilitaryTechAirForce, MilitaryTechArtillery, MilitaryTechCavalry, MilitaryTechInfantry,
-        Wonder, Leader, Government,
-        Event, Colony, Tactic, War, Aggression, Pact,Defend,
-        Unknown,
+        Unknown = 0,
+        Action =1, Aggression=2, Colony=3, Event=4, Government=5, Leader=6,
+        MilitaryTechAirForce=7, MilitaryTechArtillery=8, MilitaryTechCavalry=9, MilitaryTechInfantry=10,
+        Pact=11,
+        ResourceTechFarm=12,ResourceTechMine=13,
+        SpecialTechCivil=14, SpecialTechEngineering=15, SpecialTechExploration=16, SpecialTechMilitary=17,
+        Tactic=18,
+        UrbanTechArena=19, UrbanTechLab=20, UrbanTechLibrary=21, UrbanTechTemple=22, UrbanTechTheater=23,
+        War=24,
+        Wonder=25,
+        Defend=26,
     }
 
     public enum PlayerActionType
@@ -94,8 +116,22 @@ namespace Assets.CSharpCode.Entity
         /// </summary>
         ResetActionPhase,
         //---------打出一张内政卡---------
-        //0. CardInfo
-        DevelopTechCard, PlayActionCard, ElectLeader,Revolution,
+        /// <summary>
+        /// 0. CardInfo
+        /// </summary>
+        DevelopTechCard,
+        /// <summary>
+        /// 0. CardInfo
+        /// </summary>
+        PlayActionCard,
+        /// <summary>
+        /// 0. CardInfo
+        /// </summary>
+        ElectLeader,
+        /// <summary>
+        /// 0. CardInfo
+        /// </summary>
+        Revolution,
         /// <summary>
         /// 建造奇迹
         /// 0. CardInfo
@@ -103,10 +139,36 @@ namespace Assets.CSharpCode.Entity
         /// 2. 总的资源消耗
         /// </summary>
         BuildWonder,
+        //--------掉红点的行动------
+        /// <summary>
+        /// 设置一个阵型
+        /// 0. CardInfo
+        /// </summary>
+        SetupTactic,AdoptTactic,
+        /// <summary>
+        /// 结束内政行动
+        /// </summary>
+        EndActionPhase,
         #endregion
 
         #region 常见政治行动
         PlayEvent, PlayeColony,
+        PassPoliticalPhase,
+        Resign,
+        /// <summary>
+        /// 发动战争，有Interaction版和非Interaction版
+        /// Interaction版：
+        /// 0.CardInfo
+        /// 非Interaction版：
+        /// 0. CardInfo
+        /// 1. 目标玩家
+        /// 2. 需要红点
+        /// </summary>
+        DeclareWar,
+        #endregion
+
+        #region InterAction
+        CancelInterAction,
         #endregion
     }
 }

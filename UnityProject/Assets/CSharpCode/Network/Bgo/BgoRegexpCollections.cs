@@ -244,6 +244,10 @@ namespace Assets.CSharpCode.Network.Bgo
         public static Regex ExtractSubDropDown(string dropdown)
         {
             return new Regex(@"<select.*?name="""+dropdown+@""".*?>([\s\S]*?)</select>");
-        } 
+        }
+
+        public static readonly Regex ExtractGamePhase= new Regex(@"<td class=.titre3.>(.*?) Phase");
+
+        public static readonly Regex ExtractActionChoice =new Regex(@"<input type=.radio. value=""(.*?)"" [\s\S]*?<label .*?>(.*?)<");
     }
 }

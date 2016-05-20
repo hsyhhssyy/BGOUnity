@@ -10,6 +10,8 @@ namespace Assets.CSharpCode.Network.Bgo
 {
     public class BgoTestServer:IServerAdapter
     {
+        public String File;
+
         public IEnumerator LogIn(String username, String password, Action callback)
         {
             if (callback != null)
@@ -32,7 +34,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
         public IEnumerator RefreshBoard(TtaGame game, Action callback)
         {
-            var html = Resources.Load<TextAsset>("Test/TestPage1"); ;
+            var html = Resources.Load<TextAsset>(File); ;
 
             BgoPageProvider.FillGameBoard(html.text, game as BgoGame);
 
@@ -49,6 +51,16 @@ namespace Assets.CSharpCode.Network.Bgo
             if (callback != null)
             {
                 callback();
+            }
+
+            yield break;
+        }
+
+        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>>  callback)
+        {
+            if (callback != null)
+            {
+                callback(new List<PlayerAction>());
             }
 
             yield break;

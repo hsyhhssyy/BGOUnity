@@ -36,8 +36,8 @@ public class TestSceneUIBehaviour : MonoBehaviour
         {
 
             var up = File.ReadAllText(Application.persistentDataPath + "/UsernamePassword").Split("|".ToCharArray());
-            GameObject.Find("Canvas/Username").GetComponent<InputField>().text = up[0];
-            GameObject.Find("Canvas/Password").GetComponent<InputField>().text = up[1];
+            GameObject.Find("Canvas/Login/Username").GetComponent<InputField>().text = up[0];
+            GameObject.Find("Canvas/Login/Password").GetComponent<InputField>().text = up[1];
         }
 
         LoadTestCards();
@@ -68,13 +68,33 @@ public class TestSceneUIBehaviour : MonoBehaviour
         }));
     }
     [UsedImplicitly]
+    public void 登录并打开尝鲜9_Clicked()
+    {
+        //登录
+        TtaTranslation.LoadDictionary();
+        SceneTransporter.Server = new BgoServer();
+
+        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
+
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        {
+            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
+
+            BgoGame g = new BgoGame { GameId = "7279177", Nat = "1", Name = "2.5尝鲜 9", Version = "2.0" };
+
+            SceneTransporter.CurrentGame = g;
+
+            SceneManager.LoadScene("Scene/BoardScene-PC");
+        }));
+    }
+    [UsedImplicitly]
     public void 登录并打开尝鲜10_Clicked()
     {
         //登录
         TtaTranslation.LoadDictionary();
         SceneTransporter.Server = new BgoServer();
 
-       Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
+        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
         StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
         {
@@ -94,8 +114,9 @@ public class TestSceneUIBehaviour : MonoBehaviour
         //登录
         TtaTranslation.LoadDictionary();
         SceneTransporter.Server = new BgoTestServer();
+        (SceneTransporter.Server as BgoTestServer).File = "Test/TestPage1";
 
-       Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
+        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
         StartCoroutine(SceneTransporter.Server.LogIn("username", "password", () =>
         {
@@ -110,6 +131,30 @@ public class TestSceneUIBehaviour : MonoBehaviour
         }));
     }
 
+    [UsedImplicitly]
+    public void 根据测试文本展示页面2_Clicked()
+    {
+        //登录
+        TtaTranslation.LoadDictionary();
+        SceneTransporter.Server = new BgoTestServer();
+        (SceneTransporter.Server as BgoTestServer).File = "Test/TestPage2";
+        
+
+        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
+
+        StartCoroutine(SceneTransporter.Server.LogIn("username", "password", () =>
+        {
+            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
+
+            BgoGame g = new BgoGame { GameId = "7279178", Nat = "2", Name = "Text based Game" };
+
+            SceneTransporter.CurrentGame = g;
+
+            ExtensionMethods.LoadScene("Scene/BoardScene-PC", 1);
+
+        }));
+    }
+
     #endregion
 
     #region 登录BGO的相关代码
@@ -120,19 +165,19 @@ public class TestSceneUIBehaviour : MonoBehaviour
        Assets.CSharpCode.UI.Util.LogRecorder.Log("LoginButton!");
         //LoginButton
 
-        GameObject.Find("Canvas/Login").GetComponent<Button>().interactable = false;
+        GameObject.Find("Canvas/Login/Login").GetComponent<Button>().interactable = false;
 
         SceneTransporter.Server = new BgoServer();
 
         StartCoroutine(SceneTransporter.Server.LogIn(
-            GameObject.Find("Canvas/Username").GetComponent<InputField>().text,
-            GameObject.Find("Canvas/Password").GetComponent<InputField>().text, () =>
+            GameObject.Find("Canvas/Login/Username").GetComponent<InputField>().text,
+            GameObject.Find("Canvas/Login/Password").GetComponent<InputField>().text, () =>
         {
            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
             
-                var up = GameObject.Find("Canvas/Username").GetComponent<InputField>().text + "|" +
-                         GameObject.Find("Canvas/Password").GetComponent<InputField>().text;
+                var up = GameObject.Find("Canvas/Login/Username").GetComponent<InputField>().text + "|" +
+                         GameObject.Find("Canvas/Login/Password").GetComponent<InputField>().text;
                 File.WriteAllText(Application.persistentDataPath + "/UsernamePassword", up);
             
 
@@ -143,7 +188,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
                 SceneTransporter.LastListedGames = gamesReturn;
 
-                var dropDown = GameObject.Find("Canvas/MyGamesList").GetComponent<Dropdown>();
+                var dropDown = GameObject.Find("Canvas/Login/MyGamesList").GetComponent<Dropdown>();
                 dropDown.options = new List<Dropdown.OptionData>();
                 foreach (var pa in gamesReturn)
                 {
@@ -154,7 +199,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
                 if (dropDown.options.Count > 0)
                 {
-                    dropDown.value = 0; GameObject.Find("Canvas/GoButton").GetComponent<Button>().interactable = true;
+                    dropDown.value = 0; GameObject.Find("Canvas/Login/GoButton").GetComponent<Button>().interactable = true;
                 }
             }));
         }));
@@ -163,9 +208,9 @@ public class TestSceneUIBehaviour : MonoBehaviour
     [UsedImplicitly]
     public void GoButton_Clicked()
     {
-        var dropDown = GameObject.Find("Canvas/MyGamesList").GetComponent<Dropdown>();
+        var dropDown = GameObject.Find("Canvas/Login/MyGamesList").GetComponent<Dropdown>();
         SceneTransporter.CurrentGame = SceneTransporter.LastListedGames[dropDown.value];
-        SceneManager.LoadScene("Scene/PCBoardScene");
+        SceneManager.LoadScene("Scene/BoardScene-PC");
     }
 
     #endregion

@@ -9,22 +9,21 @@ namespace Assets.CSharpCode.UI.PCBoardScene
     [UsedImplicitly]
     public class PCBoardActionTriggerController: MonoBehaviour
     {
-        private readonly List<InputActionTriggerMonoBehaviour> RegisteredTriggers=new List<InputActionTriggerMonoBehaviour>();
-
-        public void Register(InputActionTriggerMonoBehaviour candidate)
-        {
-            RegisteredTriggers.Add(candidate);
-        }
-        public void Unregister(InputActionTriggerMonoBehaviour candidate)
-        {
-            RegisteredTriggers.Remove(candidate);
-        }
+        public bool buttonDown = false;
 
         void Update()
         {
             if (Input.GetMouseButton(0))
             {
-                TestMouseWithColliderOverlap();
+                if (buttonDown == false)
+                {
+                    TestMouseWithColliderOverlap();
+                    buttonDown = true;
+                }
+            }
+            else
+            {
+                buttonDown = false;
             }
         }
 
@@ -48,7 +47,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                         }
                         Debug.Log("click object name is " + gameObj.name);
 
-                        foreach (var triggers in RegisteredTriggers)
+                        foreach (var triggers in InputActionTriggerMonoBehaviour.RegisteredTriggers)
                         {
                             if (triggers != gameObj.GetComponent<InputActionTriggerMonoBehaviour>())
                             {
@@ -61,7 +60,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 }
             }
 
-            foreach (var triggers in RegisteredTriggers)
+            foreach (var triggers in InputActionTriggerMonoBehaviour.RegisteredTriggers)
             {
                 triggers.OnMouseClickOutside();
             }

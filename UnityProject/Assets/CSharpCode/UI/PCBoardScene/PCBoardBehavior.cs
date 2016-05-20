@@ -1,9 +1,12 @@
-﻿using Assets.CSharpCode.Helper;
+﻿using System;
+using Assets.CSharpCode.Helper;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog;
 using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
@@ -16,9 +19,12 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public int CurrentPlayerBoardIndex;
 
         public GameObject LoadingGo;
-        public PlayerBoardDisplayBehavior PlayerBoardDisplay;
+
+        public PCBoardDisplayBehavior BoardDisplay;
+
         public PCBoardActionBinder ActionBinder;
         public PCBoardActionTriggerController ActionTriggerController;
+
 
         /// <summary>
         /// 用于执行两段式命令，触发两段式命令的方式就是先写入interAction
@@ -46,25 +52,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             StartCoroutine(SceneTransporter.Server.RefreshBoard(SceneTransporter.CurrentGame, () =>
             {
                 CurrentPlayerBoardIndex = SceneTransporter.CurrentGame.MyPlayerIndex;
-                PlayerBoardDisplay.Refresh();
-                ActionBinder.BindAction(this);
+                BoardDisplay.Refresh();
+                ActionBinder.BindAction(SceneTransporter.CurrentGame.PossibleActions,this);
 
                 LoadingGo.SetActive(false);
             }));
         }
-
-        private void BackgroundRefresh()
-        {
-            BackgroundRefreshing = true;
-            StartCoroutine(SceneTransporter.Server.RefreshBoard(SceneTransporter.CurrentGame, () =>
-            {
-                LoadingGo.SetActive(true);
-                PlayerBoardDisplay.Refresh();
-                ActionBinder.BindAction(this);
-                LoadingGo.SetActive(false);
-                BackgroundRefreshing = false;
-            }));
-        }
+        
 
         internal void SwitchBoard(int no)
         {
@@ -79,12 +73,14 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
 
             CurrentPlayerBoardIndex = no;
+
+            InterAction = null;
             ActionBinder.Unbind();
-            PlayerBoardDisplay.Refresh();
-            ActionBinder.BindAction(this);
+            BoardDisplay.Refresh();
+            ActionBinder.BindAction(SceneTransporter.CurrentGame.PossibleActions,this);
         }
 
-        public void TakeAction(PlayerAction action)
+        public void TakeAction(PlayerAction action,Action<List<PlayerAction>> internalActionCallback)
         {
             if (BackgroundRefreshing == true)
             {
@@ -92,9 +88,31 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             }
 
             LoadingGo.SetActive(true);
-            StartCoroutine(SceneTransporter.Server.TakeAction(SceneTransporter.CurrentGame, action,
-                BackgroundRefresh));
-
+            if (action.Internal == false)
+            {
+                InterAction = null;
+                StartCoroutine(SceneTransporter.Server.TakeAction(SceneTransporter.CurrentGame, action,
+                    () =>
+                    {
+                        BoardDisplay.Refresh();
+                        ActionBinder.BindAction(SceneTransporter.CurrentGame.PossibleActions,this);
+                        LoadingGo.SetActive(false);
+                        BackgroundRefreshing = false;
+                    }));
+            }
+            else
+            {
+                InterAction = action;
+                StartCoroutine(SceneTransporter.Server.TakeInternalAction(SceneTransporter.CurrentGame, action,
+                    (actions) =>
+                    {
+                        LoadingGo.SetActive(false);
+                        if (internalActionCallback != null)
+                        {
+                            internalActionCallback(actions);
+                        }
+                    }));
+            }
         }
         
     }

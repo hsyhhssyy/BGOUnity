@@ -43,7 +43,7 @@ namespace Assets.CSharpCode.Helper
         }
         
 
-        private static Sprite ZoomSprite(String spName,Vector2 pviot,float scale)
+        public static Sprite ZoomSprite(String spName,Vector2 pviot,float scale)
         {
             var smallSp = UnityResources.GetSprite(spName);
             return smallSp != null ? smallSp.CloneResize(pviot, scale) : null;

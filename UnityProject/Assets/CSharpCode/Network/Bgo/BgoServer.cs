@@ -77,5 +77,27 @@ namespace Assets.CSharpCode.Network.Bgo
             return BgoPostProvider.PostAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
             
         }
+
+        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>>  callback)
+        {
+            BgoGame bgoGame = game as BgoGame;
+            BgoPlayerAction bgoAction = action as BgoPlayerAction;
+            Action<List<PlayerAction>> callbackDelegate = (actions) =>
+            {
+                if (callback != null)
+                {
+                    callback(actions);
+                }
+            };
+
+            if (bgoAction == null)
+            {
+                LogRecorder.Log("Null Action!");
+                return null;
+            }
+
+            return BgoPostProvider.PostInternalAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
+
+        }
     }
 }
