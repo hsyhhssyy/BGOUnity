@@ -98,6 +98,33 @@ namespace Assets.CSharpCode.Network.Bgo
                         action.ActionType= PlayerActionType.PlayActionCard;
                         action.Data[0] = card;
                         action.Data[1] = optValue;
+                    }else if (bgoStr.StartsWith("Play event"))
+                    {
+                        //Play event Pestilence
+                        //Play event Developed Territory II
+
+                        if (bgoStr.EndsWith(" A") || bgoStr.EndsWith(" I") || bgoStr.EndsWith(" II") ||
+                            bgoStr.EndsWith(" III"))
+                        {
+                            var conlonySplit = bgoStr.Split(" ".ToCharArray());
+                            var conlonyName = "";
+                            for (var j = 2; j < conlonySplit.Length - 1; j++)
+                            {
+                                conlonyName += conlonySplit[j] + " ";
+                            }
+                            var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), conlonySplit[conlonySplit.Length]), conlonyName);
+                            action.ActionType = PlayerActionType.PlayColony;
+                            action.Data[0] = card;
+                            action.Data[1] = optValue;
+                        }
+                        else
+                        {
+                            //Play event Pestilence
+                            var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter("Play event "));
+                            action.ActionType = PlayerActionType.PlayEvent;
+                            action.Data[0] = card;
+                            action.Data[1] = optValue;
+                        }
                     }
                 }
                 else if (bgoStr.StartsWith("Revolution"))
@@ -121,7 +148,8 @@ namespace Assets.CSharpCode.Network.Bgo
                         action.Data[0] = civilopedia.GetCardInfoByName(leader);
                         action.Data[1] = optValue;
                     }
-                    else {
+                    else
+                    {
                         //MA elect
                     }
 
@@ -224,6 +252,16 @@ namespace Assets.CSharpCode.Network.Bgo
                     }
                 }
             }
+
+            #endregion
+
+            #region 侵略一拆多
+            var aggression =
+                game.PossibleActions.FirstOrDefault(
+                    action =>
+                        action.ActionType == PlayerActionType.Unknown && (
+                            action.Data[0].ToString().EndsWith(" A  ") || action.Data[0].ToString().EndsWith(" I") ||
+                            action.Data[0].ToString().EndsWith(" II") || action.Data[0].ToString().EndsWith(" III")));
 
             #endregion
 

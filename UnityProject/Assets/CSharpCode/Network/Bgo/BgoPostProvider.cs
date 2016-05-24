@@ -30,6 +30,8 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.ElectLeader:
                 case PlayerActionType.SetupTactic:
                 case PlayerActionType.AdoptTactic:
+                case PlayerActionType.PlayColony:
+                case PlayerActionType.PlayEvent:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
                 //----optvalue is [2]
                 case PlayerActionType.IncreasePopulation:

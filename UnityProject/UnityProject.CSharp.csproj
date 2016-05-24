@@ -83,6 +83,8 @@
     <Compile Include="Assets\CSharpCode\Helper\ExceptionHandle.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardManager.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\UIControllerEvent.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoActionFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />

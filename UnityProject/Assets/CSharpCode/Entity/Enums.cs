@@ -152,7 +152,16 @@ namespace Assets.CSharpCode.Entity
         #endregion
 
         #region 常见政治行动
-        PlayEvent, PlayeColony,
+        /// <summary>
+        /// 打出事件牌
+        /// 0.CardInfo
+        /// </summary>
+        PlayEvent,
+        /// <summary>
+        /// 打出殖民地
+        /// 0.CardInfo
+        /// </summary>
+        PlayColony,
         PassPoliticalPhase,
         Resign,
         /// <summary>
