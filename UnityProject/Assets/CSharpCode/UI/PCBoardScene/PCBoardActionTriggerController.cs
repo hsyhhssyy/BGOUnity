@@ -10,60 +10,140 @@ namespace Assets.CSharpCode.UI.PCBoardScene
     public class PCBoardActionTriggerController: MonoBehaviour
     {
         public bool buttonDown = false;
+        public bool buttonPressed = false;
+        public bool buttonUp=false;
 
         void Update()
         {
+            for (int i = InputActionTriggerMonoBehaviour.RegisteredTriggers.Count - 1; i >= 0; i--)
+            {
+                if (InputActionTriggerMonoBehaviour.RegisteredTriggers[i]==null)
+                {
+                    InputActionTriggerMonoBehaviour.RegisteredTriggers.RemoveAt(i);
+                }
+            }
+
             if (Input.GetMouseButton(0))
             {
-                if (buttonDown == false)
+                if (buttonDown == true|| buttonPressed == true)
                 {
-                    TestMouseWithColliderOverlap();
+                    buttonPressed = true;
+                    buttonDown = false;
+                    buttonUp = false;
+                }
+                else
+                {
                     buttonDown = true;
+                    buttonUp = false;
+                    buttonPressed = false;
                 }
             }
             else
             {
-                buttonDown = false;
+                if (buttonDown == true || buttonPressed == true)
+                {
+                    buttonPressed = false;
+                    buttonDown = false;
+                    buttonUp = true;
+                }
+                else
+                {
+                    buttonPressed = false;
+                    buttonDown = false;
+                    buttonUp = false;
+                }
             }
-        }
+            TestMouseWithColliderOverlap();
+    }
 
-        void TestMouseWithColliderOverlap()
+        private void TestMouseWithColliderOverlap()
         {
             Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
+            var colliderList = new List<Collider2D>();
             if (col.Length > 0)
             {
-                var colliderList=col.ToList();
+                colliderList = col.ToList();
                 colliderList.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
+            }
+            bool onMouseClickTriggered = false;
+            bool onMouseEnterTriggered = false;
+            bool onMouseExitTriggered = false;
+
+            if (buttonDown)
+            {
+                List<InputActionTriggerMonoBehaviour> ClickedTrigger = new List<InputActionTriggerMonoBehaviour>();
                 foreach (Collider2D c in colliderList)
                 {
                     GameObject gameObj = c.gameObject;
                     if (gameObj.GetComponent<InputActionTriggerMonoBehaviour>() != null)
                     {
-                        bool res=gameObj.GetComponent<InputActionTriggerMonoBehaviour>().OnMouseClick();
-                        if (res == false)
+                        if (!onMouseClickTriggered)
                         {
-                            continue;
-                        }
-                        Debug.Log("click object name is " + gameObj.name);
-
-                        foreach (var triggers in InputActionTriggerMonoBehaviour.RegisteredTriggers)
-                        {
-                            if (triggers != gameObj.GetComponent<InputActionTriggerMonoBehaviour>())
+                            bool res = gameObj.GetComponent<InputActionTriggerMonoBehaviour>().OnTriggerClick();
+                            ClickedTrigger.Add(gameObj.GetComponent<InputActionTriggerMonoBehaviour>());
+                            if (res == true)
                             {
-                                triggers.OnMouseClickOutside();
+                                onMouseClickTriggered = true;
                             }
                         }
-
-                        return;
+                    }
+                }
+                foreach (var trigger in InputActionTriggerMonoBehaviour.RegisteredTriggers)
+                {
+                    if (!ClickedTrigger.Contains(trigger))
+                    {
+                        trigger.OnTriggerClickOutside();
                     }
                 }
             }
 
-            foreach (var triggers in InputActionTriggerMonoBehaviour.RegisteredTriggers)
+            foreach (Collider2D c in colliderList)
             {
-                triggers.OnMouseClickOutside();
+                GameObject gameObj = c.gameObject;
+                if (gameObj.GetComponent<InputActionTriggerMonoBehaviour>() != null)
+                {
+                    if (!onMouseEnterTriggered)
+                    {
+                        var trigger = gameObj.GetComponent<InputActionTriggerMonoBehaviour>();
+                        if (trigger.OnEnterJustFired != true)
+                        {
+                            bool res = trigger.OnTriggerEnter();
+                            if (res == true)
+                            {
+                                onMouseEnterTriggered = true;
+                            }
+                            trigger.OnEnterJustFired = true;
+                            trigger.OnExitJustFired = false;
+                        }
+                    }
+                }
             }
+            foreach (var trigger in InputActionTriggerMonoBehaviour.RegisteredTriggers)
+            {
+                if (trigger == null)
+                {
+                    continue;
+                }
+                if (trigger.gameObject.GetComponent<BoxCollider2D>() != null)
+                {
+                    if (!colliderList.Contains(trigger.gameObject.GetComponent<BoxCollider2D>()))
+                    {
+                        if (trigger.OnExitJustFired != true)
+                        {
+                            bool res = trigger.OnTriggerExit();
+                            if (res == true)
+                            {
+                                onMouseExitTriggered = true;
+                            }
+                            trigger.OnEnterJustFired = false;
+                            trigger.OnExitJustFired = true;
+                        }
+                    }
+                }
+            }
+
+
         }
 
         void TestMouseWithRayCast()
@@ -76,7 +156,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 Debug.Log("click object name is " + gameObj.name);
                 if (gameObj.GetComponent<InputActionTriggerMonoBehaviour>() != null)
                 {
-                    gameObj.GetComponent<InputActionTriggerMonoBehaviour>().OnMouseClick();
+                    gameObj.GetComponent<InputActionTriggerMonoBehaviour>().OnTriggerClick();
                     Debug.Log("pick up!");
                 }
             }

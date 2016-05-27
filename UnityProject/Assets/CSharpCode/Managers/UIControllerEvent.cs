@@ -8,11 +8,35 @@ namespace Assets.CSharpCode.Managers
     public class GameUIEventArgs : EventArgs
     {
         public GameUIEventType EventType;
+
+        public String UIKey;
+
+        public Dictionary<String,Object> AttachedData=new Dictionary<string, object>();
     }
 
     public class ControllerGameUIEventArgs : GameUIEventArgs
     {
-        
+        public ControllerGameUIEventArgs(GameUIEventType allowSelect, string uIKey)
+        {
+            EventType = allowSelect;
+            UIKey = uIKey;
+        }
+    }
+    public class ManagerGameUIEventArgs : GameUIEventArgs
+    {
+        public ManagerGameUIEventArgs(GameUIEventType allowSelect, string uIKey)
+        {
+            EventType = allowSelect;
+            UIKey = uIKey;
+        }
+    }
+    public class ServerGameUIEventArgs : GameUIEventArgs
+    {
+        public ServerGameUIEventArgs(GameUIEventType allowSelect, string uIKey)
+        {
+            EventType = allowSelect;
+            UIKey = uIKey;
+        }
     }
 
     public enum GameUIEventType
@@ -21,5 +45,35 @@ namespace Assets.CSharpCode.Managers
         /// 玩家希望选中某UI元素
         /// </summary>
        TrySelect,
+       /// <summary>
+       /// 玩家已经选择了某个UI元素
+       /// </summary>
+        Selected,
+
+
+       /// <summary>
+       /// 允许玩家选中特定UI元素
+       /// </summary>
+        AllowSelect,
+        /// <summary>
+        /// 要求UI元素刷新自己
+        /// </summary>
+        Refresh,
+        /// <summary>
+        /// 通知网络服务器玩家进行某行为
+        /// </summary>
+        TakeAction,
+        /// <summary>
+        /// 表示请UI提示玩家等待网络通讯
+        /// </summary>
+        WaitingNetwork,
+        /// <summary>
+        /// 要求弹出一个选单
+        /// </summary>
+        PopupMenu,
+        /// <summary>
+        /// 要求UI取消网络等待提示
+        /// </summary>
+        NetworkDone,
     }
 }
