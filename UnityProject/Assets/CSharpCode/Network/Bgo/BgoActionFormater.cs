@@ -11,14 +11,43 @@ namespace Assets.CSharpCode.Network.Bgo
 {
     public static class BgoActionFormater
     {
-        private static TtaCivilopedia civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
+        private static readonly TtaCivilopedia Civilopedia = TtaCivilopedia.GetCivilopedia("2.0");
 
         public static void Format(BgoGame game, String html)
         {
+            //如果当前是EventResolve，那么没有CardRow
+            if (game.CurrentPhase == TtaPhase.EventResolution)
+            {
+                game.PossibleActions.RemoveAll(a => a.ActionType == PlayerActionType.TakeCardFromCardRow);
+
+                var mc = BgoRegexpCollections.ExtractResolveingEvent.Match(html);
+                var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), mc.Groups[2].Value), mc.Groups[1].Value);
+
+                foreach (
+                    var action in
+                        game.PossibleActions.Where(action => action.ActionType == PlayerActionType.Unknown).ToList())
+                {
+                    String bgoStr = action.Data[0].ToString();
+                    String optValue = action.Data[1].ToString();
+
+                    if (bgoStr == "----- Select an action -----")
+                    {
+                        continue;
+                    }
+
+                    action.ActionType = PlayerActionType.ResolveEventOption;
+
+                    //获得CurrentActionCard
+                    action.Data[0] = card;
+                    action.Data[1] = bgoStr;
+                    action.Data[2] = optValue;
+                }
+            }
+
             //Unknown的话
             //Data[0]是opt的显示内容，就是文本
             //Data[1]是optValue（要传给后端的）
-
+            
             foreach (
                 var action in
                     game.PossibleActions.Where(action => action.ActionType == PlayerActionType.Unknown).ToList())
@@ -51,7 +80,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
                         var wonderName = bgoStr.CutBetween("of ", " (");
                         action.ActionType = PlayerActionType.BuildWonder;
-                        action.Data[0] = civilopedia.GetCardInfoByName(wonderName);
+                        action.Data[0] = Civilopedia.GetCardInfoByName(wonderName);
                         action.Data[1] = stageCount;
                         action.Data[2] = resCost;
                         action.Data[3] = optValue;
@@ -62,7 +91,7 @@ namespace Assets.CSharpCode.Network.Bgo
                         String cardName = bgoStr.CutBetween("Build ", " (");
                         int resCost = Convert.ToInt32(bgoStr.CutBetween("(", "R)"));
                         action.ActionType = PlayerActionType.BuildBuilding;
-                        action.Data[0] = civilopedia.GetCardInfoByName(cardName);
+                        action.Data[0] = Civilopedia.GetCardInfoByName(cardName);
                         action.Data[1] = resCost;
                         action.Data[2] = optValue;
                     }
@@ -78,8 +107,8 @@ namespace Assets.CSharpCode.Network.Bgo
                     var resCost= bgoStr.CutBetween("(", "R)");
 
                     action.ActionType = PlayerActionType.UpgradeBuilding;
-                    action.Data[0] = civilopedia.GetCardInfoByName(card1);
-                    action.Data[1] = civilopedia.GetCardInfoByName(card2);
+                    action.Data[0] = Civilopedia.GetCardInfoByName(card1);
+                    action.Data[1] = Civilopedia.GetCardInfoByName(card2);
                     action.Data[2] = resCost;
                     action.Data[3] = optValue;
                 }
@@ -94,8 +123,9 @@ namespace Assets.CSharpCode.Network.Bgo
                         //Play A / Rich Land
                         var age = bgoStr.CutBetween("Play "," /");
                         var cardName = bgoStr.CutAfter("/ ");
-                        var card = civilopedia.GetCardInfoByName((Age) Enum.Parse(typeof (Age), age), cardName);
+                        var card = Civilopedia.GetCardInfoByName((Age) Enum.Parse(typeof (Age), age), cardName);
                         action.ActionType= PlayerActionType.PlayActionCard;
+                        action.Internal = true;
                         action.Data[0] = card;
                         action.Data[1] = optValue;
                     }else if (bgoStr.StartsWith("Play event"))
@@ -112,7 +142,7 @@ namespace Assets.CSharpCode.Network.Bgo
                             {
                                 conlonyName += conlonySplit[j] + " ";
                             }
-                            var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), conlonySplit[conlonySplit.Length]), conlonyName);
+                            var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), conlonySplit[conlonySplit.Length]), conlonyName);
                             action.ActionType = PlayerActionType.PlayColony;
                             action.Data[0] = card;
                             action.Data[1] = optValue;
@@ -120,7 +150,7 @@ namespace Assets.CSharpCode.Network.Bgo
                         else
                         {
                             //Play event Pestilence
-                            var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter("Play event "));
+                            var card = Civilopedia.GetCardInfoByName(bgoStr.CutAfter("Play event "));
                             action.ActionType = PlayerActionType.PlayEvent;
                             action.Data[0] = card;
                             action.Data[1] = optValue;
@@ -131,7 +161,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     //Revolution! Change to Constitutional Monarchy (6S)
                     var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "S)"));
-                    var card = civilopedia.GetCardInfoByName(bgoStr.CutBetween("Change to ", " ("));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutBetween("Change to ", " ("));
                     action.ActionType = PlayerActionType.Revolution;
                     action.Data[0] = card;
                     action.Data[1] = resCost;
@@ -145,7 +175,7 @@ namespace Assets.CSharpCode.Network.Bgo
                     {
                         var leader = bgoStr.CutAfter(": ");
                         action.ActionType = PlayerActionType.ElectLeader;
-                        action.Data[0] = civilopedia.GetCardInfoByName(leader);
+                        action.Data[0] = Civilopedia.GetCardInfoByName(leader);
                         action.Data[1] = optValue;
                     }
                     else
@@ -157,7 +187,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 else if (bgoStr.StartsWith("Discover"))
                 {
                     var resCost = Convert.ToInt32(bgoStr.CutBetween("(", "S)"));
-                    var card = civilopedia.GetCardInfoByName(bgoStr.CutBetween("Discover ", " ("));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutBetween("Discover ", " ("));
                     action.ActionType = PlayerActionType.DevelopTechCard;
                     action.Data[0] = card;
                     action.Data[1] = resCost;
@@ -179,7 +209,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     //Set up new tactics:  Classic Army
                     action.ActionType = PlayerActionType.SetupTactic;
-                    var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
                     action.Data[0] = card;
                     action.Data[1] = optValue;
                 }
@@ -187,7 +217,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     //Adopt tactics:  Heavy Cavalry
                     action.ActionType = PlayerActionType.AdoptTactic;
-                    var card = civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutAfter(":  "));
                     action.Data[0] = card;
                     action.Data[1] = optValue;
                 }
@@ -206,7 +236,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 //为每个建筑物建立自己的disband/destory
                 game.PossibleActions.Remove(disband);
                 var subDropdown = BgoRegexpCollections.ExtractSubDropDown("unite").Match(html);
-                if (subDropdown.Success == true)
+                if (subDropdown.Success)
                 {
                     foreach (Match match in BgoRegexpCollections.ExtractActions.Matches(subDropdown.Groups[1].Value))
                     {
@@ -216,7 +246,7 @@ namespace Assets.CSharpCode.Network.Bgo
                         var cardAge = cardName.CutBefore("/");
                         cardName = cardName.CutAfter("/ ");
 
-                        var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof (Age), cardAge), cardName);
+                        var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof (Age), cardAge), cardName);
 
                         if (card.CardType == CardType.MilitaryTechAirForce ||
                             card.CardType == CardType.MilitaryTechArtillery ||
@@ -256,12 +286,55 @@ namespace Assets.CSharpCode.Network.Bgo
             #endregion
 
             #region 侵略一拆多
+
             var aggression =
-                game.PossibleActions.FirstOrDefault(
+                game.PossibleActions.Where(
                     action =>
                         action.ActionType == PlayerActionType.Unknown && (
-                            action.Data[0].ToString().EndsWith(" A  ") || action.Data[0].ToString().EndsWith(" I") ||
-                            action.Data[0].ToString().EndsWith(" II") || action.Data[0].ToString().EndsWith(" III")));
+                            action.Data[0].ToString().EndsWith(" A") || action.Data[0].ToString().EndsWith(" I") ||
+                            action.Data[0].ToString().EndsWith(" II") || action.Data[0].ToString().EndsWith(" III")))
+                    .ToList();
+
+            foreach (var action in aggression)
+            {
+                game.PossibleActions.Remove(action);
+                
+                String bgoStr = action.Data[0].ToString();
+                String optValue = action.Data[1].ToString();
+
+                var cardName = bgoStr.Substring(0,bgoStr.LastIndexOf(" ", StringComparison.Ordinal));
+                var cardAge = bgoStr.Substring(bgoStr.LastIndexOf(" ", StringComparison.Ordinal)+1);
+                var card = Civilopedia.GetCardInfoByName(
+                    (Age)Enum.Parse(typeof(Age), cardAge)
+                    , cardName);
+
+                var advNum = optValue.CutAfter(";");
+                var subDropdown = BgoRegexpCollections.ExtractWarAggressionPactTargetList("listeAdversaires" + advNum).Match(html);
+                if (subDropdown.Success)
+                {
+                    foreach (Match match in BgoRegexpCollections.ExtractWarAggressionPactTarget.Matches(subDropdown.Groups[1].Value))
+                    {
+                        //var childId = match.Groups[1].Value;
+                        var childOpt = match.Groups[2].Value;
+                        var playername = match.Groups[3].Value.CutBefore(" -");
+                        var maRequired = BgoRegexpCollections.ExtractImage.Matches(match.Groups[4].Value).Count;
+                        game.PossibleActions.Add(new BgoPlayerAction
+                        {
+                            ActionType = PlayerActionType.Aggression,
+                            Data = new Dictionary<int, object>
+                                {
+                                    {0,card },
+                                    {1,playername},
+                                    {2,maRequired },
+                                    {3,optValue },
+                                    {4,"adversaire"+advNum },
+                                    {5,childOpt }
+                                }
+                        });
+                    }
+                }
+
+            }
 
             #endregion
 
@@ -292,9 +365,29 @@ namespace Assets.CSharpCode.Network.Bgo
             }
         }
 
-        public static void FormatInternalAction(List<PlayerAction> action, String html)
+        public static void FormatInternalAction(List<PlayerAction> actions, String html)
         {
-            
+
+            foreach (
+                var action in
+                    actions.Where(action => action.ActionType == PlayerActionType.Unknown).ToList())
+            {
+                String bgoStr = action.Data[0].ToString();
+                String optValue = action.Data[1].ToString();
+                String idCarte = action.Data[2].ToString();
+
+                if (bgoStr.StartsWith("Discover"))
+                {
+                    //Discover Irrigation - 3
+                    var resCost = Convert.ToInt32(bgoStr.CutAfter("- "));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutBetween("Discover ", " -"));
+                    action.ActionType = PlayerActionType.DevelopTechCard;
+                    action.Data[0] = card;
+                    action.Data[1] = resCost;
+                    action.Data[2] = optValue;
+                    action.Data[3] = idCarte;
+                }
+            }
         }
     }
 }

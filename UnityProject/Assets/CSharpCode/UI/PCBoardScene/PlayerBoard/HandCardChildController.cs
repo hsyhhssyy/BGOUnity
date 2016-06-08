@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.PCBoardScene.Effects;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
+using UnityEngine;
+using Object = System.Object;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
@@ -11,14 +16,39 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         public CardInfo Card;
 
         public bool Highlight { get; set; }
-        
+
+        private PCBoardCardSmallHighlightEffect highligtGo ;
 
         [UsedImplicitly]
         public void Start()
         {
             UIKey = "PCBoard."+ ParentController.HandType+ ".Child." + Guid;
-            ParentController.Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             ParentController.Manager.Regiseter(this);
+            highligtGo=gameObject.AddComponent<PCBoardCardSmallHighlightEffect>();
+        }
+
+        public void Update()
+        {
+            if (Highlight)
+            {
+                highligtGo.Highlight = true;
+                return;
+            }
+            if (ParentController.Manager.State == GameManagerState.ActionPhaseChooseTarget &&
+                ParentController.Manager.StateData.ContainsKey("HighlightElement"))
+            {
+                var dict = ParentController.Manager.StateData["HighlightElement"] as Dictionary<String, List<CardInfo>>;
+                if (dict != null && dict.ContainsKey("HandCivilCard"))
+                {
+                    if (dict["HandCivilCard"].Contains(Card))
+                    {
+                        highligtGo.Highlight = true;
+                        return;
+                    }
+                }
+            }
+
+            highligtGo.Highlight = false;
         }
 
         protected override void OnSubscribedGameEvents(Object sender, GameUIEventArgs args)
@@ -37,7 +67,12 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            var args = new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey);
+
+            //附加Card
+            args.AttachedData["Card"] = Card;
+
+            Channel.Broadcast(args);
             return true;
         }
 
@@ -56,7 +91,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             //附加Card
             args.AttachedData["Card"] = Card;
 
-            Broadcast(args);
+            Channel.Broadcast(args);
 
             return true;
         }

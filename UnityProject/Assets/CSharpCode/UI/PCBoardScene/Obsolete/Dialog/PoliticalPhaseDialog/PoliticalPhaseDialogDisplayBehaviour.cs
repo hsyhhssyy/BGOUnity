@@ -6,12 +6,14 @@ using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
+using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase;
 using Assets.CSharpCode.UI.Util;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog
 {
-    
+    [Obsolete]
     //对Political Dialog，ActionBinder和DisplayBehavior放一起比较好
     //共享一些内存数据
     public class PoliticalPhaseDialogDisplayBehaviour: MonoBehaviour,TtaActionBinder

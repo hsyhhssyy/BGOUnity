@@ -5,6 +5,7 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -23,7 +24,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public void Start()
         {
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
            
         }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.CSharpCode.Entity;
-using Assets.CSharpCode.Helper;
+﻿using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.PCBoardScene.Controller;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Assets.CSharpCode.UI.PCBoardScene.Controller
+namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
 {
     public class YellowMarkerController : TtaUIControllerMonoBehaviour
     {
@@ -24,7 +21,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         public void Start()
         {
             UIKey = "PCBoard.YellowMarker." + Guid;
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
         }
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
@@ -72,7 +68,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
             return true;
         }
 
@@ -88,7 +84,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
             var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
             
-            Broadcast(args);
+            Channel.Broadcast(args);
 
             return true;
         }

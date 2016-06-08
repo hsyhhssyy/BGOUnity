@@ -44,6 +44,7 @@ namespace Assets.CSharpCode.Civilopedia
         public List<CardEffect> ImmediateEffects = new List<CardEffect>();
         public List<CardEffect> SustainedEffects=new List<CardEffect>();
 
+        public List<int> AffectedTrget=new List<int>();
         public List<CardEffect> WinnerEffects = new List<CardEffect>();
         public List<CardEffect> LoserEffects = new List<CardEffect>();
 

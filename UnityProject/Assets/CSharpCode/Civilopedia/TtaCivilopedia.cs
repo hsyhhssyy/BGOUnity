@@ -13,6 +13,8 @@ namespace Assets.CSharpCode.Civilopedia
 {
     public class TtaCivilopedia
     {
+        public const String TtaVersionBoardGamingOnline2 = "2.0";
+
         private static Dictionary<String, TtaCivilopedia> Civilopedias;
 
         public static TtaCivilopedia GetCivilopedia(String gameVersion)
@@ -44,7 +46,7 @@ namespace Assets.CSharpCode.Civilopedia
             foreach (var row in rows)
             {
                 var csvRow = CsvUtil.SplitRow(row.Trim());
-                if (csvRow.Count != 19)
+                if (csvRow.Count != 20)
                 {
                     continue;
                 }
@@ -79,17 +81,19 @@ namespace Assets.CSharpCode.Civilopedia
 
                     info.SustainedEffects = CreateEffects(csvRow[13]); //持续效果
 
-                    info.WinnerEffects = CreateEffects(csvRow[14]);
-                    info.LoserEffects = CreateEffects(csvRow[15]);
+                    info.AffectedTrget = ToIntList(csvRow[14], ","); //6月6日新加：影响对象
 
-                    info.TacticComposition = ToIntList(csvRow[16], ",");
-                    info.TacticValue = string.IsNullOrEmpty(csvRow[17])
+                    info.WinnerEffects = CreateEffects(csvRow[15]);
+                    info.LoserEffects = CreateEffects(csvRow[16]);
+
+                    info.TacticComposition = ToIntList(csvRow[17], ",");
+                    info.TacticValue = string.IsNullOrEmpty(csvRow[18])
                         ? new List<int>()
-                        : csvRow[17].Split("/".ToCharArray())
+                        : csvRow[18].Split("/".ToCharArray())
                             .Select(a => Convert.ToInt32(a.Split(",".ToCharArray())[2]))
                             .ToList();
 
-                    info.ImmediateEffects.AddRange(CreateEffects(csvRow[18])); //领袖技能主动使用效果（LeaderCard专用）
+                    info.ImmediateEffects.AddRange(CreateEffects(csvRow[19])); //领袖技能主动使用效果（LeaderCard专用）
 
                     civilopedia.cardInfos[info.InternalId] = info;
                 }
@@ -155,6 +159,11 @@ namespace Assets.CSharpCode.Civilopedia
         //-------------------------------
 
         private Dictionary<String, CardInfo> cardInfos;
+
+        public List<CardInfo> GetAllCards()
+        {
+            return cardInfos.Values.ToList();
+        } 
 
         public CardInfo GetCardInfoById(String internalId)
         {

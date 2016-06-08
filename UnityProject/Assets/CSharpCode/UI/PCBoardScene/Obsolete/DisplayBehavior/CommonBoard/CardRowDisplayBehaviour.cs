@@ -5,6 +5,7 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.Collider;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior

@@ -5,8 +5,10 @@ using System.Text;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
 using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog;
 using Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior;
+using Assets.CSharpCode.UI.PCBoardScene.PlayerBoard;
 using JetBrains.Annotations;
 using UnityEngine;
 

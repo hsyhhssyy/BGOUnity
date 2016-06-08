@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
+using Assets.CSharpCode.UI.PCBoardScene.PlayerBoard;
 using JetBrains.Annotations;
 using UnityEngine;
 

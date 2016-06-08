@@ -1,9 +1,11 @@
 ﻿using Assets.CSharpCode.Entity;
 using JetBrains.Annotations;
 using UnityEngine;
+using System;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
 {
+    [Obsolete]
     public class PlayerBriefPlateDisplayBehavior : MonoBehaviour
     {
         public PCBoardBehavior BoardBehavior;

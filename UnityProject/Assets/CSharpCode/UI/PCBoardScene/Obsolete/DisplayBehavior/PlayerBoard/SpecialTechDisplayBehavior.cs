@@ -6,6 +6,7 @@ using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.Collider;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
 using JetBrains.Annotations;
 using UnityEngine;
 

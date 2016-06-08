@@ -53,6 +53,7 @@ namespace Assets.CSharpCode.Entity
         ActionPhase,
         DiscardPhase,
         OtherPhase,
+        EventResolution,
     }
 
     public enum CardType
@@ -174,6 +175,22 @@ namespace Assets.CSharpCode.Entity
         /// 2. 需要红点
         /// </summary>
         DeclareWar,
+        /// <summary>
+        /// 发动战争，有Interaction版和非Interaction版
+        /// Interaction版：
+        /// 0.CardInfo
+        /// 非Interaction版：
+        /// 0. CardInfo
+        /// 1. 目标玩家
+        /// 2. 需要红点
+        /// </summary>
+        Aggression,
+        /// <summary>
+        /// 响应事件
+        /// 0.CardInfo（产生事件的Card）
+        /// 1.OptionText
+        /// </summary>
+        ResolveEventOption,
         #endregion
 
         #region InterAction

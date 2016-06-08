@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 

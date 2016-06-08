@@ -9,6 +9,7 @@ using UnityEngine;
 namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 {
     [UsedImplicitly]
+    [Obsolete]
     public class CardRowActionBinder:MonoBehaviour
     {
         public PCBoardBehavior BoardBehaviour ;

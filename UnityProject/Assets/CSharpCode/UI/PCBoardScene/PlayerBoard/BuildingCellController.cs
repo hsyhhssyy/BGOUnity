@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
-using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
-using Assets.CSharpCode.UI.PCBoardScene.Menu;
-using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.PCBoardScene.Controller;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
-using UnityEngine;
 
-namespace Assets.CSharpCode.UI.PCBoardScene.Controller
+namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
 {
     public class BuildingCellController : TtaUIControllerMonoBehaviour
     {
@@ -23,7 +18,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             {
                 if (value != null)
                 {
-                    value.Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
                     value.Manager.Regiseter(this);
                 }
                 _parentController = value;
@@ -66,7 +60,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
             return true;
         }
 
@@ -94,7 +88,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             //附加Card
             args.AttachedData["Card"] = Card;
 
-            Broadcast(args);
+            Channel.Broadcast(args);
 
             return true;
         }

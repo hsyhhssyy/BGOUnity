@@ -5,6 +5,9 @@ using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
+using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -17,7 +20,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         public GameObject ConstructingWonderFrame;
         public GameObject CompletedWondersFrame;
 
-        private bool _refreshRequired ;
+        private bool _refreshRequired =false;
 
         public WonderParentController()
         {
@@ -36,17 +39,16 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public void Start()
         {
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
         }
 
         [UsedImplicitly]
-        public void Update()
+        public void FixedUpdate()
         {
             if (_refreshRequired)
             {
-                _refreshRequired = false;
                 Refresh(Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo]);
+                _refreshRequired = false;
             }
 
         }
@@ -119,7 +121,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 {
                     cardGo.FindObject("Image").GetComponent<SpriteRenderer>().sprite = sp;
                 }
-
+                Manager.Regiseter(cardGo.GetComponent<WonderChildController>());
                 cardGo.GetComponent<WonderChildController>().Card = wonderCard;
             }
         }

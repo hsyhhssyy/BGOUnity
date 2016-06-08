@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
     public class WonderChildController : TtaUIControllerMonoBehaviour
     {
-        public WonderParentController ParentController;
         public CardInfo Card;
 
         public String WonderState = "Constructing";
@@ -21,8 +21,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         public void Start()
         {
             UIKey = "PCBoard.Wonder." + WonderState + ".Child." + Guid;
-            ParentController.Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
-            ParentController.Manager.Regiseter(this);
         }
 
         protected override void OnSubscribedGameEvents(Object sender, GameUIEventArgs args)
@@ -41,7 +39,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
             return true;
         }
 
@@ -60,7 +58,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             //附加Card
             args.AttachedData["Card"] = Card;
 
-            Broadcast(args);
+            Channel.Broadcast(args);
 
             return true;
         }

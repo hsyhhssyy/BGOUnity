@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.Util.UnityEnhancement;
 using JetBrains.Annotations;
 using UnityEngine;
-using System.Collections.Generic;
-using System.Linq;
-using Assets.CSharpCode.UI.Util;
 
-namespace Assets.CSharpCode.UI.PCBoardScene
+namespace Assets.CSharpCode.UI.PCBoardScene.CommonPrefab
 {
     [UsedImplicitly]
     // ReSharper disable once InconsistentNaming
@@ -90,7 +91,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 Destroy(_normalImagePopup);
             }
         }
-
+        public void OnDisable()
+        {
+            if (_normalImagePopup != null)
+            {
+                Destroy(_normalImagePopup);
+            }
+        }
         [UsedImplicitly]
         public void OnMouseUpAsButton()
         {
@@ -99,6 +106,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene
                 Destroy(_normalImagePopup);
             }
         }
+
+
 
         #endregion
 

@@ -12,8 +12,9 @@ namespace Assets.CSharpCode.Network.Bgo
     public static class BgoPostProvider
     {
         public const String BgoBaseUrl = "http://www.boardgaming-online.com/";
-        
-        public static IEnumerator PostAction(BgoSessionObject sessionObject, BgoGame game,BgoPlayerAction action,Action callback)
+
+        public static IEnumerator PostAction(BgoSessionObject sessionObject, BgoGame game, BgoPlayerAction action,
+            Action callback)
         {
             switch (action.ActionType)
             {
@@ -37,7 +38,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.IncreasePopulation:
                 case PlayerActionType.BuildBuilding:
                 case PlayerActionType.Revolution:
-                case PlayerActionType.DevelopTechCard:
+                case PlayerActionType.ResolveEventOption:
                     return PerformAction(sessionObject, game, action.Data[2].ToString(), callback);
                 //----optvalue is [3]
                 case PlayerActionType.UpgradeBuilding:
@@ -50,6 +51,20 @@ namespace Assets.CSharpCode.Network.Bgo
                         new Dictionary<String, String>
                         {
                             {"unite", action.Data[2].ToString()}
+                        },
+                        callback);
+                case PlayerActionType.Aggression:
+                    return PerformAction(sessionObject, game, action.Data[3].ToString(),
+                        new Dictionary<String, String>
+                        {
+                            {action.Data[4].ToString(), action.Data[5].ToString()}
+                        },
+                        callback);
+                case PlayerActionType.DevelopTechCard:
+                    return PerformAction(sessionObject, game, action.Data[2].ToString(),
+                        new Dictionary<String, String>
+                        {
+                            {"idCarte", action.Data[3].ToString()}
                         },
                         callback);
                 //----Unknown
@@ -65,8 +80,11 @@ namespace Assets.CSharpCode.Network.Bgo
         {
             switch (action.ActionType)
             {
+                case PlayerActionType.PlayActionCard:
+                    return Perform2StepAction(sessionObject, game, action.Data[1].ToString(), callback);
                 case PlayerActionType.BuildWonder:
                     return Perform2StepAction(sessionObject, game, action.Data[3].ToString(), callback);
+                    
                 default:
                     return null;
             }
@@ -88,12 +106,17 @@ namespace Assets.CSharpCode.Network.Bgo
                     if (overrideData.ContainsKey(pair.Key))
                     {
                         myPostData.AddField(pair.Key, overrideData[pair.Key]);
+                        overrideData.Remove(pair.Key);
                     }
                     else
                     {
                         myPostData.AddField(pair.Key, pair.Value);
                     }
                 }
+            }
+            foreach (var pair in overrideData)
+            {
+                myPostData.AddField(pair.Key, pair.Value);
             }
 
             var cookieHeaders = myPostData.headers;
@@ -128,11 +151,26 @@ namespace Assets.CSharpCode.Network.Bgo
             var postUrl = RemoveCharacterEntities(game.ActionFormSubmitUrl);
 
             WWWForm myPostData = new WWWForm();
+
+            var actionSp = actionValue.Split(";".ToCharArray());
+            var idCarte = "0";
             foreach (var pair in game.ActionForm)
             {
                 if (pair.Key == "action")
                 {
                     myPostData.AddField("action", actionValue);
+                }
+                else if (pair.Key == "idCarteAction")
+                {
+                    if (actionSp.Length > 1 && actionSp[0] == "12")
+                    {
+                        idCarte = actionSp[1];
+                        myPostData.AddField("idCarteAction", actionSp[1]);
+                    }
+                    else
+                    {
+                        myPostData.AddField("idCarteAction", pair.Value);
+                    }
                 }
                 else
                 {
@@ -163,6 +201,7 @@ namespace Assets.CSharpCode.Network.Bgo
             var labelMatches = BgoRegexpCollections.ExtractActionChoice.Matches(responseText);
             if (labelMatches.Count <= 0)
             {
+                callback(new List<PlayerAction>());
                 yield break;
             }
             var actions = new List<PlayerAction>();
@@ -174,6 +213,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 BgoPlayerAction pa = new BgoPlayerAction { ActionType = PlayerActionType.Unknown };
                 pa.Data[0] = msg;
                 pa.Data[1] = optValue;
+                pa.Data[2] = idCarte;
                 actions.Add(pa);
             }
             BgoActionFormater.FormatInternalAction(actions,responseText);

@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Menu
 {
+    [Obsolete]
     public class WonderMenuAnimationBehaviour:MonoBehaviour
     {
 

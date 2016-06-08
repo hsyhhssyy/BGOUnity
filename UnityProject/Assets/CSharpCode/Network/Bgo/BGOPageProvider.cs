@@ -252,8 +252,17 @@ namespace Assets.CSharpCode.Network.Bgo
             var phase = matchPhase.Groups[1].Value;
             switch (phase.Trim())
             {
-                case "Political":
+                case "Political Phase":
                     game.CurrentPhase = TtaPhase.PoliticalPhase;
+                    break;
+                case "Action Phase":
+                    game.CurrentPhase = TtaPhase.ActionPhase;
+                    break;
+                case "Event Resolution":
+                    game.CurrentPhase = TtaPhase.EventResolution;
+                    break;
+                case "Discard Phase":
+                    game.CurrentPhase = TtaPhase.DiscardPhase;
                     break;
                 default:
                     game.CurrentPhase = TtaPhase.OtherPhase;

@@ -1,5 +1,6 @@
 ﻿using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -13,8 +14,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public void Start()
         {
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
+
             gameObject.transform.position=new Vector3(gameObject.transform.position.x, gameObject.transform.position.y,-9f);
         }
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
@@ -23,9 +24,11 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             if (args.EventType == GameUIEventType.Refresh)
             {
                gameObject.SetActive(false);
+                LogRecorder.Log("Disable Mask");
             }else if (args.EventType == GameUIEventType.WaitingNetwork)
             {
                 gameObject.SetActive(true);
+                LogRecorder.Log("Enable Mask");
             }
         }
     }

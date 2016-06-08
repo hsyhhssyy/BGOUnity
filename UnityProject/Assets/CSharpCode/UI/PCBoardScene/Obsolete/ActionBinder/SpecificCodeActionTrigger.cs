@@ -1,10 +1,12 @@
 using System;
 using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.Util.Input;
 using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
 {
     [UsedImplicitly]
+    [Obsolete]
     // ReSharper disable once InconsistentNaming
     public class SpecificCodeActionTrigger : InputActionTriggerMonoBehaviour
     {

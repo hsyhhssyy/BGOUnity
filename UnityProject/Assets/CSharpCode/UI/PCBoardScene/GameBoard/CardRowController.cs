@@ -2,6 +2,8 @@
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -27,7 +29,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public void Start()
         {
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
         }
 
@@ -68,7 +69,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect,UIKey));
+            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect,UIKey));
             return true;
         }
 
@@ -87,7 +88,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             //附加Position
             args.AttachedData["Position"] = Position;
 
-            Broadcast(args);
+            Channel.Broadcast(args);
             
             return true;
         }
@@ -113,7 +114,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 if (cardRowInfo.CanPutBack != true)
                 {
                     SmallCardFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(cardRowInfo.Card);
-                    SmallCardFrame.transform.position=new Vector3(SmallCardFrame.transform.position.x, SmallCardFrame.transform.position.y,-0.01f);
+                    SmallCardFrame.transform.localPosition=new Vector3(SmallCardFrame.transform.localPosition.x, SmallCardFrame.transform.localPosition.y,-0.01f);
                 }
 
 

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e67874b290e91404ca3bd5b1435c5ba8
-timeCreated: 1463638157
+timeCreated: 1465281862
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -51,6 +51,10 @@ TextureImporter:
     21300088: pc-board-hand-card-menu-button-3
     21300090: pc-board-worker-outline
     21300092: pc-board-warning-text-frame
+    21300094: pc-board-card-small-highlight
+    21300096: pc-board-event-resolve-options
+    21300098: pc-board-buton-reset
+    21300100: pc-board-button-pass
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -522,19 +526,25 @@ TextureImporter:
     - name: pc-board-card-strengh-main
       rect:
         serializedVersion: 2
-        x: 450
-        y: 260
+        x: 257
+        y: 86
         width: 90
         height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -45, y: 45}
-        - {x: -45, y: 29}
-        - {x: -7, y: 29}
-        - {x: -3, y: 33}
-        - {x: -3, y: 45}
+      - - {x: -42, y: 39}
+        - {x: -42, y: -45}
+        - {x: 40, y: -45}
+        - {x: 42, y: -42}
+        - {x: 42, y: 43}
+        - {x: -41, y: 43}
+      - - {x: 42, y: -23}
+        - {x: 45, y: -22}
+        - {x: 45, y: -19}
+        - {x: 42, y: -18}
+        - {x: 40, y: -20}
     - name: pc-board-card-strength-addition
       rect:
         serializedVersion: 2
@@ -760,6 +770,76 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+    - name: pc-board-card-small-highlight
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 193
+        width: 85
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40.5, y: 60}
+        - {x: -42.5, y: 58}
+        - {x: -42.5, y: -60}
+        - {x: 42.5, y: -60}
+        - {x: 42.5, y: 59}
+        - {x: 41.5, y: 60}
+      - - {x: -31.5, y: -46}
+        - {x: -31.5, y: 47}
+        - {x: 32.5, y: 47}
+        - {x: 29.5, y: -49}
+    - name: pc-board-event-resolve-options
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 20
+        width: 420
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 205, y: 30}
+        - {x: -206, y: 30}
+        - {x: -210, y: 25}
+        - {x: -210, y: -25}
+        - {x: -206, y: -30}
+        - {x: 205, y: -30}
+        - {x: 210, y: -24}
+        - {x: 210, y: 24}
+    - name: pc-board-buton-reset
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 289
+        width: 69
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.5, y: 18.5}
+        - {x: -34.5, y: -18.5}
+        - {x: 34.5, y: -18.5}
+        - {x: 34.5, y: 18.5}
+    - name: pc-board-button-pass
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 246
+        width: 69
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -34.5, y: 18.5}
+        - {x: -34.5, y: -18.5}
+        - {x: 34.5, y: -18.5}
+        - {x: 34.5, y: 18.5}
     outline: []
   spritePackingTag: 
   userData: 

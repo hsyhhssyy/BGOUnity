@@ -31,7 +31,10 @@ namespace Assets.CSharpCode.Civilopedia
         //-------------E100------
        ResourceOfTypeXChangedY = 100,
 
-       //-----------Program Effect ---------
-       ChooseOne = 1000,
+        //E408
+        DevelopATechThenChangeYofResourceX=408,//研究科技后改变[0]类型的属性[1]点
+
+        //-----------Program Effect ---------
+        ChooseOne = 1000,
     }
 }

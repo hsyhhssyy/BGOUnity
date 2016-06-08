@@ -7,6 +7,7 @@ using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
+using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
 using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog;
 using Assets.CSharpCode.UI.PCBoardScene.Menu;
 using Assets.CSharpCode.UI.Util;
@@ -14,6 +15,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
 {
+    [Obsolete]
     public class PCBoardActionBinder:MonoBehaviour, TtaActionBinder
     {
         #region Unity GameObjects

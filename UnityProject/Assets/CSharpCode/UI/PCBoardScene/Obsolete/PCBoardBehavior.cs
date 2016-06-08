@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog;
+using Assets.CSharpCode.UI.Util.Input;
 using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene
 {
     [UsedImplicitly]
+    [Obsolete]
     // ReSharper disable once InconsistentNaming
     public class PCBoardBehavior : MonoBehaviour
     {
@@ -23,7 +25,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public PCBoardDisplayBehavior BoardDisplay;
 
         public PCBoardActionBinder ActionBinder;
-        public PCBoardActionTriggerController ActionTriggerController;
+        public InputManagerMonoBehaviour ActionTriggerController;
 
 
         /// <summary>

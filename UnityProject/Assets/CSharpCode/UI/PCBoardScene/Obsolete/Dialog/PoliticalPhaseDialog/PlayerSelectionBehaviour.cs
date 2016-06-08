@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.UI.Util;
+using Assets.CSharpCode.UI.Util.Input;
 using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhaseDialog

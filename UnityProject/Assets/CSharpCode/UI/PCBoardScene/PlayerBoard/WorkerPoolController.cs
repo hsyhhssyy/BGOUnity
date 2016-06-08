@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -27,7 +28,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public void Start()
         {
-            Manager.GameBoardManagerEvent += OnSubscribedGameEvents;
             Manager.Regiseter(this);
         }
 
@@ -68,7 +68,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         public override bool OnTriggerEnter()
         {
-            Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
             return true;
         }
 
@@ -83,8 +83,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             if (!Highlight) return false;
 
             var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
-            
-            Broadcast(args);
+
+            Channel.Broadcast(args);
 
             return true;
         }

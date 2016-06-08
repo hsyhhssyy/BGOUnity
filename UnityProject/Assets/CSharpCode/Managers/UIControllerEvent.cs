@@ -72,8 +72,17 @@ namespace Assets.CSharpCode.Managers
         /// </summary>
         PopupMenu,
         /// <summary>
-        /// 要求UI取消网络等待提示
+        /// 要求UI元素进入已选中状态
         /// </summary>
-        NetworkDone,
+        SelectionActive,
+        /// <summary>
+        /// 要求UI元素取消自己的已选中状态
+        /// </summary>
+        SelectionDeactive,
+        /// <summary>
+        /// 强制要求进行网络刷新
+        /// </summary>
+        ForceRefresh,
+        //
     }
 }

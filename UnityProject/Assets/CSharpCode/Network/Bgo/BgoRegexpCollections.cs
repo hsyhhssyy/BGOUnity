@@ -25,6 +25,8 @@ namespace Assets.CSharpCode.Network.Bgo
         public static readonly Regex ExtractPlayerNameAndResourceUnhappy = new Regex(@"/unhappy.png");
         //missing
         public static readonly Regex ExtractGovenrmentAndActionPointsMissing = new Regex(@"/missing");
+        //missing
+        public static readonly Regex ExtractImage = new Regex(@"<img");
 
         /// <summary>
         /// 这个可以测试我的名字，但是要注意需要替换&nbsp;
@@ -246,8 +248,18 @@ namespace Assets.CSharpCode.Network.Bgo
             return new Regex(@"<select.*?name="""+dropdown+@""".*?>([\s\S]*?)</select>");
         }
 
-        public static readonly Regex ExtractGamePhase= new Regex(@"<td class=.titre3.>(.*?) Phase");
+        public static readonly Regex ExtractGamePhase= new Regex(@"<ul[^>]*?class=.infoBox carteJoueur.[\s\S]*?<td class=.titre3.>([^<]*?) - <");
 
-        public static readonly Regex ExtractActionChoice =new Regex(@"<input type=.radio. value=""(.*?)"" [\s\S]*?<label .*?>(.*?)<");
+        public static readonly Regex ExtractActionChoice =new Regex(@"input type=.radio..*?value=""(.*?)"".*?>[^<]*?<label[^>]*?>([^<]*?)<");
+
+        public static Regex ExtractWarAggressionPactTargetList(string trName)
+        {
+            return new Regex(@"<tr id=."+ trName + @".([\s\S]*?)</tr>");
+        }
+
+        public static readonly Regex ExtractWarAggressionPactTarget=new Regex(@"<input .*? id=""(.*?)"" value=""(.*?)""[^<]*?<label[^>]*?>([^<]*?)<.*?-([\s\S]*?)</label");
+
+        //class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<
+        public static readonly Regex ExtractResolveingEvent = new Regex(@"class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<");
     }
 }

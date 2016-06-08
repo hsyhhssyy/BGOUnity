@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Menu
 {
+    [Obsolete]
     public class HandCardMenuBehaviour:MonoBehaviour
     {
         public SpecificCodeActionTrigger trigger;

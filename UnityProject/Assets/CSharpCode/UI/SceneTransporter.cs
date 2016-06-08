@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.Network;
+using Assets.CSharpCode.UI.Util;
 
 namespace Assets.CSharpCode.UI
 {
@@ -33,5 +35,19 @@ namespace Assets.CSharpCode.UI
         }
 
         public static String LastError = "";
+
+        private static GameEventChannel _currentChannel;
+        public static GameEventChannel CurrentChannel
+        {
+            get
+            {
+                if (_currentChannel == null)
+                {
+                    _currentChannel=new GameEventChannel();
+                    LogRecorder.Log("Channel Created");
+                }
+                return _currentChannel;
+            }
+        }
     }
 }
