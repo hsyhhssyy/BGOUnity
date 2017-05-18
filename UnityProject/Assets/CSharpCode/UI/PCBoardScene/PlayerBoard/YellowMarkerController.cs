@@ -7,46 +7,20 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
 {
-    public class YellowMarkerController : TtaUIControllerMonoBehaviour
+    public class YellowMarkerController : SimpleClickUIController
     {
-        private bool _refreshRequired;
-        private bool _highlight;
-
         public GameObject[] YellowBankMarkers;
 
-        [UsedImplicitly]
-        public GameBoardManager Manager;
-
-        [UsedImplicitly]
-        public void Start()
+        public GameObject HighlightFrame;
+        
+        protected override string GetUIKey()
         {
-            UIKey = "PCBoard.YellowMarker." + Guid;
-            Manager.Regiseter(this);
+            return "PCBoard.YellowMarker." + Guid;
         }
-        protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
+        
+        protected override void Refresh()
         {
-            //响应Refresh（来重新创建UI Element）
-            if (args.EventType == GameUIEventType.Refresh)
-            {
-                _refreshRequired = true;
-            }else if (args.EventType == GameUIEventType.AllowSelect)
-            {
-                _highlight = true;
-            }
-        }
-
-        [UsedImplicitly]
-        public void Update()
-        {
-            if (_refreshRequired)
-            {
-                _refreshRequired = false;
-                Refresh();
-            }
-        }
-
-        private void Refresh()
-        {
+            HighlightFrame.SetActive(isActiveAndEnabled);
             var board = Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo];
             int yellowMarkerOwn = board.Resource[ResourceType.YellowMarker];
             for (int yellowMarkerDisplay = 17;
@@ -66,27 +40,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
             }
         }
 
-        public override bool OnTriggerEnter()
+        protected override void OnHoveringHighlightChanged()
         {
-            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
-            return true;
-        }
-
-        public override bool OnTriggerExit()
-        {
-            _highlight = false;
-            return true;
-        }
-
-        public override bool OnTriggerClick()
-        {
-            if (!_highlight) return false;
-
-            var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
-            
-            Channel.Broadcast(args);
-
-            return true;
+            HighlightFrame.SetActive(isActiveAndEnabled);
         }
     }
 }

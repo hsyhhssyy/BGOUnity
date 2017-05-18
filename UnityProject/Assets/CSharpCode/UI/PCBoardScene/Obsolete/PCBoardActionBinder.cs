@@ -31,7 +31,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public HandCardMenuBehaviour HandCardMenuFrame;
 
         public SpecificCodeActionTrigger ConstructingWonderFrame;
-        public WonderMenuAnimationBehaviour ConstructingWonderMenuFrame;
+        public WonderMenuController ConstructingWonderMenuFrame;
 
         public PoliticalPhaseDialogDisplayBehaviour PoliticalPhaseDialogFrame;
         #endregion
@@ -113,7 +113,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
                 acceptedActions.Sort((a, b) => ((int) a.Data[1]).CompareTo(b.Data[0]));
 
-                ConstructingWonderMenuFrame.Popup(acceptedActions, boardBehavior);
+                //2017-05-15 ConstructingWonderMenuFrame.Popup(acceptedActions, boardBehavior);
             };
             ConstructingWonderFrame.ActionOnMouseClickOutside = () =>
             {

@@ -78,7 +78,7 @@ namespace Assets.CSharpCode.Entity
         #region 常见内政行动
         /// <summary>
         /// 玩家可以从卡牌列上拿一张卡
-        /// 0. CardInfo
+        /// 0. CardRowCardInfo
         /// 1. 此卡在卡牌列上的位置，0开始
         /// </summary>
         TakeCardFromCardRow, PutBackCard,

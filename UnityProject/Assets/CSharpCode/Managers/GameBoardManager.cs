@@ -149,6 +149,9 @@ namespace Assets.CSharpCode.Managers
 
         #region 决定游戏状态
         
+        /// <summary>
+        /// 尝试针对当前状态触发事件
+        /// </summary>
         public void VerifyState()
         {
             GameManagerState newState;
@@ -196,6 +199,7 @@ namespace Assets.CSharpCode.Managers
 
         private void ProcessActionPhaseIdleStateEvents(System.Object sender, GameUIEventArgs args)
         {
+            #region ProcessActionPhaseIdleStateEvents - TrySelect
             if (args.EventType == GameUIEventType.TrySelect)
             {
                 //在空闲状态，允许点击的UI元素如下
@@ -203,12 +207,49 @@ namespace Assets.CSharpCode.Managers
                 {
                     //卡牌列上的卡
                     //要看是什么张卡，白点够不够
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    var action =
+                        CurrentGame.PossibleActions.FirstOrDefault(a => (
+                            a.ActionType == PlayerActionType.TakeCardFromCardRow ||
+                            a.ActionType == PlayerActionType.PutBackCard) && (
+                                Convert.ToInt32(a.Data[1]) ==
+                                (int)
+                                    args.AttachedData[
+                                        "Position"]));
+
+                    if (action != null)
+                    {
+                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    }
                 }
                 else if (args.UIKey.Contains("BuildingCell"))
                 {
                     //建筑列表
                     //看有没有相关的Action，没有就不让选
+                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                }
+                else if (args.UIKey.Contains("BuildingsPopupMenuItem"))
+                {
+                    //Building的MenuItem都是可选的Action
+                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                }
+                else if (args.UIKey.Contains("ConstructingWonderBox"))
+                {
+                    //在建造中的奇迹
+                    List<PlayerAction> acceptedActions =
+                    CurrentGame.PossibleActions.Where(
+                        action =>
+                            action.ActionType == PlayerActionType.BuildWonder).ToList();
+
+                    acceptedActions.Sort((a, b) => ((int)a.Data[1]).CompareTo(b.Data[0]));
+
+                    if (acceptedActions.Count > 0)
+                    {
+                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    }
+                }
+                else if (args.UIKey.Contains("ConstructingWonderMenuItem"))
+                {
+                    //Wonder的MenuItem只要拉得出来都是可选的Action
                     _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
                 }
                 else if (args.UIKey.Contains("WorkerBank"))
@@ -257,10 +298,13 @@ namespace Assets.CSharpCode.Managers
                     _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
                 }
             }
+            #endregion
+
+            #region ProcessActionPhaseIdleStateEvents - Selected
             if (args.EventType == GameUIEventType.Selected)
             {
                 //如果玩家在空闲状态下，选中不同的目标
-                //这里省略判断，默认合法
+                //TODO 这里省略判断，默认合法（理论上上面TrySelect的内容应该留在这里判断）
                 if (args.UIKey.Contains("CardRow"))
                 {
                     //卡牌列上的卡
@@ -331,6 +375,65 @@ namespace Assets.CSharpCode.Managers
                     msg.AttachedData.Add("Actions", acceptedActions);
                     _channel.Broadcast(msg);
                 }
+                else if (args.UIKey.Contains("BuildingsPopupMenuItem"))
+                {
+                    var action = args.AttachedData["Action"] as PlayerAction;
+                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
+                    msg.AttachedData.Add("PlayerAction", action);
+
+                    if (action == null)
+                    {
+                        return;
+                    }
+
+                    if (action.Internal)
+                    {
+                        //出错了，建筑面板不可能有InternalAction
+                        Debug.Log("Error: BuildingsPopupMenuItem has Internal Action");
+                    }
+                    else
+                    {
+                        _channel.Broadcast(msg);
+                    }
+                }
+                else if (args.UIKey.Contains("ConstructingWonderBox"))
+                {
+                    //在建造中的奇迹
+                    List<PlayerAction> acceptedActions =
+                    CurrentGame.PossibleActions.Where(
+                        action =>
+                            action.ActionType == PlayerActionType.BuildWonder).ToList();
+
+                    acceptedActions.Sort((a, b) => ((int)a.Data[1]).CompareTo(b.Data[0]));
+
+                    if (acceptedActions.Count > 0)
+                    {
+                        var msg = new ManagerGameUIEventArgs(GameUIEventType.PopupMenu, args.UIKey);
+                        msg.AttachedData.Add("Actions", acceptedActions);
+                        _channel.Broadcast(msg);
+                    }
+                }
+                else if (args.UIKey.Contains("ConstructingWonderMenuItem"))
+                {
+                    var action = args.AttachedData["Action"] as PlayerAction;
+                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
+                    msg.AttachedData.Add("PlayerAction", action);
+
+                    if (action == null)
+                    {
+                        return;
+                    }
+
+                    if (action.Internal)
+                    {
+                        //出错了，Wonder不可能有InternalAction
+                        Debug.Log("Error: BuildingsPopupMenuItem has Internal Action");
+                    }
+                    else
+                    {
+                        _channel.Broadcast(msg);
+                    }
+                }
                 else if (args.UIKey.Contains("PlayerTab"))
                 {
                     //玩家面板
@@ -399,8 +502,33 @@ namespace Assets.CSharpCode.Managers
                         _channel.Broadcast(msg);
                     }
                 }
+                else if (args.UIKey.Contains("HandMilitaryCard"))
+                {
+                    var card = args.AttachedData["Card"] as CardInfo;
+                    var cardAction = CurrentGame.PossibleActions.FirstOrDefault(
+                        action =>
+                            action.ActionType == PlayerActionType.SetupTactic && action.Data[0] as CardInfo == card);
+
+                    if (cardAction == null)
+                    {
+                        return;
+                    }
+
+                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
+                    msg.AttachedData.Add("PlayerAction", cardAction);
+
+                    if (cardAction.Internal)
+                    {
+                        LogRecorder.Log("Error HandMilitaryCard Internal Action");
+                    }
+                    else
+                    {
+                        _channel.Broadcast(msg);
+                    }
+                }
 
             }
+            #endregion
         }
 
         #endregion
@@ -420,8 +548,9 @@ namespace Assets.CSharpCode.Managers
                 LogRecorder.Log("Crash!");
                 return;
             }
-
+            
             var targetElements = new Dictionary<String, List<CardInfo>>();
+            
             if (triggerCard.ImmediateEffects.FirstOrDefault(e=> e.FunctionId== CardEffectType.DevelopATechThenChangeYofResourceX)!=null)
             {
                 //1. 突破(研发一项科技后返还X科技）
@@ -468,6 +597,15 @@ namespace Assets.CSharpCode.Managers
                         highlightElement["HandCivilCard"].Contains(args.AttachedData["Card"] as CardInfo))
                     {
                         _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    }
+                    else
+                    {
+                        //原卡牌
+                        //表示取消操作
+                        if (args.AttachedData["Card"] as CardInfo == triggerCard)
+                        {
+                            _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                        }
                     }
                 }
             }

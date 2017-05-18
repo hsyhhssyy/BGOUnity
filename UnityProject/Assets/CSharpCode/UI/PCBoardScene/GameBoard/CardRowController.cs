@@ -9,92 +9,39 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
-    public class CardRowController: TtaUIControllerMonoBehaviour
+    public class CardRowController: SimpleClickUIController
     {
-        public GameBoardManager Manager;
         public PCBoardCardDisplayBehaviour SmallCardFrame;
         public GameObject HighLightFrame;
 
         public int Position;
-
-        private bool _refreshRequired;
-
-        public bool Highlight { get; set; }
-
-        public CardRowController()
+        
+        
+        protected override string GetUIKey()
         {
-            UIKey = "PCBoard.CardRow." + Guid;
+            return "PCBoard.CardRow." + Guid;
+        }
+        
+        protected override void OnHoveringHighlightChanged()
+        {
+            HighLightFrame.SetActive(IsHoveringAndAllowSelected);
         }
 
-        [UsedImplicitly]
-        public void Start()
+        protected override void AttachDataOnTrySelect(ControllerGameUIEventArgs args)
         {
-            Manager.Regiseter(this);
-        }
-
-        [UsedImplicitly]
-        public void FixedUpdate()
-        {
-            if (_refreshRequired)
-            {
-                _refreshRequired = false;
-                Refresh(Manager.CurrentGame.CardRow[Position]);
-            }
-
-            //HighLight
-            if (HighLightFrame != null) HighLightFrame.SetActive(Highlight);
-            
-        }
-
-        protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
-        {
-            if (args.EventType == GameUIEventType.Refresh)
-            {
-                _refreshRequired = true;
-                return;
-            }
-            
-            if (!args.UIKey.Contains(Guid))
-            {
-                return;
-            }
-
-            //含有自己的GUID，是发给自己的
-            if (args.EventType == GameUIEventType.AllowSelect)
-            {
-                Highlight = true;
-            }
-        }
-
-
-        public override bool OnTriggerEnter()
-        {
-            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect,UIKey));
-            return true;
-        }
-
-        public override bool OnTriggerExit()
-        {
-            Highlight = false;
-            return true;
-        }
-
-        public override bool OnTriggerClick()
-        {
-            if (!Highlight) return false;
-
-            var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
-
-            //附加Position
             args.AttachedData["Position"] = Position;
-
-            Channel.Broadcast(args);
-            
-            return true;
         }
 
-        private void Refresh(CardRowCardInfo cardRowInfo)
+        protected override void AttachDataOnSelected(ControllerGameUIEventArgs args)
         {
+            args.AttachedData["Position"] = Position;
+        }
+        
+
+        protected override void Refresh()
+        {
+            CardRowCardInfo cardRowInfo = Manager.CurrentGame.CardRow[Position];
+
             var whitePrefab = Resources.Load<GameObject>("Dynamic-PC/WhiteMarker");
             
             var civilCostFrame = gameObject.FindObject("CivilActionCost");
@@ -120,7 +67,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
                 if (cardRowInfo.CivilActionCost > 0)
                 {
-                    float init = -0.15f*cardRowInfo.CivilActionCost + 0.15f;
+                    float init = -0.15f* cardRowInfo.CivilActionCost/2+0.15f/2;
                     for (int j = 0; j < cardRowInfo.CivilActionCost; j++)
                     {
                         var mSp = Instantiate(whitePrefab);

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: f1bdf4bc00ea93d46b74fe41fae9d8e1
-timeCreated: 1463649889
+timeCreated: 1494847592
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,7 @@ TextureImporter:
     21300002: pc-board-dialog-min-button
     21300004: pc-board-dialog-background
     21300006: pc-board-dialog-bolder
+    21300008: pc-board-worker-pool-highlight
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -50,11 +51,14 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: pc-board-dialog-title-bar
+    - serializedVersion: 2
+      name: pc-board-dialog-title-bar
       rect:
         serializedVersion: 2
         x: 11
@@ -65,7 +69,9 @@ TextureImporter:
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: pc-board-dialog-min-button
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: pc-board-dialog-min-button
       rect:
         serializedVersion: 2
         x: 248
@@ -76,7 +82,9 @@ TextureImporter:
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: pc-board-dialog-background
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: pc-board-dialog-background
       rect:
         serializedVersion: 2
         x: 11
@@ -86,12 +94,10 @@ TextureImporter:
       alignment: 1
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: 0}
-        - {x: 0, y: -46}
-        - {x: 73, y: -46}
-        - {x: 73, y: 0}
-    - name: pc-board-dialog-bolder
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: pc-board-dialog-bolder
       rect:
         serializedVersion: 2
         x: 85
@@ -102,6 +108,20 @@ TextureImporter:
       pivot: {x: 0, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: pc-board-worker-pool-highlight
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 859
+        width: 395
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

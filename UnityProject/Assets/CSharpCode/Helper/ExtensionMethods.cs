@@ -109,6 +109,8 @@ namespace Assets.CSharpCode.Helper
 
         #endregion
 
+        #region 字符串裁切
+
         [UsedImplicitly]
         public static String CutBetween(this String origin, String prefix, String suffix)
         {
@@ -144,6 +146,8 @@ namespace Assets.CSharpCode.Helper
             return cutPiece;
         }
 
+        #endregion
+
         public static GameObject FindObject(this GameObject parent, string name)
         {
             Component[] trs = parent.GetComponentsInChildren(typeof(Transform), true);
@@ -175,6 +179,24 @@ namespace Assets.CSharpCode.Helper
         {
             var sprite = Sprite.Create(sp.texture, sp.rect, pivot, sp.pixelsPerUnit / scale);
             return sprite;
+        }
+        #endregion
+
+        #region Collider2D对指针的检测
+
+        public static bool IsMouseHitting(this Collider2D collider)
+        {
+            Collider2D[] cols = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition));
+
+            foreach (var col in cols)
+            {
+                if (col == collider)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         #endregion
     }

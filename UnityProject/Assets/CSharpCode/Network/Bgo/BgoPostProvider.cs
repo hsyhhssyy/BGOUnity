@@ -61,12 +61,21 @@ namespace Assets.CSharpCode.Network.Bgo
                         },
                         callback);
                 case PlayerActionType.DevelopTechCard:
-                    return PerformAction(sessionObject, game, action.Data[2].ToString(),
-                        new Dictionary<String, String>
-                        {
-                            {"idCarte", action.Data[3].ToString()}
-                        },
-                        callback);
+                    if (action.Data.Count > 3)
+                    {
+                        return PerformAction(sessionObject, game, action.Data[2].ToString(),
+                            new Dictionary<String, String>
+                            {
+                                {"idCarte", action.Data[3].ToString()}
+                            },
+                            callback);
+                    }
+                    else
+                    {
+                        return PerformAction(sessionObject, game, action.Data[2].ToString(),
+                            null,
+                            callback);
+                    }
                 //----Unknown
                 case PlayerActionType.Unknown:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
@@ -103,7 +112,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 }
                 else
                 {
-                    if (overrideData.ContainsKey(pair.Key))
+                    if (overrideData!=null&&overrideData.ContainsKey(pair.Key))
                     {
                         myPostData.AddField(pair.Key, overrideData[pair.Key]);
                         overrideData.Remove(pair.Key);
@@ -114,10 +123,14 @@ namespace Assets.CSharpCode.Network.Bgo
                     }
                 }
             }
-            foreach (var pair in overrideData)
+            if (overrideData != null)
             {
-                myPostData.AddField(pair.Key, pair.Value);
+                foreach (var pair in overrideData)
+                {
+                    myPostData.AddField(pair.Key, pair.Value);
+                }
             }
+            
 
             var cookieHeaders = myPostData.headers;
             cookieHeaders.Add("Cookie", "PHPSESSID=" + sessionObject._phpSession + "; identifiant=" + sessionObject._identifiant + "; mot_de_passe=" + sessionObject._motDePasse);

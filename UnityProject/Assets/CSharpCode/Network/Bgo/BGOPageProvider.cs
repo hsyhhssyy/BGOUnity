@@ -206,8 +206,12 @@ namespace Assets.CSharpCode.Network.Bgo
                 pa.Data[1] = game.CardRow.Count; //Card Row Pos
                 pa.Data[2] = mc.Groups[3].Value;//idNote
                 pa.Data[3] = mc.Groups[2].Value;//PostUrl
-                
-                game.PossibleActions.Add(pa);
+
+                //能拿能放回去，才能有Action
+                if (cardRowCardInfo.CanPutBack || cardRowCardInfo.CanTake)
+                {
+                    game.PossibleActions.Add(pa);
+                }
 
                 game.CardRow.Add(cardRowCardInfo);
             }

@@ -35,13 +35,13 @@ namespace Assets.CSharpCode.UI.Util.Controller
 
         public override bool OnTriggerExit()
         {
-            Highlight = false;
+            IsHoveringAndAllowSelected = false;
             return false;
         }
 
         public override bool OnTriggerClick()
         {
-            if (!Highlight) return false;
+            if (!IsHoveringAndAllowSelected) return false;
 
             var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
             AttachDataOnSelected(args);

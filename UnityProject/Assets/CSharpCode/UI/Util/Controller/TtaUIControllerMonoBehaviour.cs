@@ -5,6 +5,9 @@ using Assets.CSharpCode.UI.Util.Input;
 
 namespace Assets.CSharpCode.UI.Util.Controller
 {
+    /// <summary>
+    /// 表示一个能够接受和响应游戏事件的MonoBehavior
+    /// </summary>
     public abstract class TtaUIControllerMonoBehaviour: InputActionTriggerMonoBehaviour
     {
         public virtual String UIKey { get; protected set; }

@@ -5,19 +5,25 @@ using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
+    /// <summary>
+    /// 仅用于显示的UiController，他能够响应Refresh事件
+    /// </summary>
     public abstract class DisplayOnlyUIController : TtaUIControllerMonoBehaviour
     {
         protected bool RefreshRequired;
 
-        private bool _highlight;
-        protected bool Highlight
+        private bool _isHoveringAndAllowSelected;
+        /// <summary>
+        /// 表示该按钮是否允许被选中，隐含了当前鼠标指针就在该按钮上的
+        /// </summary>
+        protected bool IsHoveringAndAllowSelected
         {
-            get { return _highlight; }
+            get { return _isHoveringAndAllowSelected; }
             set {
-                if (_highlight != value)
+                if (_isHoveringAndAllowSelected != value)
                 {
-                    _highlight = value;
-                    OnHighlightChanged();
+                    _isHoveringAndAllowSelected = value;
+                    OnHoveringHighlightChanged();
                 }
             }
         }
@@ -29,6 +35,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         public virtual void Start()
         {
             Manager.Regiseter(this);
+            OnHoveringHighlightChanged();
         }
 
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
@@ -44,7 +51,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             {
                 if (args.EventType == GameUIEventType.AllowSelect)
                 {
-                    Highlight = true;
+                    IsHoveringAndAllowSelected = true;
                 }
             }
         }
@@ -61,7 +68,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         protected abstract void Refresh();
 
-        protected virtual void OnHighlightChanged()
+        /// <summary>
+        /// 当悬停状态被改变时触发
+        /// </summary>
+        protected virtual void OnHoveringHighlightChanged()
         {
             //Do nothing
         }
