@@ -39,11 +39,13 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.BuildBuilding:
                 case PlayerActionType.Revolution:
                 case PlayerActionType.ResolveEventOption:
-                    return PerformAction(sessionObject, game, action.Data[2].ToString(), callback);
+                case PlayerActionType.DevelopTechCard:
+                    return PerformAction(sessionObject, game, action.Data[2].ToString(), AttachIdCarte(3, action),
+                        callback);
                 //----optvalue is [3]
                 case PlayerActionType.UpgradeBuilding:
                 case PlayerActionType.BuildWonder:
-                    return PerformAction(sessionObject, game, action.Data[3].ToString(), callback);
+                    return PerformAction(sessionObject, game, action.Data[3].ToString(), AttachIdCarte(4, action), callback);
                 //----has additional form
                 case PlayerActionType.Destory:
                 case PlayerActionType.Disband:
@@ -60,22 +62,6 @@ namespace Assets.CSharpCode.Network.Bgo
                             {action.Data[4].ToString(), action.Data[5].ToString()}
                         },
                         callback);
-                case PlayerActionType.DevelopTechCard:
-                    if (action.Data.Count > 3)
-                    {
-                        return PerformAction(sessionObject, game, action.Data[2].ToString(),
-                            new Dictionary<String, String>
-                            {
-                                {"idCarte", action.Data[3].ToString()}
-                            },
-                            callback);
-                    }
-                    else
-                    {
-                        return PerformAction(sessionObject, game, action.Data[2].ToString(),
-                            null,
-                            callback);
-                    }
                 //----Unknown
                 case PlayerActionType.Unknown:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
@@ -83,6 +69,8 @@ namespace Assets.CSharpCode.Network.Bgo
                     return null;
             }
         }
+
+
 
         public static IEnumerator PostInternalAction(BgoSessionObject sessionObject, BgoGame game, BgoPlayerAction action,
              Action<List<PlayerAction>> callback)
@@ -97,6 +85,21 @@ namespace Assets.CSharpCode.Network.Bgo
                 default:
                     return null;
             }
+        }
+
+        private static Dictionary<String, String> AttachIdCarte(int pos, BgoPlayerAction action, Dictionary<String, String> otherData = null)
+        {
+            if (otherData == null)
+            {
+                otherData=new Dictionary<string, string>();
+            }
+
+            if (action.Data.Count > pos)
+            {
+                otherData.Add("idCarte", action.Data[pos].ToString());
+            }
+
+            return otherData;
         }
 
         private static IEnumerator PerformAction(BgoSessionObject sessionObject, BgoGame game, String actionValue,Dictionary<String,String> overrideData, Action callback)

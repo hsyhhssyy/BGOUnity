@@ -15,7 +15,7 @@ namespace Assets.CSharpCode.UI.LobbyScene
         {
             SceneTransporter.CurrentGame = SceneTransporter.LastListedGames[GameNumber];
 
-            SceneManager.LoadScene("Scene/BoardScene");
+            SceneManager.LoadScene("Scene/BoardScene-PC");
         }
     }
 }

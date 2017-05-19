@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Schema;
 
 namespace Assets.CSharpCode.Civilopedia
 {
@@ -27,14 +28,26 @@ namespace Assets.CSharpCode.Civilopedia
     /// </summary>
     public enum CardEffectType
     {
-        Unknown=0,
+        Unknown = 0,
         //-------------E100------
-       ResourceOfTypeXChangedY = 100,
-
-        //E408
-        DevelopATechThenChangeYofResourceX=408,//研究科技后改变[0]类型的属性[1]点
+        [CardEffectDetail("改变[0]类型的属性[1]点")] E100 = 100,
+        [CardEffectDetail("建造资源建筑减少资源点消耗[0]")] E402 = 402,
+        [CardEffectDetail("建造城市建筑减少资源点消耗[0]")] E403 = 403,
+        [CardEffectDetail("升级资源建筑减少资源点消耗[0]")] E404 = 404,
+        [CardEffectDetail("升级城市建筑减少资源点消耗[0]")] E405 = 405,
+        [CardEffectDetail("研究科技后改变[0]类型的属性[1]点")] E408 = 408,
 
         //-----------Program Effect ---------
         ChooseOne = 1000,
     }
+
+    public class CardEffectDetailAttribute : Attribute
+    {
+        public CardEffectDetailAttribute(String desc)
+        {
+            
+        }
+    }
+
+    
 }

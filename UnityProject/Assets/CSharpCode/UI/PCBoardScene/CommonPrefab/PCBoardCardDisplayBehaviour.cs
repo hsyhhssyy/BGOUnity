@@ -268,7 +268,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.CommonPrefab
         {
             switch (effect.FunctionId)
             {
-                case CardEffectType.ResourceOfTypeXChangedY:
+                case CardEffectType.E100:
 
                     String iconImg;
                     switch ((ResourceType)effect.Data[0])
@@ -567,7 +567,7 @@ case ResourceType.Resource:
             List<CardEffect> effects = new List<CardEffect>();
             foreach (var effect in Card.SustainedEffects)
             {
-                if (effect.FunctionId == CardEffectType.ResourceOfTypeXChangedY)
+                if (effect.FunctionId == CardEffectType.E100)
                 {
                     switch ((ResourceType)effect.Data[0])
                     {

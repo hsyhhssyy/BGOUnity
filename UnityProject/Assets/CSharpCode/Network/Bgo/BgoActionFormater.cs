@@ -125,7 +125,9 @@ namespace Assets.CSharpCode.Network.Bgo
                         var cardName = bgoStr.CutAfter("/ ");
                         var card = Civilopedia.GetCardInfoByName((Age) Enum.Parse(typeof (Age), age), cardName);
                         action.ActionType= PlayerActionType.PlayActionCard;
-                        action.Internal = true;
+                        
+                        action.Internal = IfCardIsInternal(card);
+
                         action.Data[0] = card;
                         action.Data[1] = optValue;
                     }else if (bgoStr.StartsWith("Play event"))
@@ -347,22 +349,7 @@ namespace Assets.CSharpCode.Network.Bgo
             {
                 game.PossibleActions.Remove(selectaction);
             }
-
-            //标记internal
-            foreach (var action in game.PossibleActions)
-            {
-                switch (action.ActionType)
-                {
-                        case PlayerActionType.PlayActionCard:
-                        var card =(CardInfo)action.Data[0];
-
-                        if (card.ImmediateEffects.FirstOrDefault(t=>t.FunctionId== CardEffectType.ChooseOne) != null)
-                        {
-                            action.Internal = true;
-                        }
-                        break;
-                }
-            }
+            
         }
 
         public static void FormatInternalAction(List<PlayerAction> actions, String html)
@@ -386,6 +373,74 @@ namespace Assets.CSharpCode.Network.Bgo
                     action.Data[1] = resCost;
                     action.Data[2] = optValue;
                     action.Data[3] = idCarte;
+                }
+                if (bgoStr.StartsWith("Build"))
+                {
+                    //Build Philosophy - 1
+                    var price = Convert.ToInt32(bgoStr.CutAfter("- "));
+                    var card = Civilopedia.GetCardInfoByName(bgoStr.CutBetween("Build ", " -"));
+                    action.ActionType = PlayerActionType.BuildBuilding;
+                    action.Data[0] = card;
+                    action.Data[1] = price;
+                    action.Data[2] = optValue;
+                    action.Data[3] = idCarte;
+                }
+                if (bgoStr.StartsWith("Upgrade"))
+                {
+                    //Upgrade Philosophy to Alchemy - 1
+                    var price = Convert.ToInt32(bgoStr.CutAfter("- "));
+                    var card1 = Civilopedia.GetCardInfoByName(bgoStr.CutBetween("Upgrade ", " to"));
+                    var card2 = Civilopedia.GetCardInfoByName(bgoStr.CutBetween(" to ", " -"));
+                    action.ActionType = PlayerActionType.UpgradeBuilding;
+                    action.Data[0] = card1;
+                    action.Data[1] = card2;
+                    action.Data[2] = price;
+                    action.Data[3] = optValue;
+                    action.Data[4] = idCarte;
+                }
+            }
+        }
+
+        public static bool IfCardIsInternal(CardInfo info)
+        {
+            if (info.CardType != CardType.Action)
+            {
+                return false;
+            }
+            var effectList = new List<CardEffect>();
+            foreach (var immediateEffect in info.ImmediateEffects)
+            {
+                PutItIntoList(immediateEffect,effectList);
+            }
+
+            if (effectList.Exists(e => e.FunctionId == CardEffectType.ChooseOne
+                                       || e.FunctionId == CardEffectType.E408||
+                                       e.FunctionId == CardEffectType.E402 ||
+                                       e.FunctionId == CardEffectType.E403 ||
+                                       e.FunctionId == CardEffectType.E404 ||
+                                       e.FunctionId == CardEffectType.E405))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void PutItIntoList(CardEffect effect, List<CardEffect> list)
+        {
+            list.Add(effect);
+
+            if (effect.FunctionId == CardEffectType.ChooseOne)
+            {
+                var choose = effect as ChooseOneCardEffect;
+                if (choose == null)
+                {
+                    return;
+                }
+
+                foreach (var e in choose.Candidate)
+                {
+                    PutItIntoList(e, list);
                 }
             }
         }

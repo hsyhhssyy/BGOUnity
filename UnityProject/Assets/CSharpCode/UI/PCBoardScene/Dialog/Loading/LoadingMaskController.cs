@@ -21,7 +21,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
         {
             //响应Refresh（来重新创建UI Element）
-            if (args.EventType == GameUIEventType.Refresh)
+            if (args.EventType == GameUIEventType.CancelWaitingNetwork)
             {
                gameObject.SetActive(false);
                 LogRecorder.Log("Disable Mask");

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
+using Assets.CSharpCode.UI.PCBoardScene.Effects;
 using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -32,6 +34,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
         public CardInfo Card;
 
         public bool Highlight { get; set; }
+        private PCBoardCardSmallHighlightEffect highligtGo;
 
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
         {
@@ -55,17 +58,39 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
             }
         }
 
+        public void Update()
+        {
+            highligtGo.Highlight = Highlight;
+
+            if (ParentController.Manager.State == GameManagerState.ActionPhaseChooseTarget &&
+                ParentController.Manager.StateData.ContainsKey("HighlightElement"))
+            {
+                var dict = ParentController.Manager.StateData["HighlightElement"] as Dictionary<String, List<CardInfo>>;
+                if (dict != null && dict.ContainsKey("BuildingCell"))
+                {
+                    if (dict["HandCivilCard"].Contains(Card))
+                    {
+                        highligtGo.Highlight = true;
+                        return;
+                    }
+                }
+            }
+
+        }
+
         [UsedImplicitly]
         public void Start()
         {
             UIKey = "PCBoard.BuildingCell.Child." + Guid;
-            
-
+            highligtGo = gameObject.AddComponent<PCBoardCardSmallHighlightEffect>();
         }
 
         public override bool OnTriggerEnter()
         {
-            Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
+            var args = new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey);
+
+            args.AttachedData["Card"] = Card;
+            Channel.Broadcast(args);
             return true;
         }
 

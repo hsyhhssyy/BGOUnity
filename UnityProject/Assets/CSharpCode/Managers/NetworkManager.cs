@@ -45,8 +45,7 @@ namespace Assets.CSharpCode.Managers
                 Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, () =>
                 {
                     Manager.CurrentDisplayingBoardNo = Manager.CurrentGame.MyPlayerIndex;
-
-                    Manager.VerifyState();
+                    
                     var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
                     Channel.Broadcast(msg);
                 }));
@@ -61,7 +60,14 @@ namespace Assets.CSharpCode.Managers
                     Manager.StartCoroutine(Server.TakeInternalAction(Manager.CurrentGame,
                         action, (actions) =>
                         {
-                            PlayerAction actionToPerform=null;
+                            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
+
+
+                            var msg = new ManagerGameUIEventArgs(GameUIEventType.ReportInternalAction, "PCBoard");
+                            msg.AttachedData["Actions"] = actions;
+                            Channel.Broadcast(msg);
+                            /*
+                            PlayerAction actionToPerform =null;
                             foreach (var candidateAction in actions)
                             {
                                 if (candidateAction.ActionType == PlayerActionType.DevelopTechCard)
@@ -81,7 +87,6 @@ namespace Assets.CSharpCode.Managers
                             {
                                 LogRecorder.Log("Selection invalid!");
                                 //GameManager提交过来的选择无效
-                                Manager.VerifyState();
                                 Channel.Broadcast(new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
                             }
                             else
@@ -89,10 +94,9 @@ namespace Assets.CSharpCode.Managers
                                 Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
                                     actionToPerform, () =>
                                     {
-                                        Manager.VerifyState();
                                         Channel.Broadcast(new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
                                     }));
-                            }
+                            }*/
                         }));
                 }
                 else
@@ -100,7 +104,6 @@ namespace Assets.CSharpCode.Managers
                     Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
                         action, () =>
                         {
-                            Manager.VerifyState();
                             var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
                             Channel.Broadcast(msg);
                         }));

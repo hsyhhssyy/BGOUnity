@@ -60,6 +60,10 @@ namespace Assets.CSharpCode.Managers
         /// </summary>
         Refresh,
         /// <summary>
+        /// 通知UI元素收到InternalAction的实际Action结果
+        /// </summary>
+        ReportInternalAction,
+        /// <summary>
         /// 通知网络服务器玩家进行某行为
         /// </summary>
         TakeAction,
@@ -67,6 +71,10 @@ namespace Assets.CSharpCode.Managers
         /// 表示请UI提示玩家等待网络通讯
         /// </summary>
         WaitingNetwork,
+        /// <summary>
+        /// 表示请UI不再提示玩家等待网络通讯
+        /// </summary>
+        CancelWaitingNetwork,
         /// <summary>
         /// 要求弹出一个选单
         /// </summary>

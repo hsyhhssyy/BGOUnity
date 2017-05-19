@@ -84,8 +84,15 @@
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameBoardManager.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseChooseTargetStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseIdleStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseInternalQueryHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\OutOfMyTurnStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\PoliticalPhaseIdleStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ResolveEventStateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameEventChannel.cs" />
     <Compile Include="Assets\CSharpCode\Managers\NetworkManager.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\StateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\UIControllerEvent.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoActionFormater.cs" />

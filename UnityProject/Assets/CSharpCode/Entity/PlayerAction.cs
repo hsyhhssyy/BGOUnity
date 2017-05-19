@@ -50,14 +50,14 @@ namespace Assets.CSharpCode.Entity
 
         public override string ToString()
         {
-            String actionString = "";
+            String actionString;
             switch (ActionType)
             {
                 case PlayerActionType.TakeCardFromCardRow:
                     actionString = "TakeCardFromCardRow:" + (Data[0] as CardInfo).InternalId+ " at "+Data[1];
                     break;
                 default:
-                    actionString = "Unknown Action:" + Enum.GetName(typeof (PlayerActionType), ActionType);
+                    actionString = ""+Enum.GetName(typeof (PlayerActionType), ActionType);
                     break;
             }
             return actionString;

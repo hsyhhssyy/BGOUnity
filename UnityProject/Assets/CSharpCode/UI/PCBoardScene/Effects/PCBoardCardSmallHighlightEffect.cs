@@ -8,6 +8,14 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Effects
 {
+    /// <summary>
+    /// 使用方法:<para/>
+    /// private PCBoardCardSmallHighlightEffect highlightGo;<para/>
+    /// public void Start()<para/>
+    /// {<para/>
+    ///    highligtGo=gameObject.AddComponent&lt;PCBoardCardSmallHighlightEffect&gt;();<para/>
+    /// }<para/>
+    /// </summary>
     public class PCBoardCardSmallHighlightEffect:MonoBehaviour
     {
         private GameObject _frame;

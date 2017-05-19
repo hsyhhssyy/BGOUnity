@@ -8,6 +8,7 @@ using UnityEngine;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.Managers.GameBoardStateHandlers;
 using Assets.CSharpCode.UI;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
 using Assets.CSharpCode.UI.Util;
@@ -19,17 +20,61 @@ namespace Assets.CSharpCode.Managers
 {
     public class GameBoardManager : MonoBehaviour
     {
-        private readonly GameEventChannel _channel;
+        #region 一系列复杂的用于维护当前游戏状态机的变量
+
+        public TtaGame CurrentGame
+        {
+            get { return SceneTransporter.CurrentGame; }
+        }
+
+        public int CurrentDisplayingBoardNo = 0;
+
+        public GameManagerState State;
+        public Dictionary<String, System.Object> StateData = new Dictionary<string, object>();
+
+        public Dictionary<GameManagerState, List<GameBoardStateHandler>> Handlers; 
+
+        public GameEventChannel Channel { get; private set; }
 
         public NetworkManager NetworkManager;
 
+
+        #endregion
+
         public GameBoardManager()
         {
-            _channel = SceneTransporter.CurrentChannel;
-            _channel.GameEvent += DestoryNullReference;
+            Channel = SceneTransporter.CurrentChannel;
+            Channel.GameEvent += DestoryNullReference;
             
-            NetworkManager = new NetworkManager(this, _channel);
+            NetworkManager = new NetworkManager(this, Channel);
 
+            Handlers = new Dictionary<GameManagerState, List<GameBoardStateHandler>>
+            {
+                {
+                    GameManagerState.ActionPhaseIdle, new List<GameBoardStateHandler>
+                    {
+                        new ActionPhaseIdleStateHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.ActionPhaseInternalQuery, new List<GameBoardStateHandler>
+                    {
+                        new ActionPhaseInternalQueryHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.ActionPhaseChooseTarget, new List<GameBoardStateHandler>
+                    {
+                        new ActionPhaseChooseTargetStateHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.OutOfMyTurn, new List<GameBoardStateHandler>
+                    {
+                        new OutOfMyTurnStateHandler(this)
+                    }
+                }
+            };
         }
 
         #region 接受和分发消息的部分
@@ -40,49 +85,42 @@ namespace Assets.CSharpCode.Managers
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (this == null)
             {
-                _channel.GameEvent -= DestoryNullReference;
+                Channel.GameEvent -= DestoryNullReference;
             }
             else
             {
-                OnSubscribedUIControllerEvents(sender, args);
+                OnSubscribedUiControllerEvents(sender, args);
             }
         }
 
         public void Regiseter(TtaUIControllerMonoBehaviour controller)
         {
-            controller.Channel = _channel;
+            controller.Channel = Channel;
 
             LogRecorder.Log(controller.name + " Registed");
         }
 
-        private void OnSubscribedUIControllerEvents(System.Object sender, GameUIEventArgs args)
+        private void OnSubscribedUiControllerEvents(System.Object sender, GameUIEventArgs args)
         {
-            switch (State)
+            //只有在刷新时才会出现，否则定时请求刷新
+            if (args.EventType == GameUIEventType.Refresh)
             {
-                case GameManagerState.PoliticalPhaseIdle:
-                    ProcessPoliticalPhaseIdleStateEvents(sender, args);
-                    break;
-                case GameManagerState.ActionPhaseIdle:
-                    ProcessActionPhaseIdleStateEvents(sender, args);
-                    break;
-                case GameManagerState.ResolveEvent:
-                    ProcessResolveEventStateEvents(sender, args);
-                    break;
-                case GameManagerState.OutOfMyTurn:
-                    ProcessOutOfMyTurnStateEvents(sender, args);
-                    break;
-                    case GameManagerState.ActionPhaseChooseTarget:
-                    ProcessActionPhaseChooseTargetStateEvents(sender, args);
-                    break;
-                case GameManagerState.Unknown:
-                default:
-                    //只有在刷新时才会出现，否则定时请求刷新
-                    if (args.EventType == GameUIEventType.Refresh)
-                    {
-                        VerifyState();
-                    }
-                    break;
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
+                VerifyState();
             }
+
+            if (Handlers.ContainsKey(State))
+            {
+                var hand = Handlers[State];
+                if (hand != null)
+                {
+                    foreach (var handler in hand)
+                    {
+                        handler.ProcessGameEvents(sender,args);
+                    }
+                }
+            }
+
         }
 
         #endregion
@@ -108,51 +146,46 @@ namespace Assets.CSharpCode.Managers
 
         public void LateUpdate()
         {
-            _channel.Flush();
+            Channel.Flush();
         }
 
         public void Update()
         {
-            switch (State)
+            if (Handlers.ContainsKey(State))
             {
-                case GameManagerState.OutOfMyTurn:
-                    UpdateOnOutOfMyTurnState();
-                    break;
-                case GameManagerState.Unknown:
-                default:
-                    break;
+                var hand = Handlers[State];
+                if (hand != null)
+                {
+                    foreach (var handler in hand)
+                    {
+                        handler.OnUnityUpdate();
+                    }
+                }
             }
         }
 
         private IEnumerator Init()
         {
             yield return 0;
-            _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.ForceRefresh, "NetworkManager"));
+            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.ForceRefresh, "NetworkManager"));
             yield break;
         }
 
         #endregion
-
-        #region 一系列复杂的用于维护当前游戏状态机的变量
-
-        public TtaGame CurrentGame
+        
+        public bool SwitchDisplayingBoardNo(int no)
         {
-            get { return SceneTransporter.CurrentGame; }
+            CurrentDisplayingBoardNo = no;
+            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
+            return true;
         }
-
-        public int CurrentDisplayingBoardNo = 0;
-
-        public GameManagerState State;
-        public Dictionary<String, System.Object> StateData = new Dictionary<string, object>();
-
-        #endregion
 
         #region 决定游戏状态
         
         /// <summary>
-        /// 尝试针对当前状态触发事件
+        /// 尝试针对当前面板内容确定当前状态
         /// </summary>
-        public void VerifyState()
+        private void VerifyState()
         {
             GameManagerState newState;
 
@@ -176,685 +209,58 @@ namespace Assets.CSharpCode.Managers
                     case TtaPhase.DiscardPhase:
 
                     default:
-                        newState = GameManagerState.Unknown;
+                        newState = State;
                         break;
                 }
             }
 
             if (newState != State)
             {
-                State = newState;
-                switch (State)
-                {
-                    case GameManagerState.ActionPhaseChooseTarget:
-                        EnteringActionPhaseChooseTargetState();
-                        break;
-                }
+                SwitchState(newState, null);
             }
         }
 
         #endregion
-
-        #region ActionPhase Idle State
-
-        private void ProcessActionPhaseIdleStateEvents(System.Object sender, GameUIEventArgs args)
-        {
-            #region ProcessActionPhaseIdleStateEvents - TrySelect
-            if (args.EventType == GameUIEventType.TrySelect)
-            {
-                //在空闲状态，允许点击的UI元素如下
-                if (args.UIKey.Contains("CardRow"))
-                {
-                    //卡牌列上的卡
-                    //要看是什么张卡，白点够不够
-                    var action =
-                        CurrentGame.PossibleActions.FirstOrDefault(a => (
-                            a.ActionType == PlayerActionType.TakeCardFromCardRow ||
-                            a.ActionType == PlayerActionType.PutBackCard) && (
-                                Convert.ToInt32(a.Data[1]) ==
-                                (int)
-                                    args.AttachedData[
-                                        "Position"]));
-
-                    if (action != null)
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                }
-                else if (args.UIKey.Contains("BuildingCell"))
-                {
-                    //建筑列表
-                    //看有没有相关的Action，没有就不让选
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("BuildingsPopupMenuItem"))
-                {
-                    //Building的MenuItem都是可选的Action
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("ConstructingWonderBox"))
-                {
-                    //在建造中的奇迹
-                    List<PlayerAction> acceptedActions =
-                    CurrentGame.PossibleActions.Where(
-                        action =>
-                            action.ActionType == PlayerActionType.BuildWonder).ToList();
-
-                    acceptedActions.Sort((a, b) => ((int)a.Data[1]).CompareTo(b.Data[0]));
-
-                    if (acceptedActions.Count > 0)
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                }
-                else if (args.UIKey.Contains("ConstructingWonderMenuItem"))
-                {
-                    //Wonder的MenuItem只要拉得出来都是可选的Action
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("WorkerBank"))
-                {
-                    //人力库（要看粮食）
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("PlayerTab"))
-                {
-                    //玩家面板（要看人数）
-                    var playerNo = (int) args.AttachedData["PlayerNo"];
-                    if (CurrentGame.Boards.Count > playerNo)
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                }
-                else if (args.UIKey.Contains("HandCivilCard")
-                    )
-                {
-                    //手牌（要看手牌内容）
-                    var card = args.AttachedData["Card"] as CardInfo;
-                    if (CurrentGame.PossibleActions.FirstOrDefault(
-                        action => (
-                            action.ActionType == PlayerActionType.DevelopTechCard ||
-                            action.ActionType == PlayerActionType.PlayActionCard ||
-                            action.ActionType == PlayerActionType.Revolution ||
-                            action.ActionType == PlayerActionType.ElectLeader) && (action.Data[0] as CardInfo == card)) !=
-                        null)
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                }else if (args.UIKey.Contains("HandMilitaryCard"))
-                {
-                    var card = args.AttachedData["Card"] as CardInfo;
-                    if (CurrentGame.PossibleActions.FirstOrDefault(
-                        action =>
-                            action.ActionType == PlayerActionType.SetupTactic && action.Data[0] as CardInfo == card) !=
-                        null)
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                }
-                else if (args.UIKey.Contains("DialogButton"))
-                {
-                    //按钮
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-            }
-            #endregion
-
-            #region ProcessActionPhaseIdleStateEvents - Selected
-            if (args.EventType == GameUIEventType.Selected)
-            {
-                //如果玩家在空闲状态下，选中不同的目标
-                //TODO 这里省略判断，默认合法（理论上上面TrySelect的内容应该留在这里判断）
-                if (args.UIKey.Contains("CardRow"))
-                {
-                    //卡牌列上的卡
-
-                    //第一步，把要的action找出来
-                    var action =
-                        CurrentGame.PossibleActions.FirstOrDefault(a => (
-                            a.ActionType == PlayerActionType.TakeCardFromCardRow ||
-                            a.ActionType == PlayerActionType.PutBackCard) && (
-                                Convert.ToInt32(a.Data[1]) ==
-                                (int)
-                                    args.AttachedData[
-                                        "Position"]));
-
-                    //第二步，发消息给server，take action
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-                    _channel.Broadcast(msg);
-                }
-                else if (args.UIKey.Contains("WorkerBank"))
-                {
-                    //人力库（要看粮食）
-
-                    var action =
-                        CurrentGame.PossibleActions.FirstOrDefault(
-                            a => a.ActionType == PlayerActionType.IncreasePopulation);
-
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-                    _channel.Broadcast(msg);
-
-                }
-                else if (args.UIKey.Contains("BuildingCell"))
-                {
-                    //建筑列表
-                    var card = (CardInfo) args.AttachedData["Card"];
-                    //看有没有相关的Action，没有就不让选
-                    List<PlayerAction> acceptedActions = new List<PlayerAction>();
-
-                    foreach (var action in CurrentGame.PossibleActions)
-                    {
-                        if (action.ActionType == PlayerActionType.BuildBuilding &&
-                            ((CardInfo) action.Data[0]).InternalId == card.InternalId)
-                        {
-                            acceptedActions.Add(action);
-                        }
-
-                        if (action.ActionType == PlayerActionType.UpgradeBuilding)
-                        {
-                            if (((CardInfo) action.Data[0]).InternalId == card.InternalId ||
-                                ((CardInfo) action.Data[1]).InternalId == card.InternalId)
-                            {
-                                acceptedActions.Add(action);
-                            }
-                        }
-                        if (action.ActionType == PlayerActionType.Disband ||
-                            action.ActionType == PlayerActionType.Destory)
-                        {
-                            if (((CardInfo) action.Data[0]).InternalId == card.InternalId)
-                            {
-                                acceptedActions.Add(action);
-                            }
-                        }
-
-
-                    }
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.PopupMenu, args.UIKey);
-                    msg.AttachedData.Add("Actions", acceptedActions);
-                    _channel.Broadcast(msg);
-                }
-                else if (args.UIKey.Contains("BuildingsPopupMenuItem"))
-                {
-                    var action = args.AttachedData["Action"] as PlayerAction;
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-
-                    if (action == null)
-                    {
-                        return;
-                    }
-
-                    if (action.Internal)
-                    {
-                        //出错了，建筑面板不可能有InternalAction
-                        Debug.Log("Error: BuildingsPopupMenuItem has Internal Action");
-                    }
-                    else
-                    {
-                        _channel.Broadcast(msg);
-                    }
-                }
-                else if (args.UIKey.Contains("ConstructingWonderBox"))
-                {
-                    //在建造中的奇迹
-                    List<PlayerAction> acceptedActions =
-                    CurrentGame.PossibleActions.Where(
-                        action =>
-                            action.ActionType == PlayerActionType.BuildWonder).ToList();
-
-                    acceptedActions.Sort((a, b) => ((int)a.Data[1]).CompareTo(b.Data[0]));
-
-                    if (acceptedActions.Count > 0)
-                    {
-                        var msg = new ManagerGameUIEventArgs(GameUIEventType.PopupMenu, args.UIKey);
-                        msg.AttachedData.Add("Actions", acceptedActions);
-                        _channel.Broadcast(msg);
-                    }
-                }
-                else if (args.UIKey.Contains("ConstructingWonderMenuItem"))
-                {
-                    var action = args.AttachedData["Action"] as PlayerAction;
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-
-                    if (action == null)
-                    {
-                        return;
-                    }
-
-                    if (action.Internal)
-                    {
-                        //出错了，Wonder不可能有InternalAction
-                        Debug.Log("Error: BuildingsPopupMenuItem has Internal Action");
-                    }
-                    else
-                    {
-                        _channel.Broadcast(msg);
-                    }
-                }
-                else if (args.UIKey.Contains("PlayerTab"))
-                {
-                    //玩家面板
-                    var playerNo = (int) args.AttachedData["PlayerNo"];
-                    if (CurrentGame.Boards.Count > playerNo)
-                    {
-
-                        CurrentDisplayingBoardNo = playerNo;
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
-                    }
-                }
-                else if (args.UIKey.Contains("DialogButton"))
-                {
-                    //按钮
-                    if (args.UIKey.Contains("ResetActionPhase"))
-                    {
-                        var action =
-                            CurrentGame.PossibleActions.FirstOrDefault(
-                                a => a.ActionType == PlayerActionType.ResetActionPhase);
-
-                        var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                        msg.AttachedData.Add("PlayerAction", action);
-                        _channel.Broadcast(msg);
-                    }
-                    else if (args.UIKey.Contains("EndActionPhase"))
-                    {
-                        var action =
-                            CurrentGame.PossibleActions.FirstOrDefault(
-                                a => a.ActionType == PlayerActionType.EndActionPhase);
-
-                        var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                        msg.AttachedData.Add("PlayerAction", action);
-                        _channel.Broadcast(msg);
-                    }
-                }
-                else if (args.UIKey.Contains("HandCivilCard"))
-                {
-                    //手牌（要看手牌内容）
-                    var handCardActions = CurrentGame.PossibleActions.Where(
-                        a =>
-                            a.ActionType == PlayerActionType.DevelopTechCard ||
-                            a.ActionType == PlayerActionType.PlayActionCard ||
-                            a.ActionType == PlayerActionType.Revolution ||
-                            a.ActionType == PlayerActionType.ElectLeader).ToList();
-                    var action = handCardActions.FirstOrDefault(
-                        a => a.Data[0] as CardInfo == args.AttachedData["Card"] as CardInfo);
-
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-
-                    if (action == null)
-                    {
-                        return;
-                    }
-
-                    if (action.Internal)
-                    {
-                        LogRecorder.Log("Go ActionPhaseChooseTarget");
-                        State = GameManagerState.ActionPhaseChooseTarget;
-                        StateData["ActionPhaseChooseTarget.TriggerCard"] = args.AttachedData["Card"] as CardInfo;
-                        StateData["ActionPhaseChooseTarget.TriggerAction"] = action;
-                        EnteringActionPhaseChooseTargetState();
-                    }
-                    else
-                    {
-                        _channel.Broadcast(msg);
-                    }
-                }
-                else if (args.UIKey.Contains("HandMilitaryCard"))
-                {
-                    var card = args.AttachedData["Card"] as CardInfo;
-                    var cardAction = CurrentGame.PossibleActions.FirstOrDefault(
-                        action =>
-                            action.ActionType == PlayerActionType.SetupTactic && action.Data[0] as CardInfo == card);
-
-                    if (cardAction == null)
-                    {
-                        return;
-                    }
-
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", cardAction);
-
-                    if (cardAction.Internal)
-                    {
-                        LogRecorder.Log("Error HandMilitaryCard Internal Action");
-                    }
-                    else
-                    {
-                        _channel.Broadcast(msg);
-                    }
-                }
-
-            }
-            #endregion
-        }
-
-        #endregion
-
-        #region ActionPhase Choose Action Target
-
-        private void EnteringActionPhaseChooseTargetState()
-        {
-            //进入该事件
-            var board = CurrentGame.Boards[CurrentGame.MyPlayerIndex];
-
-            //确定可选组件
-
-            var triggerCard = StateData["ActionPhaseChooseTarget.TriggerCard"] as CardInfo;
-            if (triggerCard == null)
-            {
-                LogRecorder.Log("Crash!");
-                return;
-            }
-            
-            var targetElements = new Dictionary<String, List<CardInfo>>();
-            
-            if (triggerCard.ImmediateEffects.FirstOrDefault(e=> e.FunctionId== CardEffectType.DevelopATechThenChangeYofResourceX)!=null)
-            {
-                //1. 突破(研发一项科技后返还X科技）
-                var cards = new List<CardInfo>();
-                foreach (var card in board.CivilCards)
-                {
-                    if (card.ResearchCost != null && card.ResearchCost.Count > 0)
-                    {
-                        if (card.ResearchCost[0] <= board.Resource[ResourceType.Science])
-                        {
-                            cards.Add(card);
-                        }
-                    }
-                }
-
-                cards.Add(triggerCard);
-                targetElements["HandCivilCard"] = cards;
-            }
-            
-
-            //
-            StateData["HighlightElement"] = targetElements;
-        }
-
-        private void ProcessActionPhaseChooseTargetStateEvents(System.Object sender, GameUIEventArgs args)
-        {
-            var triggerCard = StateData["ActionPhaseChooseTarget.TriggerCard"] as CardInfo;
-            var highlightElement=StateData["HighlightElement"] as Dictionary<String, List<CardInfo>>;
-            if (highlightElement == null)
-            {
-                return;
-            }
-
-            if (args.EventType == GameUIEventType.TrySelect)
-            {
-                if (args.UIKey.Contains("BuildingCell"))
-                {
-                    //建筑列表
-                }
-                else if (args.UIKey.Contains("HandCivilCard"))
-                {
-                    //手牌（要看手牌内容）
-                    if (highlightElement.ContainsKey("HandCivilCard") &&
-                        highlightElement["HandCivilCard"].Contains(args.AttachedData["Card"] as CardInfo))
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    }
-                    else
-                    {
-                        //原卡牌
-                        //表示取消操作
-                        if (args.AttachedData["Card"] as CardInfo == triggerCard)
-                        {
-                            _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                        }
-                    }
-                }
-            }
-            else if (args.EventType == GameUIEventType.Selected)
-            {
-                if (args.UIKey.Contains("BuildingCell"))
-                {
-                    //建筑列表
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("HandCivilCard"))
-                {
-                    //手牌（要看手牌内容）
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    
-                    //如果是点击了同样的卡
-                    if (args.AttachedData["Card"] as CardInfo == triggerCard)
-                    {
-                        State= GameManagerState.ActionPhaseIdle;
-                        VerifyState();
-                        return;
-                    }
-                    
-                    //Action来自于TriggeringCard
-
-
-                    var action = StateData["ActionPhaseChooseTarget.TriggerAction"] as PlayerAction;
-                    msg.AttachedData.Add("PlayerAction", action);
-                    msg.AttachedData.Add("AdditionalCard1", args.AttachedData["Card"]);
-                    _channel.Broadcast(msg);
-                }
-            }
-        }
-
-        #endregion
-
-        #region PoliticalPhase Idle State
-
-        private void ProcessPoliticalPhaseIdleStateEvents(System.Object sender, GameUIEventArgs args)
-        {
-            if (!args.UIKey.Contains("PoliticalDialog"))
-            {
-                return;
-            }
-            if (args.EventType == GameUIEventType.TrySelect)
-            {
-                //内政Idle中，能选中的Dialog就能点击
-                if (args.UIKey.Contains("Card"))
-                {
-                    //点的是卡
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("Player"))
-                {
-                    //是玩家名字
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-                else if (args.UIKey.Contains("DialogButton"))
-                {
-                    //是按钮
-                    //这里不一定能按
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                }
-            }
-            else if (args.EventType == GameUIEventType.Selected)
-            {
-                if (args.UIKey.Contains("Card"))
-                {
-                    //点的是卡
-                    if (StateData.ContainsKey("PoliticalIdle-CardSelected"))
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.SelectionDeactive,
-                            ((GameUIEventArgs) StateData["PoliticalIdle-CardSelected"]).UIKey));
-                    }
-                    StateData["PoliticalIdle-CardSelected"] = args;
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.SelectionActive, args.UIKey));
-                }
-                else if (args.UIKey.Contains("Player"))
-                {
-                    //是玩家名字
-                    if (StateData.ContainsKey("PoliticalIdle-Player"))
-                    {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.SelectionDeactive,
-                            ((GameUIEventArgs) StateData["PoliticalIdle-Player"]).UIKey));
-                    }
-                    StateData["PoliticalIdle-Player"] = args;
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.SelectionActive, args.UIKey));
-                }
-                else if (args.UIKey.Contains("DialogButton"))
-                {
-                    //是按钮
-                    //这里不一定能按
-                    //看是什么Button
-                    if (args.UIKey.Contains("PassPoliticalPhase"))
-                    {
-                        var action =
-                            CurrentGame.PossibleActions.FirstOrDefault(
-                                a => a.ActionType == PlayerActionType.PassPoliticalPhase);
-
-                        var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                        msg.AttachedData.Add("PlayerAction", action);
-                        _channel.Broadcast(msg);
-                    }
-                    else if (args.UIKey.Contains("Confirm"))
-                    {
-                        var card =
-                            (CardInfo) ((GameUIEventArgs) StateData["PoliticalIdle-CardSelected"]).AttachedData["Card"];
-                        var action =
-                            CurrentGame.PossibleActions.FirstOrDefault(
-                                a => a.ActionType == PlayerActionType.Aggression && card == (CardInfo) a.Data[0]);
-
-                        var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-
-                        if (StateData.ContainsKey("PoliticalIdle-Player"))
-                        {
-                            var playerNo =
-                                (int) ((GameUIEventArgs) StateData["PoliticalIdle-Player"]).AttachedData["PlayerNo"];
-                            action =
-                                CurrentGame.PossibleActions.FirstOrDefault(
-                                    a =>
-                                        String.Equals(a.Data[1].ToString(), CurrentGame.Boards[playerNo].PlayerName,
-                                            StringComparison.CurrentCultureIgnoreCase));
-                            if (action == null)
-                            {
-                                LogRecorder.Log("No Such Aggression");
-                                return;
-                            }
-
-                        }
-                        msg.AttachedData.Add("PlayerAction", action);
-                        _channel.Broadcast(msg);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region Resolve Event State
-
-        private void ProcessResolveEventStateEvents(System.Object sender, GameUIEventArgs args)
-        {
-            if (!args.UIKey.Contains("ResolveEventDialog"))
-            {
-                return;
-            }
-            if (args.EventType == GameUIEventType.TrySelect)
-            {
-                if (args.UIKey.Contains("Option"))
-                {
-                    //点的是选项
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-
-                    //当然可以啦
-                }
-            }else if (args.EventType == GameUIEventType.Selected)
-            {
-                if (args.UIKey.Contains("Option"))
-                {
-                    var action =
-                               CurrentGame.PossibleActions.FirstOrDefault(
-                                   a =>
-                                      a.Data[1]== args.AttachedData["Data"]);
-                    //点的是选项
-                    var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
-                    msg.AttachedData.Add("PlayerAction", action);
-                    _channel.Broadcast(msg);
-                }
-            }
-        }
-
-        #endregion
-
-        #region OutOfMyTurn
         
-        private void UpdateOnOutOfMyTurnState()
+        
+        public void SwitchState(GameManagerState newState, Dictionary<string, System.Object> stateData)
         {
-            if(!StateData.ContainsKey("Toggle")||(bool)StateData["Toggle"] == false)
+            if (Handlers.ContainsKey(State))
             {
-                return;
-            }
-
-            float refreshIntervel = (float)StateData["Progress"];
-
-            refreshIntervel -= Time.deltaTime;
-
-            if (refreshIntervel < 0)
-            {
-                refreshIntervel = 0;
-            }
-
-            StateData["Progress"] = refreshIntervel;
-
-            if (refreshIntervel <= 0)
-            {
-                StateData["Toggle"] = false;
-                //Refresh
-                _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.ForceRefresh, "NetworkManager"));
-            }
-        }
-
-        private void ProcessOutOfMyTurnStateEvents(System.Object sender, GameUIEventArgs args)
-        {
-            //Refresh以后仍然处于这个状态
-            if (args.EventType == GameUIEventType.Refresh)
-            {
-                StateData["Progress"] = 30f;
-                StateData["Toggle"] = true;
-            }
-            else if (args.EventType == GameUIEventType.TrySelect)
-            {
-                if (args.UIKey.Contains("PlayerTab"))
+                var hand = Handlers[State];
+                if (hand != null)
                 {
-                    //玩家面板（要看人数）
-                    var playerNo = (int) args.AttachedData["PlayerNo"];
-                    if (CurrentGame.Boards.Count > playerNo)
+                    foreach (var handler in hand)
                     {
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                        handler.LeaveState();
                     }
                 }
-                else if(args.UIKey.Contains("ForceRefreshButton"))
-                {
-                  _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
-                    
-                }
             }
-            else if (args.EventType == GameUIEventType.Selected)
+
+            State = newState;
+
+            StateData.Clear();
+            if (stateData != null)
             {
-                if (args.UIKey.Contains("PlayerTab"))
+            foreach (var o in stateData)
+            {
+                StateData.Add(o.Key,o.Value);
+                }
+            }
+
+            if (Handlers.ContainsKey(State))
+            {
+                var hand = Handlers[State];
+                if (hand != null)
                 {
-                    //玩家面板
-                    var playerNo = (int) args.AttachedData["PlayerNo"];
-                    if (CurrentGame.Boards.Count > playerNo)
+                    foreach (var handler in hand)
                     {
-                        CurrentDisplayingBoardNo = playerNo;
-                        _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
+                        handler.EnteringState();
                     }
-                }else if (args.UIKey.Contains("ForceRefreshButton"))
-                {
-                    StateData["Toggle"] = false;
-                    //Refresh
-                    _channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.ForceRefresh, "NetworkManager"));
                 }
             }
         }
-
-        #endregion
-
-        }
+    }
 
 
     public enum GameManagerState
@@ -862,7 +268,7 @@ namespace Assets.CSharpCode.Managers
         Unknown,
         PoliticalPhaseIdle,
         ResolveEvent, DefendAggression,Colonize,
-        ActionPhaseIdle, ActionPhaseChooseTarget,
+        ActionPhaseIdle, ActionPhaseChooseTarget, ActionPhaseInternalQuery,
         DiscardPhaseIdle,
         OutOfMyTurn,
     }
