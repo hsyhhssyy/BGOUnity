@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   namespace="HSYErpBase.EntityDefinition.UserModel" assembly="HSYErpBase">
+  <class name="User" table="user" >
+    <id name="Id" column="tta_id" type="Int32" >
+      <generator class="identity" />
+    </id>
+    <property name="Name" column="name" type="String" not-null="false" length="765" />
+    <property name="Username" column="username" type="String" not-null="false" length="60" />
+    <property name="Password" column="password" type="String" not-null="false" length="765" />
+    <property name="MainUserGroup" column="main_user_group_r_id" type="Int32" not-null="false" />
+    
+  </class>
+</hibernate-mapping> 

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   namespace="HSYErpBase.EntityDefinition.UserModel" 
+                   assembly="HSYErpBase">
+  <class name="ModuleFunctionMap" table="module_function_map" >
+    <id name="Id" column="tta_id" type="Int32" >
+      <generator class="identity" />
+    </id>
+    <property name="ModuleId" column="module_r_id" type="int" not-null="false" />
+    <property name="EntityId" column="entity_r_id" type="int" not-null="false" />
+    <property name="EntityTypeId" column="entity_type_r_id" type="int" not-null="false" />
+    <property name="State" column="state" type="int" not-null="false" />
+    <property name="Description" column="description" type="string" not-null="false" />
+    <property name="EndDate" column="end_date" type="DateTime" not-null="false" />
+  </class>
+</hibernate-mapping>

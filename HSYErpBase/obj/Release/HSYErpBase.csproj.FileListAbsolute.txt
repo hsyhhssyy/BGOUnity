@@ -1,0 +1,10 @@
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\HSYErpBase.exe.config
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\HSYErpBase.exe
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\HSYErpBase.pdb
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\Iesi.Collections.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\NHibernate.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\Iesi.Collections.xml
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\bin\Release\NHibernate.xml
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\obj\Release\HSYErpBase.csprojResolveAssemblyReference.cache
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\obj\Release\HSYErpBase.exe
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\HSYErpBase\obj\Release\HSYErpBase.pdb

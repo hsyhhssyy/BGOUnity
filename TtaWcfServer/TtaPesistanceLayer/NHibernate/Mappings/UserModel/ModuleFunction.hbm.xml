@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" 
+                   namespace="HSYErpBase.EntityDefinition.UserModel" 
+                   assembly="HSYErpBase">
+  <class name="ModuleFunction" table="module_function" >
+    <id name="Id" column="tta_id" type="Int32" >
+      <generator class="identity" />
+    </id>
+    <property name="FunctionQualifier" column="function_qualifier" type="String" not-null="false" />
+    <property name="ServiceName" column="service_name" type="String" not-null="false" />
+    <property name="BusinessName" column="business_name" type="String" not-null="false" />
+  </class>
+</hibernate-mapping>

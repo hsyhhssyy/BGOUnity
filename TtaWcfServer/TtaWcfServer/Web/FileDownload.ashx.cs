@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.IO;
-using System.ServiceModel.Channels;
+using System.Web;
+using HSYErpBase.NHibernate;
+using NHibernate;
+using TtaPesistanceLayer.NHibernate;
+using TtaWcfServer.ServerApi.FileTransfer;
 
-namespace RailwayERPWebService.Web
+namespace TtaWcfServer.Web
 {
     /// <summary>
     /// FileDownload 的摘要说明
@@ -22,7 +23,7 @@ namespace RailwayERPWebService.Web
                 context.Response.End();
                 return;
             }
-            using (ISession hibernateSession = NHibernateHelper.OpenSession())
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
                 //第一步查找是否有指定的文件
                 var token = FileTransferApi.GetToken(hibernateSession, guid);

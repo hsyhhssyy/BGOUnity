@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="HSYErpBase"
+                   namespace="HSYErpBase.EntityDefinition">
+
+  <class name="EntityStructure" table="structure">
+    <id name="Id" column="tta_id" type="int">
+      <generator class="identity" />
+    </id>
+    <property name="Name">
+      <column name="name" sql-type="varchar2(255)" not-null="true" />
+    </property>
+    <property name="TypeName">
+      <column name="type_name" sql-type="varchar2(255)" not-null="true" />
+    </property>
+    <property name="PropertyMapType">
+      <column name="property_map_type" sql-type="varchar2(255)" not-null="true" />
+    </property>
+    <property name="BeginDate">
+      <column name="begin_date" sql-type="datetime" not-null="false" />
+    </property>
+    <property name="EndDate">
+      <column name="end_date" sql-type="datetime" not-null="false" />
+    </property>
+  </class>
+
+</hibernate-mapping>

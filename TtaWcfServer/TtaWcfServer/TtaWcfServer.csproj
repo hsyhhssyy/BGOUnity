@@ -41,7 +41,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -61,15 +73,40 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Service1.svc" />
+    <Content Include="global.asax" />
+    <Content Include="Service\GameService\GameMainService.svc" />
+    <Content Include="Service\LobbyService\LobbyMainService.svc" />
+    <Content Include="Service\Login\UserLoginService.svc" />
+    <Content Include="Service\UpdateService\ClientUpdateService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service1.svc.cs">
-      <DependentUpon>Service1.svc</DependentUpon>
-    </Compile>
-    <Compile Include="IService1.cs" />
+    <Compile Include="InGameLogic\ActionDefinition\ActionHandler.cs" />
+    <Compile Include="InGameLogic\ActionDefinition\PlayerAction.cs" />
+    <Compile Include="InGameLogic\ActionDefinition\ActionResponse.cs" />
+    <Compile Include="InGameLogic\GameBoard.cs" />
+    <Compile Include="InGameLogic\GameJournals\GameJournal.cs" />
+    <Compile Include="InGameLogic\GameManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerApi\FileTransferModel\FileTransferApi.cs" />
+    <Compile Include="ServerApi\LobbyService\LobbyServiceApi.cs" />
+    <Compile Include="ServerApi\ServerInitialize\ServerHostMain.cs" />
+    <Compile Include="ServiceBase\Login\UserLoginBase.cs" />
+    <Compile Include="Service\GameService\GameMainService.svc.cs">
+      <DependentUpon>GameMainService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\LobbyService\ILobbyMainService.cs" />
+    <Compile Include="Service\LobbyService\LobbyMainService.svc.cs">
+      <DependentUpon>LobbyMainService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Login\IUserLoginService.cs" />
+    <Compile Include="Service\Login\UserLoginService.svc.cs">
+      <DependentUpon>UserLoginService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\UpdateService\ClientUpdateService.svc.cs">
+      <DependentUpon>ClientUpdateService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\UpdateService\IClientUpdateService.cs" />
     <Compile Include="Web\FileDownload.ashx.cs">
       <DependentUpon>FileDownload.ashx</DependentUpon>
     </Compile>
@@ -78,9 +115,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="InGameLogic\ActionDefinition\Handlers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\AliCloud.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -92,6 +130,14 @@
     <Content Include="Web\FileUpload.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\HSYErpBase\HSYErpBase.csproj">
+      <Project>{a09541a6-5886-4406-9b57-d99229cfc6c6}</Project>
+      <Name>HSYErpBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TtaCommonLibrary\TtaCommonLibrary.csproj">
+      <Project>{4C524B01-8133-426F-A023-284B386E2F24}</Project>
+      <Name>TtaCommonLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TtaPesistanceLayer\TtaPesistanceLayer.csproj">
       <Project>{9954ae34-ca2e-446a-b6c6-4e0fa818e7c6}</Project>
       <Name>TtaPesistanceLayer</Name>

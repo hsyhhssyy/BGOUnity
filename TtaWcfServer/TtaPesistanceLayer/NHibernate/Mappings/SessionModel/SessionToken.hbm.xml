@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="HSYErpBase"
+                   namespace="HSYErpBase.EntityDefinition.SessionModel">
+
+  <class name="SessionToken" table="user_session">
+    <id name="SessionRId" column="tta_id" type="int">
+      <generator class="identity" />
+    </id>
+    <property name="SessionGuid">
+      <column name="session_guid" sql-type="varchar2(255)" not-null="false" />
+    </property>
+    <property name="GenerationTime">
+      <column name="generate_time" sql-type="datetime" not-null="false" />
+    </property>
+    <property name="User">
+      <column name="user_used" sql-type="int" not-null="false" />
+    </property>
+    <property name="LastOperationTime">
+      <column name="last_operation_time" sql-type="datetime" not-null="false" />
+    </property>
+    <property name="LastOperation">
+      <column name="last_operation" sql-type="varchar2(255)" not-null="false" />
+    </property>
+  </class>
+
+</hibernate-mapping>

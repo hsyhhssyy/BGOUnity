@@ -1,19 +1,20 @@
-﻿using NHibernate;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.ServiceModel.Channels;
 using System.Web;
+using HSYErpBase.NHibernate;
+using NHibernate;
+using TtaCommonLibrary.Entities.FileStorageModel;
 using TtaPesistanceLayer.NHibernate;
+using TtaWcfServer.ServerApi.FileTransfer;
 
-namespace RailwayERPWebService.Web
+namespace TtaWcfServer.Web
 {
     /// <summary>
     /// FileUpload 的摘要说明
     /// </summary>
     public class FileUpload : IHttpHandler
     {
-        string uploadFolder = @"C:\UploadFile\";
+        string uploadFolder = @"C:\TtaFileUpload\";
 
         public void ProcessRequest(HttpContext context)
         {
@@ -39,7 +40,7 @@ namespace RailwayERPWebService.Web
             token.Guid = guid.ToString();
             token.OriginalName = fileInfo.Name;
             token.Type = fileInfo.Extension;
-            using (ISession hibernateSession = NHibernateHelper.OpenSession())
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
                 FileTransferApi.AddToken(hibernateSession, token);
             }

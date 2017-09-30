@@ -31,11 +31,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\TtaWcfServer\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\TtaWcfServer\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -48,12 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="NHibernate\NHibernateHelper.cs" />
+    <Compile Include="NHibernate\TtaNHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="hibernate.cfg.xml">
@@ -61,7 +61,46 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NHibernate\Mappings\" />
+    <EmbeddedResource Include="NHibernate\Mappings\SessionModel\SessionToken.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\ModuleFunction.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\ModuleFunctionMap.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\User.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\UserGroup.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\UserGroupRship.hbm.xml" />
+    <EmbeddedResource Include="NHibernate\Mappings\UserModel\UserPropertyMap.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HSYErpBase\HSYErpBase.csproj">
+      <Project>{a09541a6-5886-4406-9b57-d99229cfc6c6}</Project>
+      <Name>HSYErpBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TtaCommonLibrary\TtaCommonLibrary.csproj">
+      <Project>{4c524b01-8133-426f-a023-284b386e2f24}</Project>
+      <Name>TtaCommonLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\FileTransfer\UploadedFileToken.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NHibernate\Entities\SessionModel\" />
+    <Folder Include="NHibernate\Entities\UserModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\ClientUpdateModel\VersionInfo.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\ClientUpdateModel\UpdateContent.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\GameModel\GameRoom.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\MetaModel\EntityStructure.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

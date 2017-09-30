@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   namespace="TtaCommonLibrary.Entities.GameModel" 
+                   assembly="TtaCommonLibrary">
+
+  <class name="GameRoom" table="game_room">
+    <id name="Id" column="tta_id" type="int">
+      <generator class="identity" />
+    </id>
+    <property name="RoomName">
+      <column name="room_name" sql-type="integer" not-null="false" />
+    </property>
+    <property name="RelatedMatchId">
+      <column name="match_id" sql-type="integer" not-null="false" />
+    </property>
+    <property name="HasPassword">
+      <column name="has_password" sql-type="integer" not-null="false" />
+    </property>
+    <property name="HostId">
+      <column name="host_id" sql-type="integer" not-null="false" />
+    </property>
+    <property name="Players">
+      <column name="players" sql-type="varchar(255)" not-null="false" />
+    </property>
+  </class>
+
+</hibernate-mapping>

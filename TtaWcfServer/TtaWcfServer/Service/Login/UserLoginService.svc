@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TtaWcfServer.Service.Login.UserLoginService" CodeBehind="UserLoginService.svc.cs" %>

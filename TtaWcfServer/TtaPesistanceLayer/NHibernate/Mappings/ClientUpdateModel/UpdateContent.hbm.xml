@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   namespace="TtaCommonLibrary.Entities.ClientUpdateModel" 
+                   assembly="TtaCommonLibrary">
+
+  <class name="UpdateContent" table="update_content">
+    <id name="Id" column="tta_id" type="int">
+      <generator class="identity" />
+    </id>
+    <property name="Version">
+      <column name="version" sql-type="integer" not-null="false" />
+    </property>
+    <property name="Type">
+      <column name="update_type" sql-type="integer" not-null="false" />
+    </property>
+    <property name="ContentGuid">
+      <column name="content_grid" sql-type="varchar(45)" not-null="false" />
+    </property>
+    <property name="PackagePath">
+      <column name="package_path" sql-type="varchar(255)" not-null="false" />
+    </property>
+    <property name="DestinationRelatedPath">
+      <column name="destination_related_path" sql-type="varchar(255)" not-null="false" />
+    </property>
+  </class>
+
+</hibernate-mapping>

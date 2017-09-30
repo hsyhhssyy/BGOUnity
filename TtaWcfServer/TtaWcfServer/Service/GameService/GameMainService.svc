@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="TtaWcfServer.Service.GameService.GameMainService" CodeBehind="GameMainService.svc.cs" %>

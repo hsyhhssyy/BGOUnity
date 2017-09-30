@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,9 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Entities\FileStorage\UploadedFileToken.cs" />
+    <Compile Include="Entities\ClientUpdateModel\UpdateContent.cs" />
+    <Compile Include="Entities\ClientUpdateModel\VersionInfo.cs" />
+    <Compile Include="Entities\FileStorageModel\UploadedFileToken.cs" />
+    <Compile Include="Entities\GameModel\GameRoom.cs" />
+    <Compile Include="Entities\UserModel\UserLite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HSYErpBase\HSYErpBase.csproj">
+      <Project>{a09541a6-5886-4406-9b57-d99229cfc6c6}</Project>
+      <Name>HSYErpBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\SessionModel\" />
+    <Folder Include="Wcf\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,11 @@
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\TtaCommonLibrary.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\TtaCommonLibrary.pdb
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\obj\Release\TtaCommonLibrary.csprojResolveAssemblyReference.cache
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\obj\Release\TtaCommonLibrary.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\obj\Release\TtaCommonLibrary.pdb
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\HSYErpBase.exe
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\NHibernate.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\Iesi.Collections.dll
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\HSYErpBase.pdb
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\NHibernate.xml
+C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaCommonLibrary\bin\Release\Iesi.Collections.xml

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   namespace="TtaCommonLibrary.Entities.ClientUpdateModel" 
+                   assembly="TtaCommonLibrary">
+
+  <class name="VersionInfo" table="version_info">
+    <id name="Id" column="tta_id" type="int">
+      <generator class="identity" />
+    </id>
+    <property name="Version">
+      <column name="version" sql-type="integer" not-null="false" />
+    </property>
+    <property name="LatestUpdatableVersion">
+      <column name="latest_updatable_version" sql-type="integer" not-null="false" />
+    </property>
+    <property name="EstimateFileSize">
+      <column name="estimate_filesize" sql-type="integer" not-null="false" />
+    </property>
+  </class>
+
+</hibernate-mapping>
