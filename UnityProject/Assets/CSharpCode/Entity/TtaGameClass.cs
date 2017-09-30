@@ -34,6 +34,8 @@ namespace Assets.CSharpCode.Entity
         public List<PlayerAction> PossibleActions;
 
         public String Version = "2.0";
+
+        public List<GameJournalEntry> Journal;
     }
 
     public class Warning

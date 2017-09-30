@@ -1,0 +1,35 @@
+[SP1]<img class="spacer5" src="images/spacer.gif">
+[B]|&
+[BR]|\n
+[Strength1]|strength
+[Strength2]|strength
+[Resource1]|resource
+[Resource2]|resource
+[Resource3]|resource
+[Resource4]|resource
+[Resource5]|resource
+[Exploration1]<img alt="ship" title="Ship" class="iconeTexte" src="images/tta7/exploration.png">
+[Exploration2]<img alt="M" title="Ship" class="iconeCarte" src="images/tta7/exploration.png">
+[Culture1]|culture
+[Culture2]|culture
+[Culture3]|culture
+[HappyFace1]|happy face
+[HappyFace2]|happy face
+[UnhappyFace1]|discontent worker
+[Science1]|science
+[Science2]|science
+[Science3]|science
+[MA1]|military action
+[MA2]|military action
+[CA1]|civil action
+[CA2]|civil action
+[Food1]|food
+[Food2]|food
+[Food3]|food
+[Temple1]|temple
+[Theater1]|theater
+[Lab1]|lab
+[Library1]|library
+[Arena1]|arena
+[BlueToken1]<img alt="Blue token" title="Blue token" class="iconeCarte" src="images/tta7/blue.gif">
+[YellowToken1]<img alt="Yellow token" title="Yellow token" class="iconeCarte" src="images/tta7/yellow.gif">

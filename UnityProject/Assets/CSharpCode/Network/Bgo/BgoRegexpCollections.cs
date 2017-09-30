@@ -261,5 +261,10 @@ namespace Assets.CSharpCode.Network.Bgo
 
         //class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<
         public static readonly Regex ExtractResolveingEvent = new Regex(@"class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<");
+        //class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<[\s\S]*?Best bid ([\d]) by
+        public static readonly Regex ExtractSendColonists = new Regex(@"class=.texte evtActif.>([^<]*?)<[\s\S]*?ageCarte ageCarte20.>([^<]*?)<[\s\S]*?Best bid ([\d]) by");
+        public  static readonly Regex ExtractSendColoinstsSacrifice=new Regex(@"<input type=""checkbox"" value=""([^""]*?)"" id=""((unite_sacrifiee_\d*?)|(carte_defense_\d*?))""[\s\S]*?<label for=""\2"" >(&nbsp;)?([\s\S]*?)/(\s)?([\s\S]*?)</label");
+        //
+        public static readonly Regex ExtractGameJournal = new Regex(@"<tr><td class=""ligneJournal""[\s\S]*?""texte"">([^<]*?)<.*?style=""color:[^""]*?"">([^<]*?)<[\s\S]*?""texte"">([^<]*?)<[\s\S]*?""texte"">([^<]*?)<[\s\S]*?""titre3"">([^<]*?)<[\s\S]*?""texte"">([^<]*?)<");
     }
 }

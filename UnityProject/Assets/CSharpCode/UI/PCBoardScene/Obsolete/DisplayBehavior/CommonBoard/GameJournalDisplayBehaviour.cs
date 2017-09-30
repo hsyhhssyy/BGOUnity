@@ -6,11 +6,5 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 {
-    public class GameJournalDisplayBehaviour:MonoBehaviour
-    {
-        public void Refresh()
-        {
-            
-        }
-    }
+    
 }

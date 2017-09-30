@@ -1,0 +1,9 @@
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\TtaPesistanceLayer.dll
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\TtaPesistanceLayer.pdb
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\Iesi.Collections.dll
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\NHibernate.dll
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\Iesi.Collections.xml
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\bin\Release\NHibernate.xml
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\obj\Release\TtaPesistanceLayer.csprojResolveAssemblyReference.cache
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\obj\Release\TtaPesistanceLayer.dll
+C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\obj\Release\TtaPesistanceLayer.pdb

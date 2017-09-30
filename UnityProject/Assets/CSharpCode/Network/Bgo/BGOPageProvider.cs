@@ -213,7 +213,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 game.CardRow.Add(cardRowCardInfo);
             }
 
-            //当前事件
+            //当前事件牌堆
             var matchCurrentEvent = BgoRegexpCollections.ExtractCurrentEvent.Match(html);
             if (matchCurrentEvent.Groups[3].Value == "")
             {
@@ -229,7 +229,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 game.CurrentEventCount = matchCurrentEvent.Groups[7].Value;
             }
 
-            //未来事件
+            //未来事件牌堆
             var matchFutureEvent = BgoRegexpCollections.ExtractFutureEvent.Match(html);
             if (matchFutureEvent.Groups[1].Value.Length > 4)
             {
@@ -264,6 +264,12 @@ namespace Assets.CSharpCode.Network.Bgo
                     break;
                 case "Discard Phase":
                     game.CurrentPhase = TtaPhase.DiscardPhase;
+                    break;
+                case "Colonize":
+                    game.CurrentPhase = TtaPhase.Colonize;
+                    break;
+                case "Send Colonists":
+                    game.CurrentPhase = TtaPhase.SendColonists;
                     break;
                 default:
                     game.CurrentPhase = TtaPhase.OtherPhase;
@@ -358,7 +364,8 @@ namespace Assets.CSharpCode.Network.Bgo
                 }
             }
 
-            BgoActionFormater.Format((BgoGame)game,html);
+            BgoActionFormater.Format((BgoGame)game, html);
+            BgoJournalFormater.Format((BgoGame)game, html);
         }
 
         // ReSharper disable once FunctionComplexityOverflow

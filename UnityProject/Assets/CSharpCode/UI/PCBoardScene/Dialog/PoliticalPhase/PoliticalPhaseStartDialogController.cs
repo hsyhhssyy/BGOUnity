@@ -21,7 +21,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase
 
     //Political Dialog的Parent Controller，只负责生成各个UI组件，目前不负责任何其他任何事件
     [UsedImplicitly]
-    public class PoliticalPhaseStartDialogController: DisplayOnlyUIController
+    public class PoliticalPhaseStartDialogController: DialogController
     {
 
         #region 卡牌区域Frame
@@ -48,22 +48,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase
 
         #endregion
 
-        private bool display = false;
-
-        public void DisplayDialog()
-        {
-            display = true;
-            RefreshRequired = true;
-        }
-        public void HideDialog()
-        {
-            display = false;
-        }
-
+        //private bool displayOnce = false;
+        
         protected override void Refresh()
         {
-            this.gameObject.SetActive(display);
-
             float incr = 0;
             float start = 0;
 

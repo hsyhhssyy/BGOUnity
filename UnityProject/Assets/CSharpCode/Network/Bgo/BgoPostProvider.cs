@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.Network.Bgo.DataStructure;
 using UnityEngine;
 
 namespace Assets.CSharpCode.Network.Bgo
@@ -26,7 +28,6 @@ namespace Assets.CSharpCode.Network.Bgo
                 //----optvalue is [1]
                 case PlayerActionType.ResetActionPhase:
                 case PlayerActionType.PassPoliticalPhase:
-                case PlayerActionType.EndActionPhase:
                 case PlayerActionType.PlayActionCard:
                 case PlayerActionType.ElectLeader:
                 case PlayerActionType.SetupTactic:
@@ -38,6 +39,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.IncreasePopulation:
                 case PlayerActionType.BuildBuilding:
                 case PlayerActionType.Revolution:
+                case PlayerActionType.ColonizeBid:
                 case PlayerActionType.ResolveEventOption:
                 case PlayerActionType.DevelopTechCard:
                     return PerformAction(sessionObject, game, action.Data[2].ToString(), AttachIdCarte(3, action),
@@ -55,6 +57,7 @@ namespace Assets.CSharpCode.Network.Bgo
                             {"unite", action.Data[2].ToString()}
                         },
                         callback);
+                case PlayerActionType.DeclareWar:
                 case PlayerActionType.Aggression:
                     return PerformAction(sessionObject, game, action.Data[3].ToString(),
                         new Dictionary<String, String>
@@ -62,6 +65,16 @@ namespace Assets.CSharpCode.Network.Bgo
                             {action.Data[4].ToString(), action.Data[5].ToString()}
                         },
                         callback);
+                case PlayerActionType.EndActionPhase:
+                    return PerformAction(sessionObject, game, action.Data[1].ToString(),
+                        new Dictionary<String, String>
+                        {
+                            {"confirmEndTurn", "on"}
+                        },
+                        callback);
+                //---has additional method
+                case PlayerActionType.SendColonists:
+                    return SendSendColonistsPostMessage(sessionObject, game, action, callback);
                 //----Unknown
                 case PlayerActionType.Unknown:
                     return PerformAction(sessionObject, game, action.Data[1].ToString(), callback);
@@ -316,11 +329,54 @@ namespace Assets.CSharpCode.Network.Bgo
                 callback();
             }
         }
-        
+
+        private static IEnumerator SendSendColonistsPostMessage(BgoSessionObject sessionObject, BgoGame game,
+            BgoPlayerAction action, Action callback)
+        {
+            var form = new Dictionary<String, String>
+            {
+                {"confirmEndTurn", "on"}
+            };
+
+            var tupleList=new List<BgoAdditionalFormTuple>();
+            tupleList.AddRange(action.Data[5] as List<BgoAdditionalFormTuple>);
+
+            foreach (var card in action.Data[2] as List<CardInfo>)
+            {
+                BgoAdditionalFormTuple theTuple=null;
+                foreach (var tuple in tupleList)
+                {
+                    if (tuple.card == card)
+                    {
+                        theTuple = tuple;
+                        break;
+                    }
+                }
+                if (theTuple == null)
+                {
+                    throw new InvalidOperationException("找不到合适的用于牺牲的部队");
+                }
+
+                tupleList.Remove(theTuple);
+                form.Add(theTuple.formName, ToCharacterEntities(theTuple.formValue));
+            }
+
+            return PerformAction(sessionObject, game, action.Data[1].ToString(),
+                        form,
+                        callback);
+        }
+
         private static String RemoveCharacterEntities(String src)
         {
             src = src.Replace("&amp;", "&");
             src = src.Replace("&nbsp;", " ");
+
+            return src;
+        }
+
+        private static String ToCharacterEntities(String src)
+        {
+            src = WWW.EscapeURL(src);
 
             return src;
         }

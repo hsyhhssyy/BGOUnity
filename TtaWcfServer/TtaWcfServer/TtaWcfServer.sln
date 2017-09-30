@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TtaWcfServer", "TtaWcfServer.csproj", "{01FCFC8C-E7B9-4000-9FC0-6A13E0CBBD9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TtaPesistanceLayer", "..\TtaPesistanceLayer\TtaPesistanceLayer.csproj", "{9954AE34-CA2E-446A-B6C6-4E0FA818E7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TtaCommonLibrary", "TtaCommonLibrary\TtaCommonLibrary.csproj", "{4C524B01-8133-426F-A023-284B386E2F24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01FCFC8C-E7B9-4000-9FC0-6A13E0CBBD9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01FCFC8C-E7B9-4000-9FC0-6A13E0CBBD9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01FCFC8C-E7B9-4000-9FC0-6A13E0CBBD9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01FCFC8C-E7B9-4000-9FC0-6A13E0CBBD9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9954AE34-CA2E-446A-B6C6-4E0FA818E7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9954AE34-CA2E-446A-B6C6-4E0FA818E7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9954AE34-CA2E-446A-B6C6-4E0FA818E7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9954AE34-CA2E-446A-B6C6-4E0FA818E7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C524B01-8133-426F-A023-284B386E2F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C524B01-8133-426F-A023-284B386E2F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C524B01-8133-426F-A023-284B386E2F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C524B01-8133-426F-A023-284B386E2F24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

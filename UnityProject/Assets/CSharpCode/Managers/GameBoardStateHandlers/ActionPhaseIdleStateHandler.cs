@@ -81,10 +81,25 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
                     //Wonder的MenuItem只要拉得出来都是可选的Action
                     Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
                 }
+                else if (args.UIKey.Contains("SharedTactic"))
+                {
+                    var card = args.AttachedData["Card"] as CardInfo;
+                    if (card != CurrentGame.Boards[CurrentGame.MyPlayerIndex].Tactic)
+                    {
+                        Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    }
+                }
                 else if (args.UIKey.Contains("WorkerBank"))
                 {
-                    //人力库（要看粮食）
-                    Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+
+                    var action =
+                        CurrentGame.PossibleActions.FirstOrDefault(
+                            a => a.ActionType == PlayerActionType.IncreasePopulation);
+                    if (action != null)
+                    {
+                        //人力库（要看粮食）
+                        Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.AllowSelect, args.UIKey));
+                    }
                 }
                 else if (args.UIKey.Contains("PlayerTab"))
                 {
@@ -166,6 +181,20 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
                     msg.AttachedData.Add("PlayerAction", action);
                     Channel.Broadcast(msg);
 
+                }
+                else if (args.UIKey.Contains("SharedTactic"))
+                {
+                    var card = args.AttachedData["Card"] as CardInfo;
+                    if (card != CurrentGame.Boards[CurrentGame.MyPlayerIndex].Tactic)
+                    {
+                        var action =
+                        CurrentGame.PossibleActions.FirstOrDefault(
+                            a => a.ActionType == PlayerActionType.AdoptTactic&&a.Data[0] as CardInfo== card);
+
+                        var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
+                        msg.AttachedData.Add("PlayerAction", action);
+                        Channel.Broadcast(msg);
+                    }
                 }
                 else if (args.UIKey.Contains("BuildingCell"))
                 {

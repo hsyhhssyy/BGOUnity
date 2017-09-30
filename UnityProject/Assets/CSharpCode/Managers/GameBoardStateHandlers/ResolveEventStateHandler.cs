@@ -27,10 +27,7 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
             {
                 if (args.UIKey.Contains("Option"))
                 {
-                    var action =
-                               CurrentGame.PossibleActions.FirstOrDefault(
-                                   a =>
-                                      a.Data[1] == args.AttachedData["Data"]);
+                    var action = args.AttachedData["Data"];
                     //点的是选项
                     var msg = new ManagerGameUIEventArgs(GameUIEventType.TakeAction, "NetworkManager");
                     msg.AttachedData.Add("PlayerAction", action);

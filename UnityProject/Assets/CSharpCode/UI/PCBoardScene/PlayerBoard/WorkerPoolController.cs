@@ -10,83 +10,24 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
-    public class WorkerPoolController: TtaUIControllerMonoBehaviour
+    public class WorkerPoolController: SimpleClickUIController
     {
-        public GameBoardManager Manager;
         public GameObject WorkerPoolFrame;
-        public GameObject HighLightFrame;
         
-        private bool _refreshRequired = false;
-
-        public bool Highlight { get; set; }
-
-        public WorkerPoolController()
+        protected override string GetUIKey()
         {
-            UIKey = "PCBoard.WorkerPool." + Guid;
+            return "PCBoard.PlayerBoard.WorkerPool";
         }
-
-        [UsedImplicitly]
-        public void Start()
-        {
-            Manager.Regiseter(this);
-        }
-
-        [UsedImplicitly]
-        public void Update()
-        {
-            if (_refreshRequired)
-            {
-                _refreshRequired = false;
-                Refresh(Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo]);
-            }
-
-            //HighLight
-            if (HighLightFrame != null) HighLightFrame.SetActive(Highlight);
-
-        }
-
-        protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
-        {
-            if (args.EventType == GameUIEventType.Refresh)
-            {
-                _refreshRequired = true;
-                return;
-            }
-
-            if (!args.UIKey.Contains(Guid))
-            {
-                return;
-            }
-
-            //含有自己的GUID，是发给自己的
-            if (args.EventType == GameUIEventType.AllowSelect)
-            {
-                Highlight = true;
-            }
-        }
-
-
+        
         public override bool OnTriggerEnter()
         {
             Channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey));
             return true;
         }
-
-        public override bool OnTriggerExit()
+        
+        protected override void Refresh()
         {
-            Highlight = false;
-            return true;
-        }
-
-        public override bool OnTriggerClick()
-        {
-            if (!Highlight) return false;
-
-            var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
-
-            Channel.Broadcast(args);
-
-            return true;
+            Refresh(Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo]);
         }
 
         private void Refresh(TtaBoard board)
@@ -103,12 +44,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 ? (0.66f / (board.Resource[ResourceType.WorkerPool] - 1))
                 : 0f;
 
-            for (int i = 0; i < board.Resource[ResourceType.WorkerPool]; i++)
+            int total = board.Resource[ResourceType.WorkerPool];
+            for (int i = 0; i < total; i++)
             {
                 var mSp = Instantiate(i < board.DisorderValue ? unhappyPrefab : happyPrefab);
 
                 mSp.transform.SetParent(WorkerPoolFrame.transform);
-                mSp.transform.localPosition = new Vector3(incr * i, 0);
+                mSp.transform.localPosition = new Vector3(0.33f+(total/2-i)*0.15f, 0);
             }
         }
     }

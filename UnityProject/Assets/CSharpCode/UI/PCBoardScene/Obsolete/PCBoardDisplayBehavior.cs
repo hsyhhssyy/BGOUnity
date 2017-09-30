@@ -57,7 +57,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
         public GameObject CivilCardAge;
         public GameObject MilitaryCardAge;
 
-        public GameJournalDisplayBehaviour JournalFrame;
+        public GameObject JournalFrame;
 
         public GameObject WarningFrame;
         public GameObject WarningPopupFrame;
@@ -116,7 +116,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             BackgroundSpriteGo.GetComponent<SpriteRenderer>().sprite = backgroundsp;
             
 
-            JournalFrame.Refresh();
+            //JournalFrame.Refresh();
             
             //展示用代码
             

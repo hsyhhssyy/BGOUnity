@@ -73,9 +73,12 @@
   <ItemGroup>
     <Compile Include="Assets\CSharpCode\Civilopedia\CardEffect.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\RuleBook\TtaStandard0200RuleBook.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\TtaRuleBook.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\GameJournalEntry.cs" />
     <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
@@ -90,10 +93,13 @@
     <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\OutOfMyTurnStateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\PoliticalPhaseIdleStateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ResolveEventStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\SelectTargetStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\SendColonistsStateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameEventChannel.cs" />
     <Compile Include="Assets\CSharpCode\Managers\NetworkManager.cs" />
     <Compile Include="Assets\CSharpCode\Managers\StateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\UIControllerEvent.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoJournalFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoActionFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />
@@ -102,6 +108,7 @@
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoTestServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BoardAnalyzer.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\DataStructure\BgoAdditionalFormTuple.cs" />
     <Compile Include="Assets\CSharpCode\Network\DotNetBgo\DotNetBgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\IServerAdapter.cs" />
     <Compile Include="Assets\CSharpCode\Translation\TtaTranslation.cs" />
@@ -113,6 +120,7 @@
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\CommonPrefab\PCBoardCardDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogButtonController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Loading\LoadingMaskController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PlayerSelectionController.cs" />
@@ -120,6 +128,10 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PoliticalPhaseController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PoliticalPhaseStartDialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\ResolveEvent\ResolveEventDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SelectTargetPlayer\SelectTargetPlayerDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SendColonists\SendColonistsCardSelectionController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SendColonists\SendColonistsDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Tactic\SharedTacticController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Tactic\TacticPopupDialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Effects\PCBoardCardSmallHighlightEffect.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\CardRowController.cs" />
@@ -127,6 +139,9 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\EventsPopupController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\PlayerBoardBackgroundController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\PlayerTabController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalItemController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalScrollCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\BuildingCellActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\CardRowActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\PCBoardBindedActionClickTrigger.cs" />
@@ -134,7 +149,6 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\TtaActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\CardRowCardClickCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\EventsPopupCollider.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\GameJournalScrollCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\TacticsPopupToggleCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Dialog\PoliticalPhaseDialog\PlayerSelectionBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Dialog\PoliticalPhaseDialog\PoliticalPhaseDialogDisplayBehaviour.cs" />
@@ -157,8 +171,6 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingMenuItemController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingParentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\ColonyController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderMenuItemController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\ConstructingWonderController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\GovernmentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\HandCardChildController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\HandCardParentController.cs" />
@@ -168,8 +180,10 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WarningController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WarningDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WhiteRedMarkerController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\ConstructingWonderController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderChildController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderMenuController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderMenuItemController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderParentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WorkerPoolController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\YellowMarkerController.cs" />
@@ -186,6 +200,7 @@
     <Compile Include="Assets\CSharpCode\UI\Util\ErrorLog\LogRecorder.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\Input\InputControllerMonoBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\Input\InputManagerMonoBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\StaticHelper.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\TextMeshLayer.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\TextOutline.cs" />
   </ItemGroup>
@@ -195,6 +210,9 @@
     <None Include="Assets\Materials\StencilMask.shader" />
     <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
+    <None Include="Assets\Resources\Localization\legend_zh-cn_dest.txt" />
+    <None Include="Assets\Resources\Localization\legend_zh-cn_source.txt" />
+    <None Include="Assets\Resources\Test\%E6%B5%8B%E8%AF%95%E7%94%A8%E9%A1%B5%E9%9D%A2\%E6%B4%BE%E5%87%BA%E6%AE%96%E6%B0%91%E8%80%85%E4%B8%AD.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

@@ -108,6 +108,26 @@ public class TestSceneUIBehaviour : MonoBehaviour
             SceneManager.LoadScene("Scene/BoardScene-PC");
         }));
     }
+    [UsedImplicitly]
+    public void 登录并打开测试用局01_Clicked()
+    {
+        //登录
+        TtaTranslation.LoadDictionary();
+        SceneTransporter.Server = new BgoServer();
+
+        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
+
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        {
+            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
+
+            BgoGame g = new BgoGame { GameId = "7397386", Nat = "1", Name = "TTA开发内测用局01", Version = "2.0" };
+
+            SceneTransporter.CurrentGame = g;
+
+            SceneManager.LoadScene("Scene/BoardScene-PC");
+        }));
+    }
 
     [UsedImplicitly]
     public void 根据测试文本展示页面_Clicked()

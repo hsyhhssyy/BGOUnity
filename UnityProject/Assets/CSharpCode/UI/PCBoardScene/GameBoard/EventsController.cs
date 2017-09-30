@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 {
+    //面板上当前事件区域的控制器
     [UsedImplicitly]
     public class EventsController:SimpleClickUIController
     {
@@ -32,6 +33,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
 
         protected override void Refresh()
         {
+            Popup.HidePopup();
+
             if (!SceneTransporter.IsCurrentGameRefreshed())
             {
                 return;
@@ -91,7 +94,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
             {
                 Popup.gameObject.transform.position = new Vector3(2f, 1.5f, -5f);
 
-                Popup.gameObject.SetActive(true);
+                Popup.DisplayPopup();
             }
             return base.OnTriggerEnter();
         }
@@ -100,7 +103,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
         {
             if (Popup != null)
             {
-                Popup.gameObject.SetActive(false);
+                Popup.HidePopup();
             }
             return base.OnTriggerExit();
         }

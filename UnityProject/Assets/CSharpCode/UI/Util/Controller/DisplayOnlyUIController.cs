@@ -6,11 +6,13 @@ using JetBrains.Annotations;
 namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 {
     /// <summary>
-    /// 仅用于显示的UiController，他能够响应Refresh事件
+    /// 一个仅用于显示的UiController，他能够响应Refresh事件。
+    /// 可以通过设置IsHoveringAndAllowSelected来改变当前物体的选择边框。并且可以通过覆盖OnHoveringHighlightChanged来响应事件
     /// </summary>
     public abstract class DisplayOnlyUIController : TtaUIControllerMonoBehaviour
     {
         protected bool RefreshRequired;
+        private GameManagerState savedManagerState;
 
         private bool _isHoveringAndAllowSelected;
         /// <summary>
@@ -23,17 +25,25 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 if (_isHoveringAndAllowSelected != value)
                 {
                     _isHoveringAndAllowSelected = value;
+                    RefreshRequired = true;
+                    savedManagerState = Manager.State;
+
                     OnHoveringHighlightChanged();
                 }
             }
         }
 
-        [UsedImplicitly]
-        public GameBoardManager Manager;
+        //这里的Manager不能使用属性，因为Unity编辑器需要指定他
+        //而且，修改它会导致编辑器丢失所有Manager的信息
+        [UsedImplicitly] public GameBoardManager Manager;
 
         [UsedImplicitly]
         public virtual void Start()
         {
+            if (Manager == null)
+            {
+                Manager=GameBoardManager.ActiveManager;
+            }
             Manager.Regiseter(this);
             OnHoveringHighlightChanged();
         }
@@ -44,6 +54,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             if (args.EventType == GameUIEventType.Refresh)
             {
                 RefreshRequired = true;
+                savedManagerState = Manager.State;
+
                 this.gameObject.SetActive(true);
             }
 
@@ -59,6 +71,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
         [UsedImplicitly]
         public virtual void FixedUpdate()
         {
+            //如果游戏状态发生了变化，所有元素会强制进行刷新
+            if (savedManagerState != Manager.State)
+            {
+                RefreshRequired = true;
+                savedManagerState = Manager.State;
+            }
+
             if (RefreshRequired)
             {
                 RefreshRequired = false;

@@ -11,6 +11,7 @@ using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers.GameBoardStateHandlers;
 using Assets.CSharpCode.UI;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
+using Assets.CSharpCode.UI.PCBoardScene.Dialog.SendColonists;
 using Assets.CSharpCode.UI.Util;
 using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
@@ -26,11 +27,15 @@ namespace Assets.CSharpCode.Managers
         {
             get { return SceneTransporter.CurrentGame; }
         }
+        /// <summary>
+        /// 表示当前程序激活的Manager（或激活的多个Manager中的随机一个）
+        /// </summary>
+        public static GameBoardManager ActiveManager { get; private set; }
 
         public int CurrentDisplayingBoardNo = 0;
 
-        public GameManagerState State;
-        public Dictionary<String, System.Object> StateData = new Dictionary<string, object>();
+        public GameManagerState State { get; private set; }
+        public Dictionary<String, System.Object> StateData { get; private set; }
 
         public Dictionary<GameManagerState, List<GameBoardStateHandler>> Handlers; 
 
@@ -43,6 +48,8 @@ namespace Assets.CSharpCode.Managers
 
         public GameBoardManager()
         {
+            StateData = new Dictionary<string, object>();
+
             Channel = SceneTransporter.CurrentChannel;
             Channel.GameEvent += DestoryNullReference;
             
@@ -73,8 +80,47 @@ namespace Assets.CSharpCode.Managers
                     {
                         new OutOfMyTurnStateHandler(this)
                     }
-                }
+                },
+
+                {
+                    GameManagerState.PoliticalPhaseIdle, new List<GameBoardStateHandler>
+                    {
+                        new PoliticalPhaseIdleStateHandler(this)
+                    }
+                },
+
+                {
+                    GameManagerState.ResolveEvent, new List<GameBoardStateHandler>
+                    {
+                        new ResolveEventStateHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.Colonize, new List<GameBoardStateHandler>
+                    {
+                        new ResolveEventStateHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.SendColonists, new List<GameBoardStateHandler>
+                    {
+                        new SendColonistsStateHandler(this)
+                    }
+                },
+                {
+                    GameManagerState.SelectTargetPlayer, new List<GameBoardStateHandler>
+                    {
+                        new SelectTargetPlayerStateHandler(this)
+                    }
+                },
             };
+
+            if (ActiveManager != null)
+            {
+                //销毁上一个Manager
+            }
+
+            ActiveManager = this;
         }
 
         #region 接受和分发消息的部分
@@ -91,6 +137,8 @@ namespace Assets.CSharpCode.Managers
             {
                 OnSubscribedUiControllerEvents(sender, args);
             }
+
+
         }
 
         public void Regiseter(TtaUIControllerMonoBehaviour controller)
@@ -206,6 +254,12 @@ namespace Assets.CSharpCode.Managers
                     case TtaPhase.EventResolution:
                         newState = GameManagerState.ResolveEvent;
                         break;
+                    case TtaPhase.Colonize:
+                        newState = GameManagerState.Colonize;
+                        break;
+                    case TtaPhase.SendColonists:
+                        newState = GameManagerState.SendColonists;
+                        break;
                     case TtaPhase.DiscardPhase:
 
                     default:
@@ -222,7 +276,12 @@ namespace Assets.CSharpCode.Managers
 
         #endregion
         
-        
+        /// <summary>
+        /// 外部程序调用该方法，即可立刻切换当前状态。[注意]如果触发刷新页面操作，状态可能会被重置。
+        /// stateDate参数内的内容，会被新的状态全部继承。
+        /// </summary>
+        /// <param name="newState"></param>
+        /// <param name="stateData"></param>
         public void SwitchState(GameManagerState newState, Dictionary<string, System.Object> stateData)
         {
             if (Handlers.ContainsKey(State))
@@ -239,7 +298,7 @@ namespace Assets.CSharpCode.Managers
 
             State = newState;
 
-            StateData.Clear();
+            StateData=new Dictionary<string, object>();
             if (stateData != null)
             {
             foreach (var o in stateData)
@@ -267,9 +326,10 @@ namespace Assets.CSharpCode.Managers
     {
         Unknown,
         PoliticalPhaseIdle,
-        ResolveEvent, DefendAggression,Colonize,
+        ResolveEvent, DefendAggression,Colonize,SendColonists,
         ActionPhaseIdle, ActionPhaseChooseTarget, ActionPhaseInternalQuery,
         DiscardPhaseIdle,
         OutOfMyTurn,
+        SelectTargetPlayer
     }
 }

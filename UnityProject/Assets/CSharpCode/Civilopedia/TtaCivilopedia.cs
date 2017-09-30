@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Civilopedia.RuleBook;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Translation;
@@ -40,6 +41,7 @@ namespace Assets.CSharpCode.Civilopedia
 
             var civilopedia = new TtaCivilopedia();
             civilopedia.cardInfos = new Dictionary<string, CardInfo>();
+            civilopedia.ruleBook=new TtaStandard0200RuleBook();
 
             var rows = dictStr.Split("\n".ToCharArray());
 
@@ -59,7 +61,7 @@ namespace Assets.CSharpCode.Civilopedia
                         CardName = TtaTranslation.GetTranslatedText(csvRow[1]).Trim(),
                         CardType = (CardType) Convert.ToInt32(csvRow[2]),
                         CardAge = (Age) Convert.ToInt32(csvRow[3]),
-                        Description = csvRow[4],
+                        Description = TtaTranslation.GetTranslatedText(csvRow[4]),
                         NormalImage = "SpriteTile/Cards/" + csvRow[5].Replace(".png", "")
                     };
 
@@ -82,7 +84,7 @@ namespace Assets.CSharpCode.Civilopedia
                     info.SustainedEffects = CreateEffects(csvRow[13]); //持续效果
 
                     info.AffectedTrget = ToIntList(csvRow[14], ","); //6月6日新加：影响对象
-
+                    
                     info.WinnerEffects = CreateEffects(csvRow[15]);
                     info.LoserEffects = CreateEffects(csvRow[16]);
 
@@ -159,6 +161,7 @@ namespace Assets.CSharpCode.Civilopedia
         //-------------------------------
 
         private Dictionary<String, CardInfo> cardInfos;
+        private TtaRuleBook ruleBook;
 
         public List<CardInfo> GetAllCards()
         {
@@ -238,6 +241,11 @@ namespace Assets.CSharpCode.Civilopedia
             }
 
             return cardInfo;
+        }
+
+        public TtaRuleBook GetRuleBook()
+        {
+            return ruleBook;
         }
     }
 }

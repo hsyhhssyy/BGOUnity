@@ -41,9 +41,12 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.Tactic
 
             for (int i = 0; i < SceneTransporter.CurrentGame.SharedTactics.Count; i++)
             {
-                Instantiate(prefab).GetComponent<PCBoardCardDisplayBehaviour>()
+                var mSp=Instantiate(prefab);
+                mSp.GetComponent<PCBoardCardDisplayBehaviour>()
                     .Bind(SceneTransporter.CurrentGame.SharedTactics[i], SharedTacticsFrame.transform,
                         new Vector3(0.72f * i, 0f, -0.1f));
+                var ctrl=mSp.AddComponent<SharedTacticController>();
+                ctrl.TacticCard = SceneTransporter.CurrentGame.SharedTactics[i];
             }
         }
     }

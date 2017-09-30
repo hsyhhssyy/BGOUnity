@@ -30,9 +30,20 @@ namespace Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior
             return "PCBoard.EventDialog." + Guid;
         }
 
+        //private bool displayOnce = false;
+        public void DisplayPopup()
+        {
+            this.gameObject.SetActive(true);
+        }
+
+        public void HidePopup()
+        {
+            this.gameObject.SetActive(false);
+        }
 
         protected override void  Refresh()
         {
+
             TtaGame game = SceneTransporter.CurrentGame;
 
             if (SceneTransporter.CurrentGame.CurrentEventCard != null)

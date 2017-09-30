@@ -16,6 +16,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Effects
     ///    highligtGo=gameObject.AddComponent&lt;PCBoardCardSmallHighlightEffect&gt;();<para/>
     /// }<para/>
     /// </summary>
+    /// 
+    /// 
     public class PCBoardCardSmallHighlightEffect:MonoBehaviour
     {
         private GameObject _frame;

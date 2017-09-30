@@ -10,12 +10,13 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
     public class YellowMarkerController : SimpleClickUIController
     {
         public GameObject[] YellowBankMarkers;
+        public GameObject[] HappyFaces;
 
         public GameObject HighlightFrame;
         
         protected override string GetUIKey()
         {
-            return "PCBoard.YellowMarker." + Guid;
+            return "PCBoard.WorkerBank." + Guid;
         }
         
         protected override void Refresh()
@@ -36,6 +37,19 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
                 {
                     //Marker比上限还多
                     //添加几个新的
+                }
+            }
+
+            int happyface = board.Resource[ResourceType.HappyFace];
+            for (int i = 0; i < 9; i++)
+            {
+                if (i < happyface)
+                {
+                    HappyFaces[i].SetActive(false);
+                }
+                else
+                {
+                    HappyFaces[i].SetActive(true);
                 }
             }
         }

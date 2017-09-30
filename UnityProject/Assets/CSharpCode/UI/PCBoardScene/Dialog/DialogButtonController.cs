@@ -12,6 +12,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog
     [UsedImplicitly]
     public class DialogButtonController:SimpleClickUIController
     {
+        public const string DialogButtonDataArgsKey = "Data";
+
         public String ButtonName;
 
         public Object Data;
@@ -26,13 +28,24 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog
             return "PCBoard." + ButtonName + ".DialogButton." + Guid;
         }
 
+        protected override void AttachDataOnTrySelect(ControllerGameUIEventArgs args)
+        {
+            args.AttachedData["ButtonName"] = ButtonName;
+            if (Data != null)
+            {
+                args.AttachedData[DialogButtonDataArgsKey] = Data;
+            }
+            base.AttachDataOnTrySelect(args);
+        }
+
         protected override void AttachDataOnSelected(ControllerGameUIEventArgs args)
         {
             args.AttachedData["ButtonName"] = ButtonName;
             if (Data != null)
             {
-                args.AttachedData["Data"] = Data;
+                args.AttachedData[DialogButtonDataArgsKey] = Data;
             }
+            base.AttachDataOnSelected(args);
         }
     }
 }

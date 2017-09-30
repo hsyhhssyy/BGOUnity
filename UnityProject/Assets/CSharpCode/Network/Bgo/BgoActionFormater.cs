@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
+using Assets.CSharpCode.Network.Bgo.DataStructure;
 
 namespace Assets.CSharpCode.Network.Bgo
 {
@@ -36,6 +37,78 @@ namespace Assets.CSharpCode.Network.Bgo
                     }
 
                     action.ActionType = PlayerActionType.ResolveEventOption;
+
+                    //获得CurrentActionCard
+                    action.Data[0] = card;
+                    action.Data[1] = bgoStr;
+                    action.Data[2] = optValue;
+                }
+            }else if (game.CurrentPhase == TtaPhase.SendColonists)
+            {
+                game.PossibleActions.RemoveAll(a => a.ActionType == PlayerActionType.TakeCardFromCardRow);
+
+                foreach (
+                    var action in
+                        game.PossibleActions.Where(action => action.ActionType == PlayerActionType.Unknown).ToList())
+                {
+                    String bgoStr = action.Data[0].ToString();
+                    String optValue = action.Data[1].ToString();
+
+                    if (bgoStr != "Send task force")
+                    {
+                        continue;
+                    }
+
+                    action.ActionType = PlayerActionType.SendColonists;
+                    
+                    var mc = BgoRegexpCollections.ExtractSendColonists.Match(html);
+                    var cardName = mc.Groups[1].Value;
+                    cardName = cardName.Substring(0, cardName.IndexOf("(")).Trim();
+                    var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), mc.Groups[2].Value), cardName);
+
+                    action.Data[0] =card;
+                    action.Data[1] = Convert.ToInt32(mc.Groups[3].Value);
+                    action.Data[2] = new List<CardInfo>();
+
+                    var mapdict=new List<BgoAdditionalFormTuple>();
+                    var saMc = BgoRegexpCollections.ExtractSendColoinstsSacrifice.Matches(html);
+                    foreach (Match m in saMc)
+                    {
+                        BgoAdditionalFormTuple tuple=new BgoAdditionalFormTuple();
+                        tuple.formValue = m.Groups[1].Value;
+                        tuple.formName = m.Groups[2].Value;
+                        var tupCard = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), mc.Groups[6].Value), mc.Groups[8].Value.Trim());
+                        tuple.card = tupCard;
+                        mapdict.Add(tuple);
+                    }
+
+                    action.Data[3] = bgoStr;
+                    action.Data[4] = optValue;
+                    action.Data[5] = mapdict;
+                }
+            }
+            else if (game.CurrentPhase == TtaPhase.Colonize)
+            {
+                game.PossibleActions.RemoveAll(a => a.ActionType == PlayerActionType.TakeCardFromCardRow);
+
+                var mc = BgoRegexpCollections.ExtractResolveingEvent.Match(html);
+                var cardName = mc.Groups[1].Value;
+                cardName = cardName.Substring(0, cardName.IndexOf("(")).Trim();
+                var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), mc.Groups[2].Value), cardName);
+
+                foreach (
+                    var action in
+                        game.PossibleActions.Where(action => action.ActionType == PlayerActionType.Unknown).ToList())
+                {
+                    String bgoStr = action.Data[0].ToString();
+                    String optValue = action.Data[1].ToString();
+
+                    if (bgoStr == "----- Select an action -----")
+                    {
+                        continue;
+                    }
+
+                    action.ActionType = PlayerActionType.ColonizeBid;
 
                     //获得CurrentActionCard
                     action.Data[0] = card;
@@ -144,7 +217,9 @@ namespace Assets.CSharpCode.Network.Bgo
                             {
                                 conlonyName += conlonySplit[j] + " ";
                             }
-                            var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), conlonySplit[conlonySplit.Length]), conlonyName);
+                            conlonyName=conlonyName.Trim(' ');
+
+                            var card = Civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), conlonySplit[conlonySplit.Length-1]), conlonyName);
                             action.ActionType = PlayerActionType.PlayColony;
                             action.Data[0] = card;
                             action.Data[1] = optValue;
@@ -287,7 +362,7 @@ namespace Assets.CSharpCode.Network.Bgo
 
             #endregion
 
-            #region 侵略一拆多
+            #region 侵略/战争一拆多
 
             var aggression =
                 game.PossibleActions.Where(
@@ -304,7 +379,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 String bgoStr = action.Data[0].ToString();
                 String optValue = action.Data[1].ToString();
 
-                var cardName = bgoStr.Substring(0,bgoStr.LastIndexOf(" ", StringComparison.Ordinal));
+                var cardName = bgoStr.Substring(0,bgoStr.LastIndexOf(" ", StringComparison.Ordinal)).Replace("Declare ","").Trim();
                 var cardAge = bgoStr.Substring(bgoStr.LastIndexOf(" ", StringComparison.Ordinal)+1);
                 var card = Civilopedia.GetCardInfoByName(
                     (Age)Enum.Parse(typeof(Age), cardAge)

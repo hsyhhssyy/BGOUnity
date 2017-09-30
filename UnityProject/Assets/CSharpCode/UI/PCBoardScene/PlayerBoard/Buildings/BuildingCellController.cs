@@ -7,6 +7,7 @@ using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
 using Assets.CSharpCode.UI.PCBoardScene.Effects;
 using Assets.CSharpCode.UI.Util.Controller;
+using Assets.CSharpCode.UI.Util.Input;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -75,7 +76,6 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
                     }
                 }
             }
-
         }
 
         [UsedImplicitly]

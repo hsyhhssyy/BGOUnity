@@ -21,6 +21,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
             var board = Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo];
             TacticName.text = board.Tactic == null ? "" : board.Tactic.CardName;
             Popup.Bind(board.Tactic);
+            TacticFrame.GetComponent<TacticPopupDialogController>().MyTactic = board.Tactic;
             TacticFrame.SetActive(toggled);
         }
 
@@ -29,6 +30,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
             TacticFrame.transform.localPosition = new Vector3(-1.93f, -1.1f, -5f);
             toggled = !toggled;
             TacticFrame.SetActive(toggled);
+            
             TacticFrame.GetComponent<TacticPopupDialogController>().ForceRefresh();
 
             return true;

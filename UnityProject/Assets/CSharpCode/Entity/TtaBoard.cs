@@ -57,7 +57,7 @@ namespace Assets.CSharpCode.Entity
                     faceRequired = 0;
                 }
 
-                var discorderV= Resource[ResourceType.HappyFace] - faceRequired;
+                var discorderV= faceRequired-Resource[ResourceType.HappyFace];
                 return discorderV < 0 ? 0 : discorderV;
             }
         }

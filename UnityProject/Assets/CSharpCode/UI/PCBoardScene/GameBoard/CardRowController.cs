@@ -13,7 +13,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
     {
         public PCBoardCardDisplayBehaviour SmallCardFrame;
         public GameObject HighLightFrame;
-
+        //表示卡牌列上本Controller的位置，编辑器设定值
         public int Position;
         
         
@@ -60,8 +60,15 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             {
                 if (cardRowInfo.CanPutBack != true)
                 {
+                    SmallCardFrame.gameObject.SetActive(true);
                     SmallCardFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(cardRowInfo.Card);
-                    SmallCardFrame.transform.localPosition=new Vector3(SmallCardFrame.transform.localPosition.x, SmallCardFrame.transform.localPosition.y,-0.01f);
+                    SmallCardFrame.transform.localPosition = new Vector3(SmallCardFrame.transform.localPosition.x,
+                        SmallCardFrame.transform.localPosition.y, -0.01f);
+                }
+                else
+                {
+                    //能放回去（空格）
+                    SmallCardFrame.gameObject.SetActive(false);
                 }
 
 

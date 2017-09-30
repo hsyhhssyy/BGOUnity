@@ -5,6 +5,9 @@ using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.UI.Util.Controller
 {
+    /// <summary>
+    /// 一个Controller，除了DisplayOnlyUIController提供的功能以外，还能接受用户点击。
+    /// </summary>
     public abstract class SimpleClickUIController : DisplayOnlyUIController
     {
         public override String UIKey

@@ -54,6 +54,8 @@ namespace Assets.CSharpCode.Entity
         DiscardPhase,
         OtherPhase,
         EventResolution,
+        Colonize,
+        SendColonists,
     }
 
     public enum CardType
@@ -145,7 +147,12 @@ namespace Assets.CSharpCode.Entity
         /// 设置一个阵型
         /// 0. CardInfo
         /// </summary>
-        SetupTactic,AdoptTactic,
+        SetupTactic,
+        /// <summary>
+        /// 设置一个阵型
+        /// 0. CardInfo
+        /// </summary>
+        AdoptTactic,
         /// <summary>
         /// 结束内政行动
         /// </summary>
@@ -191,10 +198,24 @@ namespace Assets.CSharpCode.Entity
         /// 1.OptionText
         /// </summary>
         ResolveEventOption,
+        /// <summary>
+        /// 出价殖民
+        /// 0.CardInfo（产生事件的Card）
+        /// 1.OptionText
+        /// </summary>
+        ColonizeBid,
+        /// <summary>
+        /// 派出殖民者
+        /// 0.CardInfo(要出兵的殖民地)
+        /// 1.需要提供的军力值
+        /// 2.（用户提供，不能写入只能读取）要提供的部队和卡牌
+        /// </summary>
+        SendColonists,
         #endregion
 
         #region InterAction
         CancelInterAction,
         #endregion
+
     }
 }
