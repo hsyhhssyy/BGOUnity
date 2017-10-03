@@ -14,7 +14,7 @@ namespace TtaWcfServer.Web
     /// </summary>
     public class FileUpload : IHttpHandler
     {
-        string uploadFolder = @"C:\TtaFileUpload\";
+        string uploadFolder = @"C:\TtaUploads\";
 
         public void ProcessRequest(HttpContext context)
         {

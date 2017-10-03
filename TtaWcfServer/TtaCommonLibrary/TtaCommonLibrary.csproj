@@ -45,6 +45,7 @@
     <Compile Include="Entities\ClientUpdateModel\VersionInfo.cs" />
     <Compile Include="Entities\FileStorageModel\UploadedFileToken.cs" />
     <Compile Include="Entities\GameModel\GameRoom.cs" />
+    <Compile Include="Entities\GameModel\GameVersion.cs" />
     <Compile Include="Entities\UserModel\UserLite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

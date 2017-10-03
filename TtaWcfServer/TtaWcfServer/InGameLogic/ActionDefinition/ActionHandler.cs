@@ -14,8 +14,8 @@ namespace TtaWcfServer.InGameLogic.ActionDefinition
             Manager = manager;
         }
 
-        public abstract List<PlayerAction> CheckAbleToPerform();
-        public abstract PlayerAction PerfromAction(PlayerAction action);
+        public abstract List<PlayerAction> CheckAbleToPerform(int playerNo);
+        public abstract PlayerAction PerfromAction(int playerNo, PlayerAction action);
         
     }
 }

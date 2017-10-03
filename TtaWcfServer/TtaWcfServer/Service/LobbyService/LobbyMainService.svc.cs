@@ -11,6 +11,7 @@ using HSYErpBase.Wcf;
 using HSYErpBase.Wcf.CommonApi;
 using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
+using TtaWcfServer.InGameLogic;
 using TtaWcfServer.ServerApi.LobbyService;
 
 namespace TtaWcfServer.Service.LobbyService
@@ -58,7 +59,27 @@ namespace TtaWcfServer.Service.LobbyService
              ResponseFormat = WebMessageFormat.Json)]
         public WcfServicePayload<List<GameRoom>> ListActiveUnrankedGames(String sessionString)
         {
-            return null;
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<List<GameRoom>>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var query = hibernateSession.CreateQuery(
+                    "from GameRoom where RelatedMatchId is null and end_date is null");
+
+                var result = new List<GameRoom>();
+                result.AddRange(query.List<GameRoom>());
+
+                foreach (var gameRoom in result)
+                {
+                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, hibernateSession);
+                }
+
+                return new WcfServicePayload<List<GameRoom>>(result);
+            }
         }
 
         [OperationContract]
@@ -66,7 +87,28 @@ namespace TtaWcfServer.Service.LobbyService
              ResponseFormat = WebMessageFormat.Json)]
         public WcfServicePayload<List<GameRoom>> SearchActiveUnrankedGames(String sessionString,String keyword)
         {
-            return null;
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<List<GameRoom>>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var query = hibernateSession.CreateQuery(
+                    "from GameRoom where RelatedMatchId is null and end_date is null and RoomName like ?");
+                query.SetString(0, "%" + keyword + "%");
+
+                var result = new List<GameRoom>();
+                result.AddRange(query.List<GameRoom>());
+
+                foreach (var gameRoom in result)
+                {
+                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, hibernateSession);
+                }
+
+                return new WcfServicePayload<List<GameRoom>>(result);
+            }
         }
 
         [OperationContract]
@@ -95,7 +137,87 @@ namespace TtaWcfServer.Service.LobbyService
         [OperationContract]
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json)]
-        public WcfServicePayload<GameRoom> JoinRoom(String sessionString, int roomId, String password)
+        public WcfServicePayload<GameRoom> StartRanking(String sessionString)
+        {
+            return null;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<bool> StopRanking(String sessionString)
+        {
+            return null;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<GameRoom> JoinUnrankedRoom(String sessionString, int roomId, String password)
+        {
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<GameRoom>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var room=hibernateSession.Get<GameRoom>(roomId);
+                if (room == null)
+                {
+                    return new WcfServicePayload<GameRoom>(null);
+                }
+
+                if (room.HasPassword == true)
+                {
+                    if (password != room.Password)
+                    {
+                        return new WcfServicePayload<GameRoom>(WcfError.UnknownError,"Password Incorrect");
+                    }
+                }
+                var user = SessionManager.GetCurrentUser(sessionString);
+
+                var sp = room.Players.Replace("(", "").Split(")".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                if (sp.Contains(user.Id.ToString()))
+                {
+                    return new WcfServicePayload<GameRoom>(WcfError.UnknownError, "Already Joined");
+                }
+
+                if (sp.Length >= room.PlayerMax)
+                {
+                    return new WcfServicePayload<GameRoom>(WcfError.UnknownError, "No Seat");
+                }
+                
+                room.Players += "(" + user.Id + ")";
+
+                hibernateSession.Save(room);
+                if (sp.Length +1 >= room.PlayerMax)
+                {
+                    if (room.AutoStart == true)
+                    {
+                        GameManager.SetupNew(room);
+                    }
+                }
+
+                hibernateSession.Flush();
+
+                return new WcfServicePayload<GameRoom>(room);
+            }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<GameRoom> JoinUnrankedRoomAsObserver(String sessionString, int roomId, String password)
+        {
+            return null;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<GameRoom> JoinUnrankedRoomAsReferee(String sessionString, int roomId, String password)
         {
             return null;
         }
@@ -104,6 +226,14 @@ namespace TtaWcfServer.Service.LobbyService
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json)]
         public WcfServicePayload<bool> QuitRoom(String sessionString, int roomId)
+        {
+            return null;
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<bool> StartRoom(String sessionString, int roomId)
         {
             return null;
         }

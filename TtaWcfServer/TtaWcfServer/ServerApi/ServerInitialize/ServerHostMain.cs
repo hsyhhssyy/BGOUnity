@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using HSYErpBase.NHibernate;
+﻿using HSYErpBase.NHibernate;
 using TtaPesistanceLayer.NHibernate;
+using TtaWcfServer.OffGameLogic.Ranking;
 
-namespace TtaWcfServer.ServerApi.ServerInitializeApi
+namespace TtaWcfServer.ServerApi.ServerInitialize
 {
     public class ServerHostMain
     {
@@ -14,6 +11,9 @@ namespace TtaWcfServer.ServerApi.ServerInitializeApi
             //初始化NHibernateHelper
             TtaNHibernateHelper helper=new TtaNHibernateHelper();
             NHibernateHelper.CurrentHelper = helper;
+
+            //启动RankingManager
+            RankingManager.StartRankingManager();
         }
     }
 }

@@ -81,6 +81,7 @@
     <Compile Include="EntityDefinition\PropertyHelper.cs" />
     <Compile Include="Wcf\UserModelApi\UserApi.cs" />
     <Compile Include="Wcf\ValidateSessionApi.cs" />
+    <Compile Include="Wcf\WcfContext.cs" />
     <Compile Include="Wcf\WcfEntities.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ using System.Text;
 using HSYErpBase.Wcf;
 using TtaWcfServer.InGameLogic;
 using TtaWcfServer.InGameLogic.ActionDefinition;
+using TtaWcfServer.InGameLogic.TtaEntities;
 
 namespace TtaWcfServer.Service.GameService
 {
@@ -18,7 +19,7 @@ namespace TtaWcfServer.Service.GameService
     {
 
         [OperationContract]
-        public WcfServicePayload<GameBoard> QueryGameBoard(String sessionString,int matchId)
+        public WcfServicePayload<TtaBoard> QueryGameBoard(String sessionString,int matchId)
         {
             return null;
         }
@@ -30,7 +31,7 @@ namespace TtaWcfServer.Service.GameService
         }
 
         [OperationContract]
-        public WcfServicePayload<List<GameJournal>> QueryJournal(String sessionString, int matchId)
+        public WcfServicePayload<List<TtaBoard>> QueryJournal(String sessionString, int matchId)
         {
             return null;
         }

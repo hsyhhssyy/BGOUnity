@@ -1,5 +1,5 @@
 ﻿<%@ Application Language="C#" Debug="true" %>
-<%@ Import Namespace="TtaWcfServer.ServerApi.ServerInitializeApi" %>
+<%@ Import Namespace="TtaWcfServer.ServerApi.ServerInitialize" %>
 
 <script runat="server">
 
