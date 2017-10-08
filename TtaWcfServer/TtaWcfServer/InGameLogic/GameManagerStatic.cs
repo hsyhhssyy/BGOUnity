@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using HSYErpBase.Wcf;
 using TtaCommonLibrary.Entities.GameModel;
+using TtaWcfServer.Util;
 
 namespace TtaWcfServer.InGameLogic
 {
     public partial class GameManager
     {
         private static readonly Dictionary<int,GameManager> CachedGames=new Dictionary<int, GameManager>();
-         
+
         /// <summary>
         /// 在内存和数据库中查找一个已有的比赛
         /// </summary>
         /// <param name="room"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public static GameManager GetManager(GameRoom room)
+        public static GameManager GetManager(GameRoom room,WcfContext context)
         {
             int roomid = room.Id;
             if (CachedGames.ContainsKey(roomid))
@@ -25,7 +28,7 @@ namespace TtaWcfServer.InGameLogic
             else
             {
                 GameManager manager=new GameManager();
-                var result=manager.LoadFromPesistance(room);
+                var result=manager.LoadFromPesistance(room, context);
                 if (result == false)
                 {
                     return null;
@@ -39,24 +42,25 @@ namespace TtaWcfServer.InGameLogic
         /// 根据指定的room设置一个新的GameManager
         /// </summary>
         /// <param name="room"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
-        public static GameManager SetupNew(GameRoom room)
+        public static GameManager SetupNew(GameRoom room, WcfContext context)
         {
             GameManager manager = new GameManager();
             manager.SetupNewGame(room);
-            manager.SaveToPesistance();
+            manager.SaveToPesistance( context);
             CachedGames.Add(room.Id, manager);
 
 
             return manager;
         }
 
-        public static GameManager GetOrSetup(GameRoom room)
+        public static GameManager GetOrSetup(GameRoom room, WcfContext context)
         {
-            var manager = GetManager(room);
+            var manager = GetManager(room, context);
             if (manager == null)
             {
-                return SetupNew(room);
+                return SetupNew(room, context);
             }
             return manager;
         }

@@ -33,15 +33,16 @@ namespace TtaWcfServer.Service.GameService
 
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context=new WcfContext(sessionString,hibernateSession);
                 GameRoom room = hibernateSession.Get<GameRoom>(roomId);
                 if (room != null)
                 {
                     //验证权限
 
                     //给出结果
-                    var manager=GameManager.GetManager(room);
+                    var manager=GameManager.GetManager(room, context);
                     
-                    WcfGame game = new WcfGame(manager.CurrentGame);
+                    WcfGame game = new WcfGame(manager.CurrentGame,-1);
 
                     return new WcfServicePayload<WcfGame>(game);
                 }

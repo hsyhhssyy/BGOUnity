@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
-using System.Text;
 using HSYErpBase.NHibernate;
 using HSYErpBase.Wcf;
 using HSYErpBase.Wcf.CommonApi;
@@ -147,8 +145,9 @@ namespace TtaWcfServer.Service.LobbyService
             }
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
                 var user = SessionManager.GetCurrentUser(sessionString);
-                RankingManager.Queue(RankingManager.RankMode1Vs1NewExpantion, user);
+                RankingManager.Queue(RankingManager.RankMode1Vs1NewExpantion, user,context);
                 return new WcfServicePayload<bool>(true);
             }
         }
@@ -165,8 +164,9 @@ namespace TtaWcfServer.Service.LobbyService
             }
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
                 var user = SessionManager.GetCurrentUser(sessionString);
-                var match=RankingManager.QueryMatch(RankingManager.RankMode1Vs1NewExpantion, user);
+                var match=RankingManager.QueryMatch(RankingManager.RankMode1Vs1NewExpantion, user,context);
                 if (match == null)
                 {
                     return new WcfServicePayload<GameRoom>(null);
@@ -193,8 +193,9 @@ namespace TtaWcfServer.Service.LobbyService
             }
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
                 var user = SessionManager.GetCurrentUser(sessionString);
-                RankingManager.Dequeue(RankingManager.RankMode1Vs1NewExpantion, user);
+                RankingManager.Dequeue(RankingManager.RankMode1Vs1NewExpantion, user,context);
                 return new WcfServicePayload<bool>(true);
             }
         }
@@ -212,6 +213,7 @@ namespace TtaWcfServer.Service.LobbyService
 
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
                 var room=hibernateSession.Get<GameRoom>(roomId);
                 if (room == null)
                 {
@@ -245,7 +247,7 @@ namespace TtaWcfServer.Service.LobbyService
                 {
                     if (room.AutoStart == true)
                     {
-                        GameManager.SetupNew(room);
+                        GameManager.SetupNew(room,context);
                     }
                 }
 

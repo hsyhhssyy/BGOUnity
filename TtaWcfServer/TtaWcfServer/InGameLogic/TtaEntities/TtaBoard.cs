@@ -55,7 +55,10 @@ namespace TtaWcfServer.InGameLogic.TtaEntities
         public Dictionary<ResourceType, int> Resource=new Dictionary<ResourceType, int>();
         */
 
+        [DataMember]
         public int InitialYellowMarkerCount;
+
+        [DataMember]
         public int InitialBlueMarkerCount;
     }
 

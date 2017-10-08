@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Xml.Serialization;
+using HSYErpBase.Wcf;
+using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
+using TtaPesistanceLayer.NHibernate.Entities.GamePesistance;
 using TtaWcfServer.InGameLogic.ActionDefinition;
 using TtaWcfServer.InGameLogic.Civilpedia;
 using TtaWcfServer.InGameLogic.Civilpedia.RuleBook;
 using TtaWcfServer.InGameLogic.TtaEntities;
+using TtaWcfServer.InGameLogic.WcfEntities;
 using TtaWcfServer.Util;
 
 namespace TtaWcfServer.InGameLogic
@@ -18,17 +24,59 @@ namespace TtaWcfServer.InGameLogic
             Handlers=new List<ActionHandler>();
         }
 
-        
 
-        public bool LoadFromPesistance(GameRoom room)
+        readonly XmlSerializer _serializer = new XmlSerializer(typeof(TtaGame));
+
+        public bool LoadFromPesistance(GameRoom room, WcfContext context)
         {
-            SetupNewGame(room);
+            int relatedMatch = room.RelatedMatchId;
+            if (relatedMatch <= 0)
+            {
+                return false;
+            }
+
+            var content= context.HibernateSession.Get<MatchTableContent>(relatedMatch);
+            if (content == null)
+            {
+                return false;
+            }
+
+            StringReader sr = new StringReader(content.MatchData);
+            CurrentGame=(TtaGame) _serializer.Deserialize(sr);
+            
+            sr.Close();
+            CurrentGame.Room = room;
+
             return true;
         }
 
-        public void SaveToPesistance()
+        public void SaveToPesistance(WcfContext context)
         {
             CurrentGame.Room.RelatedMatchId = 1;
+            StringWriter sw=new StringWriter();
+            _serializer.Serialize(sw,this.CurrentGame);
+            String lob = sw.ToString();
+            MatchTableContent content = new MatchTableContent
+            {
+                Id = CurrentGame.Id,
+                MatchData = lob
+            };
+
+
+            if (CurrentGame.Id > 0)
+            {
+                 context.HibernateSession.Update(content);
+            }
+            else
+            {
+                int id=(int) context.HibernateSession.Save(content);
+                CurrentGame.Id = id;
+                CurrentGame.Room.RelatedMatchId = id;
+                context.HibernateSession.Update(CurrentGame.Room);
+
+                context.HibernateSession.Flush();
+            }
+            sw.Close();
         }
 
         private void SetupNewGame(GameRoom room)

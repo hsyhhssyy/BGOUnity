@@ -8,12 +8,17 @@ namespace TtaWcfServer.InGameLogic.WcfEntities
 {
     public class WcfGame
     {
-        public WcfGame(TtaGame game)
+        public const int PlayerNumberObserver = -1;
+        public const int PlayerNumberReferee = -2;
+
+
+        public WcfGame(TtaGame game,int player)
         {
-            
+            //-1是Observer
+
         }
 
-
+        public List<WcfBoard> Board;
 
     }
 }

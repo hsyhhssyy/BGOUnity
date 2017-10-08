@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/BoardScene-PC.unity
+- path: Assets/Scene/StartScreen.unity
   isLoaded: 1
   isActive: 1

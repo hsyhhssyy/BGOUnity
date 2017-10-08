@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using HSYErpBase.EntityDefinition.UserModel;
+using HSYErpBase.Wcf;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaWcfServer.InGameLogic;
 
@@ -24,7 +25,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
             UnreportMatch.Add(RankMode1Vs1NewExpantion, new List<GameRoom>());
         }
 
-        public static GameRoom QueryMatch(String mode, User u)
+        public static GameRoom QueryMatch(String mode, User u, WcfContext context)
         {
             if (mode == RankMode1Vs1NewExpantion)
             {
@@ -36,7 +37,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
         }
 
 
-        public static void Dequeue(String mode, User u)
+        public static void Dequeue(String mode, User u, WcfContext context)
         {
             if (mode == RankMode1Vs1NewExpantion)
             {
@@ -48,7 +49,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
             }
         }
 
-        public static void Queue(String mode, User u)
+        public static void Queue(String mode, User u,WcfContext context)
         {
             if (mode == RankMode1Vs1NewExpantion)
             {
@@ -58,7 +59,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
                     var user1 = queue[0];
                     queue.RemoveAt(0);
                     //
-                    CreateMatch(user1, u);
+                    CreateMatch(context,user1, u);
                 }
                 else
                 {
@@ -67,7 +68,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
             }
         }
 
-        private static void CreateMatch(User user1, User user2)
+        private static void CreateMatch(WcfContext context,User user1, User user2)
         {
             GameRoom room=new GameRoom();
             room.Ranked = true;
@@ -81,7 +82,7 @@ namespace TtaWcfServer.OffGameLogic.Ranking
 
             room.GameRuleVersion = "Original-TTA2.0";
 
-            GameManager.SetupNew(room);
+            GameManager.SetupNew(room, context);
 
             UnreportMatch[RankMode1Vs1NewExpantion].Add(room);
         }

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NHibernate\Entities\GamePesistance\MatchTableContent.cs" />
     <Compile Include="NHibernate\TtaNHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

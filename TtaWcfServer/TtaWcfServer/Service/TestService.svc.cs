@@ -6,6 +6,9 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 using System.Text;
+using HSYErpBase.NHibernate;
+using HSYErpBase.Wcf;
+using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaWcfServer.InGameLogic;
 
@@ -18,9 +21,13 @@ namespace TtaWcfServer.Service
         [OperationContract]
         public void TestMain()
         {
-            GameRoom room=new GameRoom();
-            room.GameRuleVersion = "Original-TTA2.0";
-            GameManager.SetupNew(room);
+            using (ISession hSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                WcfContext context = new WcfContext("BlaBlaBla", hSession);
+                GameRoom room = new GameRoom();
+                room.GameRuleVersion = "Original-TTA2.0";
+                GameManager.SetupNew(room, context);
+            }
         }
     }
 }
