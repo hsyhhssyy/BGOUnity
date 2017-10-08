@@ -8,7 +8,6 @@ C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistan
 C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\obj\Release\TtaPesistanceLayer.dll
 C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaPesistanceLayer\obj\Release\TtaPesistanceLayer.pdb
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaPesistanceLayer\bin\Release\hibernate.cfg.xml
-C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaPesistanceLayer\bin\Release\NHibernate\Mappings\FileTransfer\UploadedFileToken.hbm.xml
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaPesistanceLayer\bin\Release\TtaPesistanceLayer.dll
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaPesistanceLayer\bin\Release\TtaPesistanceLayer.pdb
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaPesistanceLayer\bin\Release\Iesi.Collections.dll

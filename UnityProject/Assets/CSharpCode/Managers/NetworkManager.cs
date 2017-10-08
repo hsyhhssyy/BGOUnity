@@ -42,7 +42,7 @@ namespace Assets.CSharpCode.Managers
                 //通知界面暗转等待网络
                 Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.WaitingNetwork, "PCBoard"));
 
-                Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, () =>
+                Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, (error) =>
                 {
                     Manager.CurrentDisplayingBoardNo = Manager.CurrentGame.MyPlayerIndex;
                     
@@ -102,7 +102,7 @@ namespace Assets.CSharpCode.Managers
                 else
                 {
                     Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
-                        action, () =>
+                        action, (error) =>
                         {
                             var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
                             Channel.Broadcast(msg);

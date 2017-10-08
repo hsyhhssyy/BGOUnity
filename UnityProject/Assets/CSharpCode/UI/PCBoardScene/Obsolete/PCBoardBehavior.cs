@@ -51,7 +51,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
 
             LoadingGo.SetActive(true);
 
-            StartCoroutine(SceneTransporter.Server.RefreshBoard(SceneTransporter.CurrentGame, () =>
+            StartCoroutine(SceneTransporter.Server.RefreshBoard(SceneTransporter.CurrentGame, (error) =>
             {
                 CurrentPlayerBoardIndex = SceneTransporter.CurrentGame.MyPlayerIndex;
                 BoardDisplay.Refresh();
@@ -94,7 +94,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             {
                 InterAction = null;
                 StartCoroutine(SceneTransporter.Server.TakeAction(SceneTransporter.CurrentGame, action,
-                    () =>
+                    (error) =>
                     {
                         BoardDisplay.Refresh();
                         ActionBinder.BindAction(SceneTransporter.CurrentGame.PossibleActions,this);

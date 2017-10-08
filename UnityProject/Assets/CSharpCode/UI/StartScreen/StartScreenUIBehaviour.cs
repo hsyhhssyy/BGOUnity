@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Assets.CSharpCode.Network.Bgo;
+using Assets.CSharpCode.Network.Wcf;
 using Assets.CSharpCode.Translation;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -15,7 +16,7 @@ namespace Assets.CSharpCode.UI.StartScreen
         public GameObject LoginButton;
         public InputField Username;
         public InputField Password;
-
+        public Dropdown ServerList;
 
         [UsedImplicitly]
         void Start () {
@@ -42,9 +43,23 @@ namespace Assets.CSharpCode.UI.StartScreen
 
             LoginButton.GetComponent<Button>().interactable = false;
 
-            SceneTransporter.Server = new BgoServer();
+            var server = ServerList.value;
 
-            StartCoroutine(SceneTransporter.Server.LogIn(Username.text, Password.text, () =>
+            switch (server)
+            {
+                case 1:
+                    SceneTransporter.Server = new WcfServer();
+                    break;
+                case 2:
+                    SceneTransporter.Server = new WcfServer();
+                    WcfServiceProvider.ServerUrlBase = "http://localhost:50487/Service/";
+                    break;
+                default:
+                    SceneTransporter.Server = new BgoServer();
+                    break;
+            }
+
+            StartCoroutine(SceneTransporter.Server.LogIn(Username.text, Password.text, (error) =>
             {
                Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
                 StreamWriter fs;

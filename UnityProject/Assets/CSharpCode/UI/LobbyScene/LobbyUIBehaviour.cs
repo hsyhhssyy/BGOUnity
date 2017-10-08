@@ -37,7 +37,6 @@ namespace Assets.CSharpCode.UI.LobbyScene
                 int gameNumber = 0;
                 foreach (var game in _games)
                 {
-                    var bgoGame = (BgoGame) game;
                     if (gameNumber > 5)
                     {
                         break;
@@ -45,15 +44,20 @@ namespace Assets.CSharpCode.UI.LobbyScene
 
                     var gameIdGo = GameObject.Find("GameLists/Lobby-Game" + gameNumber.ToString() + "/GameID");
                     var textMesh = gameIdGo.GetComponent<TextMesh>();
-                    textMesh.text = bgoGame.GameId;
+                    textMesh.text = "--";
 
                     var gameNameGo = GameObject.Find("GameLists/Lobby-Game" + gameNumber.ToString() + "/GameName");
                     textMesh = gameNameGo.GetComponent<TextMesh>();
-                    textMesh.text = bgoGame.Name;
+                    textMesh.text = game.Name;
 
                     SceneTransporter.LastListedGames.Add(game);
 
                     gameNumber++;
+                }
+                for (int i = gameNumber; i <= 5; i++)
+                {
+                    var go=GameObject.Find("GameLists/Lobby-Game" + i);
+                    go.SetActive(false);
                 }
 
                 LoadingGo.SetActive(false);

@@ -9,11 +9,10 @@
       NHibernate.Driver.MySqlDataDriver
     </property>
     <property name="connection.connection_string">
-      Server=www.hsyhhssyy.net;Database=TtaWcfService;User ID=hsyhhssyy;Password=hsy12345;
+      Server=www.hsyhhssyy.net;Database=tta_wcf;User ID=hsyhhssyy;Password=hsy12345;
     </property>
     <property name="dialect">
       NHibernate.Dialect.MySQL5Dialect
     </property>
-    <mapping assembly="RailwayERPCommonLib"/>
   </session-factory>
 </hibernate-configuration>

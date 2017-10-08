@@ -6,11 +6,20 @@ using HSYErpBase.EntityDefinition.UserModel;
 using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaCommonLibrary.Entities.UserModel;
+using TtaWcfServer.OffGameLogic.Ranking;
 
 namespace TtaWcfServer.ServerApi.LobbyService
 {
     public class LobbyServiceApi
     {
+        static LobbyServiceApi()
+        {
+            RankMaster.UserName = "天梯管理员";
+
+        }
+
+        public static UserLite RankMaster=new UserLite();
+
         public static GameRoom FillUserLitesOfGameRoom(GameRoom room, ISession session)
         {
             room.Host = CreateUserLite(room.HostId, session);
@@ -35,6 +44,10 @@ namespace TtaWcfServer.ServerApi.LobbyService
 
         public static UserLite CreateUserLite(int userId, ISession session)
         {
+            if (userId == 0)
+            {
+                return RankMaster;
+            }
             var user = session.Get<User>(userId);
             var lite=new UserLite();
             lite.UserName =user.Name;

@@ -1,6 +1,5 @@
 C:\Users\hsyhhssyy\Documents\TTAProject\BGOUnity_Master\TtaWcfServer\TtaWcfServer\obj\Release\TtaWcfServer.csprojResolveAssemblyReference.cache
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaWcfServer\bin\hibernate.cfg.xml
-C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaWcfServer\bin\NHibernate\Mappings\FileTransfer\UploadedFileToken.hbm.xml
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaWcfServer\bin\TtaWcfServer.dll.config
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaWcfServer\bin\TtaWcfServer.dll
 C:\Users\hsyhhssyy\Desktop\TtaProject\ProjectMaster\TtaWcfServer\TtaWcfServer\bin\TtaWcfServer.pdb

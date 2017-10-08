@@ -36,11 +36,11 @@ namespace TtaCommonLibrary.Entities.GameModel
         [DataMember]
         public virtual int RefereeMax { get; set; }
         [DataMember]
-        public virtual List<UserLite> JoinedPlayer { get; set; }
+        public virtual List<UserLite> JoinedPlayer { get; set; } = new List<UserLite>();
         [DataMember]
-        public virtual List<UserLite> ObserverPlayer { get; set; }
+        public virtual List<UserLite> ObserverPlayer { get; set; } = new List<UserLite>();
         [DataMember]
-        public virtual List<UserLite> RefereePlayer { get; set; }
+        public virtual List<UserLite> RefereePlayer { get; set; } = new List<UserLite>();
 
         [DataMember]
         public virtual ObserverMode ObserverSetting { get; set; }
@@ -52,21 +52,22 @@ namespace TtaCommonLibrary.Entities.GameModel
         [DataMember]
         public virtual String GameRuleVersion { get; set; }
         [DataMember]
-        public virtual List<String> AdditionalRules { get; set; }
+        public virtual List<String> AdditionalRules { get; set; }=new List<string>();
 
         #region 用于格式化处理的变量
         /// <summary>
         /// 服务器变量
         /// </summary>
-        public virtual String Observers { get; set; }
+        public virtual String Observers { get; set; } = "";
         /// <summary>
         /// 服务器变量
         /// </summary>
-        public virtual String Referees { get; set; }
+        public virtual String Referees { get; set; } = "";
+
         /// <summary>
         /// 服务器变量
         /// </summary>
-        public virtual String Players { get; set; }
+        public virtual String Players { get; set; } = "";
         /// <summary>
         /// 服务器变量
         /// </summary>

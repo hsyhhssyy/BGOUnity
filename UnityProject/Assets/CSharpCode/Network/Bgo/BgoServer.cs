@@ -10,7 +10,7 @@ namespace Assets.CSharpCode.Network.Bgo
     {
         private BgoSessionObject sessionObject;
 
-        public IEnumerator LogIn(String username, String password, Action callback)
+        public IEnumerator LogIn(String username, String password, Action<String> callback)
         {
             return BgoPageProvider.HomePage(username, password, (session,mot) =>
             {
@@ -20,7 +20,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 sessionObject._motDePasse = mot;
                 if (callback != null)
                 {
-                    callback();
+                    callback(null);
                 }
             });
         }
@@ -38,7 +38,7 @@ namespace Assets.CSharpCode.Network.Bgo
             });
         }
 
-        public IEnumerator RefreshBoard(TtaGame game, Action callback)
+        public IEnumerator RefreshBoard(TtaGame game, Action<String> callback)
         {
             if (!(game is BgoGame))
             {
@@ -51,12 +51,12 @@ namespace Assets.CSharpCode.Network.Bgo
              {
                  if (callback != null)
                  {
-                     callback();
+                     callback(null);
                  }
              });
         }
 
-        public IEnumerator TakeAction(TtaGame game, PlayerAction action,Action callback)
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action,Action<String> callback)
         {
             BgoGame bgoGame = game as BgoGame;
             BgoPlayerAction bgoAction = action as BgoPlayerAction;
@@ -64,7 +64,7 @@ namespace Assets.CSharpCode.Network.Bgo
             {
                 if (callback != null)
                 {
-                    callback();
+                    callback(null);
                 }
             };
 
@@ -98,6 +98,21 @@ namespace Assets.CSharpCode.Network.Bgo
 
             return BgoPostProvider.PostInternalAction(sessionObject, bgoGame, bgoAction, callbackDelegate);
 
+        }
+
+        public IEnumerator CheckRankedMatch(Action<TtaGame> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator StartRanking(string queueName, Action<bool> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator StopRanking(string queueName, Action<bool> callback)
+        {
+            throw new NotImplementedException();
         }
     }
 }

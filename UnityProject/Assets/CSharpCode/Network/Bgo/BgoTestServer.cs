@@ -12,11 +12,11 @@ namespace Assets.CSharpCode.Network.Bgo
     {
         public String File;
 
-        public IEnumerator LogIn(String username, String password, Action callback)
+        public IEnumerator LogIn(String username, String password, Action<String> callback)
         {
             if (callback != null)
             {
-                callback();
+                callback(null);
             }
             
             yield break;
@@ -32,7 +32,7 @@ namespace Assets.CSharpCode.Network.Bgo
             yield break;
         }
 
-        public IEnumerator RefreshBoard(TtaGame game, Action callback)
+        public IEnumerator RefreshBoard(TtaGame game, Action<String> callback)
         {
             var html = Resources.Load<TextAsset>(File); ;
 
@@ -40,17 +40,17 @@ namespace Assets.CSharpCode.Network.Bgo
 
             if (callback != null)
             {
-                callback();
+                callback(null);
             }
 
             yield break;
         }
 
-        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action callback)
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action<String> callback)
         {
             if (callback != null)
             {
-                callback();
+                callback(null);
             }
 
             yield break;
@@ -64,6 +64,21 @@ namespace Assets.CSharpCode.Network.Bgo
             }
 
             yield break;
+        }
+
+        public IEnumerator CheckRankedMatch(Action<TtaGame> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator StartRanking(string queueName, Action<bool> callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator StopRanking(string queueName, Action<bool> callback)
+        {
+            throw new NotImplementedException();
         }
     }
 }

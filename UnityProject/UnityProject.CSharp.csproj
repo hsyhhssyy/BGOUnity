@@ -17,7 +17,7 @@
     </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
-    <UnityVersion>5.3.3f1</UnityVersion>
+    <UnityVersion>5.4.2f2</UnityVersion>
     <RootNamespace>
     </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
@@ -29,7 +29,7 @@
     <IntermediateOutputPath>Temp\UnityVS_obj\Debug\</IntermediateOutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>DEBUG;TRACE;UNITY_5_3_3;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_4_2;UNITY_5_4;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_EDITOR_RETINA;ENABLE_RETINA_GUISTYLES;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;ENABLE_VSTU</DefineConstants>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -39,7 +39,7 @@
     <IntermediateOutputPath>Temp\UnityVS_obj\Release\</IntermediateOutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>TRACE;UNITY_5_3_3;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN</DefineConstants>
+    <DefineConstants>TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_4_2;UNITY_5_4;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_EDITOR_RETINA;ENABLE_RETINA_GUISTYLES;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;ENABLE_VSTU</DefineConstants>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -63,49 +63,65 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CSharpCode\Civilopedia\CardEffect.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\CardInfo.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\RuleBook\TtaStandard0200RuleBook.cs" />
     <Compile Include="Assets\CSharpCode\Civilopedia\TtaCivilopedia.cs" />
+    <Compile Include="Assets\CSharpCode\Civilopedia\TtaRuleBook.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Cards.cs" />
     <Compile Include="Assets\CSharpCode\Entity\Enums.cs" />
+    <Compile Include="Assets\CSharpCode\Entity\GameJournalEntry.cs" />
     <Compile Include="Assets\CSharpCode\Entity\PlayerAction.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaBoard.cs" />
     <Compile Include="Assets\CSharpCode\Entity\TtaGameClass.cs" />
     <Compile Include="Assets\CSharpCode\Helper\CSVUtil.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExceptionHandle.cs" />
     <Compile Include="Assets\CSharpCode\Helper\ExtensionMethods.cs" />
+    <Compile Include="Assets\CSharpCode\Helper\JSONHelper.cs" />
     <Compile Include="Assets\CSharpCode\Helper\UnityResources.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameBoardManager.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseChooseTargetStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseIdleStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ActionPhaseInternalQueryHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\OutOfMyTurnStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\PoliticalPhaseIdleStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\ResolveEventStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\SelectTargetStateHandler.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\GameBoardStateHandlers\SendColonistsStateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\GameEventChannel.cs" />
     <Compile Include="Assets\CSharpCode\Managers\NetworkManager.cs" />
+    <Compile Include="Assets\CSharpCode\Managers\StateHandler.cs" />
     <Compile Include="Assets\CSharpCode\Managers\UIControllerEvent.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BGOPageProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoActionFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoEntity.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\BgoJournalFormater.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoPostProvider.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoRegexpCollections.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BgoTestServer.cs" />
     <Compile Include="Assets\CSharpCode\Network\Bgo\BoardAnalyzer.cs" />
-    <Compile Include="Assets\CSharpCode\Network\DotNetBgo\DotNetBgoServer.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Bgo\DataStructure\BgoAdditionalFormTuple.cs" />
     <Compile Include="Assets\CSharpCode\Network\IServerAdapter.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Wcf\Entities\WcfGame.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Wcf\WcfJsonPageProvider.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Wcf\WcfPostOperator.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Wcf\WcfServer.cs" />
+    <Compile Include="Assets\CSharpCode\Network\Wcf\WcfServiceProvider.cs" />
     <Compile Include="Assets\CSharpCode\Translation\TtaTranslation.cs" />
     <Compile Include="Assets\CSharpCode\UI\BoardScene\BoardUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\BoardScene\Dialog\Actions\DialogActionsButtonCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\BoardScene\Dialog\DialogUIBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\BoardScene\PlayerBoardColliderBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\LobbyScene\CreateRoomDialogUiBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\GameButtonBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\LobbyScene\LobbyUIBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\LobbyScene\RankingUiBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\CommonPrefab\PCBoardCardDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogButtonController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\DialogDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Loading\LoadingMaskController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PlayerSelectionController.cs" />
@@ -113,6 +129,10 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PoliticalPhaseController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\PoliticalPhase\PoliticalPhaseStartDialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\ResolveEvent\ResolveEventDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SelectTargetPlayer\SelectTargetPlayerDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SendColonists\SendColonistsCardSelectionController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\SendColonists\SendColonistsDialogController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Tactic\SharedTacticController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Dialog\Tactic\TacticPopupDialogController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Effects\PCBoardCardSmallHighlightEffect.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\CardRowController.cs" />
@@ -120,6 +140,9 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\EventsPopupController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\PlayerBoardBackgroundController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\GameBoard\PlayerTabController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalItemController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Journal\GameJournalScrollCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\BuildingCellActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\CardRowActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\PCBoardBindedActionClickTrigger.cs" />
@@ -127,7 +150,6 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\ActionBinder\TtaActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\CardRowCardClickCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\EventsPopupCollider.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\GameJournalScrollCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Collider\TacticsPopupToggleCollider.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Dialog\PoliticalPhaseDialog\PlayerSelectionBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Dialog\PoliticalPhaseDialog\PoliticalPhaseDialogDisplayBehaviour.cs" />
@@ -140,15 +162,15 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Menu\ColliderMenu.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Menu\ColliderMenuButton.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Menu\HandCardMenuBehaviour.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\Menu\WonderMenuAnimationBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\PCBoardActionBinder.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\PCBoardBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\Obsolete\PCBoardDisplayBehavior.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\BlueMarkerController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\BuildingCellController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\BuildingChildController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\BuildingMenuController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\BuildingParentController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingCellController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingChildController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingMenuController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingMenuItemController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Buildings\BuildingParentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\ColonyController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\GovernmentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\HandCardChildController.cs" />
@@ -159,8 +181,11 @@
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WarningController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WarningDisplayBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WhiteRedMarkerController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WonderChildController.cs" />
-    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WonderParentController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\ConstructingWonderController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderChildController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderMenuController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderMenuItemController.cs" />
+    <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\Wonder\WonderParentController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\WorkerPoolController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\PlayerBoard\YellowMarkerController.cs" />
     <Compile Include="Assets\CSharpCode\UI\PCBoardScene\StatusBar\RefreshProgressBarController.cs" />
@@ -176,15 +201,23 @@
     <Compile Include="Assets\CSharpCode\UI\Util\ErrorLog\LogRecorder.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\Input\InputControllerMonoBehaviour.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\Input\InputManagerMonoBehaviour.cs" />
+    <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\StaticHelper.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\TextMeshLayer.cs" />
     <Compile Include="Assets\CSharpCode\UI\Util\UnityEnhancement\TextOutline.cs" />
+    <Compile Include="Assets\JSON\JSONObject.cs" />
+    <Compile Include="Assets\JSON\JSONTemplates.cs" />
+    <Compile Include="Assets\JSON\VectorTemplates.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\JSON\readme.txt" />
     <None Include="Assets\Materials\FontStencilDrawin.shader" />
     <None Include="Assets\Materials\StencilDrawinMask.shader" />
     <None Include="Assets\Materials\StencilMask.shader" />
     <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
+    <None Include="Assets\Resources\Localization\legend_zh-cn_dest.txt" />
+    <None Include="Assets\Resources\Localization\legend_zh-cn_source.txt" />
+    <None Include="Assets\Resources\Test\测试用页面\派出殖民者中.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

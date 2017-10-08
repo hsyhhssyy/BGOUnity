@@ -28,7 +28,7 @@ namespace HSYErpBase.Wcf
                     "WCFService." + serviceName);
                 if (validateResult != WcfError.None)
                 {
-                    return new WcfServicePayload<TReturnType>(WcfError.InsufficientPrivilege, "权限不足");
+                    return new WcfServicePayload<TReturnType>(validateResult, "权限不足");
                 }
 
                 return null;

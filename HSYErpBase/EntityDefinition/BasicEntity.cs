@@ -38,5 +38,21 @@ namespace HSYErpBase.EntityDefinition
 
             return obj;
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals((BasicEntity)obj);
+        }
+
+        protected bool Equals(BasicEntity other)
+        {
+            return other!=null&&Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
+            return Id.GetHashCode();
+        }
     }
 }

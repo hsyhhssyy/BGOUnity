@@ -57,7 +57,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
        Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", (error) =>
         {
            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -77,7 +77,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", (error) =>
         {
             Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -97,7 +97,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", (error) =>
         {
            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -117,7 +117,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", (error) =>
         {
             Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -139,7 +139,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("username", "password", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("username", "password", (error) =>
         {
            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -163,7 +163,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         Assets.CSharpCode.UI.Util.LogRecorder.Log("Clicked");
 
-        StartCoroutine(SceneTransporter.Server.LogIn("username", "password", () =>
+        StartCoroutine(SceneTransporter.Server.LogIn("username", "password", (error) =>
         {
             Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 
@@ -192,7 +192,7 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
         StartCoroutine(SceneTransporter.Server.LogIn(
             GameObject.Find("Canvas/Login/Username").GetComponent<InputField>().text,
-            GameObject.Find("Canvas/Login/Password").GetComponent<InputField>().text, () =>
+            GameObject.Find("Canvas/Login/Password").GetComponent<InputField>().text, (error) =>
         {
            Assets.CSharpCode.UI.Util.LogRecorder.Log("Logged in!");
 

@@ -11,7 +11,9 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
 
 	    public override TtaGame SetupNewGame(GameRoom room)
 	    {
-	        TtaGame game = new TtaGame();
+            civilopedia=TtaCivilopedia.GetCivilopedia(room.GameRuleVersion);
+
+            TtaGame game = new TtaGame();
             game.Boards = new List<TtaBoard>();
             for (int i = 0; i < room.PlayerMax; i++)
             {
@@ -20,7 +22,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
             }
 
             //洗牌
-	        var deck=GetCivilDeckForAge(Age.A).ShuffleCards();
+	        var deck=GetCivilDeckForAge(Age.A).Shuffle();
 
             //发13张牌
             game.CardRow = new List<CardInfo>();
@@ -49,7 +51,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
                 civilopedia.GetCardInfoById("4008"),
                 civilopedia.GetCardInfoById("4009"),
                 civilopedia.GetCardInfoById("4010"),
-            }.ShuffleCards();
+            }.Shuffle();
 			game.CurrentEventDeck=new List<CardInfo>();
 	        for (int i = 0; i < room.PlayerMax + 2; i++)
 	        {
@@ -63,6 +65,8 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
 			//Phase不设置，这个由GameManager设置
 			game.SharedTactics=new List<CardInfo>();
 	        game.Version = room.GameRuleVersion;
+
+
 
 	        return game;
 	    }
@@ -163,7 +167,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
                         civilopedia.GetCardInfoById("25002"),
                         civilopedia.GetCardInfoById("25003"),
                         civilopedia.GetCardInfoById("25004"),
-                    };
+                    }.Shuffle();
 	        }
 			return new List<CardInfo>();
 	    }

@@ -28,6 +28,7 @@ namespace TtaWcfServer.InGameLogic
 
         public void SaveToPesistance()
         {
+            CurrentGame.Room.RelatedMatchId = 1;
         }
 
         private void SetupNewGame(GameRoom room)
@@ -59,7 +60,7 @@ namespace TtaWcfServer.InGameLogic
 
         private List<ActionHandler> Handlers;
 
-        private TtaGame CurrentGame;
+        public TtaGame CurrentGame { get; set; }
         private List<TtaBoard> CurrentBoards => CurrentGame.Boards;
         
         public List<PlayerAction> GetPossibleActions(int playerNo)

@@ -12,6 +12,7 @@ using HSYErpBase.Wcf.CommonApi;
 using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaWcfServer.InGameLogic;
+using TtaWcfServer.OffGameLogic.Ranking;
 using TtaWcfServer.ServerApi.LobbyService;
 
 namespace TtaWcfServer.Service.LobbyService
@@ -137,17 +138,65 @@ namespace TtaWcfServer.Service.LobbyService
         [OperationContract]
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json)]
-        public WcfServicePayload<GameRoom> StartRanking(String sessionString)
+        public WcfServicePayload<bool> StartRanking(String sessionString,String mode)
         {
-            return null;
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<bool>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var user = SessionManager.GetCurrentUser(sessionString);
+                RankingManager.Queue(RankingManager.RankMode1Vs1NewExpantion, user);
+                return new WcfServicePayload<bool>(true);
+            }
         }
 
         [OperationContract]
         [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
              ResponseFormat = WebMessageFormat.Json)]
-        public WcfServicePayload<bool> StopRanking(String sessionString)
+        public WcfServicePayload<GameRoom> RankingStatus(String sessionString, String mode)
         {
-            return null;
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<GameRoom>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var user = SessionManager.GetCurrentUser(sessionString);
+                var match=RankingManager.QueryMatch(RankingManager.RankMode1Vs1NewExpantion, user);
+                if (match == null)
+                {
+                    return new WcfServicePayload<GameRoom>(null);
+                }
+                if (match.Id <= 0)
+                {
+                    match.Id = (int)hibernateSession.Save(match);
+                    hibernateSession.Flush();
+                }
+
+                return new WcfServicePayload<GameRoom>(match);
+            }
+        }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+             ResponseFormat = WebMessageFormat.Json)]
+        public WcfServicePayload<bool> StopRanking(String sessionString, String mode)
+        {
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<bool>(sessionString);
+            if (val != null)
+            {
+                return val;
+            }
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var user = SessionManager.GetCurrentUser(sessionString);
+                RankingManager.Dequeue(RankingManager.RankMode1Vs1NewExpantion, user);
+                return new WcfServicePayload<bool>(true);
+            }
         }
 
         [OperationContract]
