@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.Network;
@@ -18,6 +19,25 @@ namespace Assets.CSharpCode.UI
         public static List<TtaGame> LastListedGames; 
 
         public static TtaGame CurrentGame;
+
+        private static TtaGame _lastPediaGame =null;
+        private static TtaCivilopedia _civilopedia;
+        public static TtaCivilopedia CurrentCivilopedia
+        {
+            get
+            {
+                if (CurrentGame == null)
+                {
+                    return null;
+                }
+                if (_lastPediaGame != CurrentGame|| _civilopedia == null)
+                {
+                    _civilopedia=TtaCivilopedia.GetCivilopedia(CurrentGame.Version);
+                    _lastPediaGame = CurrentGame;
+                }
+                return _civilopedia;
+            }
+        }
 
         public static bool IsCurrentGameRefreshed()
         {

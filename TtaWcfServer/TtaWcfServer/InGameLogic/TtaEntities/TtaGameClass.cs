@@ -1,59 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaWcfServer.InGameLogic.ActionDefinition;
 using TtaWcfServer.InGameLogic.Civilpedia;
 
 namespace TtaWcfServer.InGameLogic.TtaEntities
 {
-    [DataContract]
     public class TtaGame
     {
-        [DataMember]
         public int Id;
+        
+        [XmlIgnore]
         public GameRoom Room;
-        [DataMember]
+
         public TtaPhase CurrentPhase;
-
-        [DataMember]
+        public int CurrentPlayer=0;
+        
         public String Version = "2.0";
-
-        [DataMember]
+        
         public Age CurrentAge;
-        [DataMember]
         public int CurrentRound;
 
-
-        [DataMember]
+        
         public List<CardInfo> CurrentEventDeck;
-        [DataMember]
         public List<CardInfo> FutureEventDeck;
-        [DataMember]
         public List<CardInfo> PastEventDeck;
 
-
-        [DataMember]
+        
         public List<CardInfo> CivilCardsDeck;
-        [DataMember]
         public List<CardInfo> MilitaryCardsDeck;
 
-
-        [DataMember]
+        
         public List<CardInfo> DiscardedMilitaryCardsDeck;
-
-
-
-        [DataMember]
+        
         public List<TtaBoard> Boards;
-
-
-        [DataMember]
+        
         public List<CardInfo> SharedTactics;
+        
+        public List<CardRowInfo> CardRow;
 
+    }
 
+    [DataContract]
+    public class CardRowInfo
+    {
         [DataMember]
-        public List<CardInfo> CardRow;
+        public CardInfo Card;
+        /// <summary>
+        /// [已过时]表示能否放回，请用拿走玩家是否是当前玩家，以及该卡是否在手牌中/奇迹面板来计算得出
+        /// </summary>
+        [Obsolete]
+        public bool CanPutBack;
+        /// <summary>
+        /// 这张卡被哪位玩家拿走了，-1表示未拿走
+        /// </summary>
+        public int TakenBy;
         
     }
 

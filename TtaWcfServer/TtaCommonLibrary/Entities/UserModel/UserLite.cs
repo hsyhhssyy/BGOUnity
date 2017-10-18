@@ -14,8 +14,6 @@ namespace TtaCommonLibrary.Entities.UserModel
         [DataMember]
         public virtual String UserName { get; set; }
         [DataMember]
-        public virtual int UserId { get; set; }
-        [DataMember]
         public virtual String Avatar { get; set; }
         [DataMember]
         public virtual int Level { get; set; }

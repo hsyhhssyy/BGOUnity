@@ -35,6 +35,10 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
             //CivilopediaList
             GameVersion ver=new GameVersion();
             ver.Name = "Original-TTA2.0";
+            if (!Directory.Exists("C:/TtaUploads/"))
+            {
+                Directory.CreateDirectory("C:/TtaUploads/");
+            }
             ver.CivilopediaPath = "C:/TtaUploads/Civilopedia/Original-TTA2.0/Civilopedia.csv";
             ver.RuleBookPath= "C:/TtaUploads/Civilopedia/Original-TTA2.0/RuleBook.cs";
             LoadCivilopedia(ver);
@@ -68,6 +72,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
                         CardType = (CardType)Convert.ToInt32(csvRow[2]),
                         CardAge = (Age)Convert.ToInt32(csvRow[3]),
                         Description = csvRow[4],
+                        FromSerialization = false,
                     };
 
                     //csv5,6,7是三个image，客户端才需要，服务器不需要也没有这些资源

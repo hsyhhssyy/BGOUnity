@@ -29,8 +29,8 @@ namespace Assets.CSharpCode.Helper
             if (type == LogType.Exception)
             {
                 //Switch Scene
-                SceneTransporter.LastError = condition+"\n"+stackTrace;
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Scene/TestScene");
+                SceneTransporter.LastError = condition+Environment.NewLine+stackTrace;
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Scene/ErrorScene");
                Assets.CSharpCode.UI.Util.LogRecorder.Log("ExceptionReceived");
             }
         }

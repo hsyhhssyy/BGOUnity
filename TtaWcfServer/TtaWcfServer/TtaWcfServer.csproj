@@ -77,18 +77,24 @@
     <Content Include="Service\GameService\GameMainService.svc" />
     <Content Include="Service\LobbyService\LobbyMainService.svc" />
     <Content Include="Service\Login\UserLoginService.svc" />
-    <Content Include="Service\TestService.svc" />
+    <Content Include="Service\Test\TestNormalService.svc" />
+    <Content Include="Service\Test\TestService.svc" />
     <Content Include="Service\UpdateService\ClientUpdateService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InGameLogic\ActionDefinition\ActionHandler.cs" />
+    <Compile Include="InGameLogic\ActionDefinition\Handlers\EndPhaseActionHandler.cs" />
+    <Compile Include="InGameLogic\ActionDefinition\Handlers\TakeCardFromCardRowActionHandler.cs" />
     <Compile Include="InGameLogic\ActionDefinition\PlayerAction.cs" />
     <Compile Include="InGameLogic\ActionDefinition\ActionResponse.cs" />
     <Compile Include="InGameLogic\Civilpedia\CardEffect.cs" />
     <Compile Include="InGameLogic\Civilpedia\CardInfo.cs" />
     <Compile Include="InGameLogic\Civilpedia\RuleBook\TtaRuleBook.cs" />
     <Compile Include="InGameLogic\Civilpedia\TtaCivilpedia.cs" />
+    <Compile Include="InGameLogic\Effects\EffectPool.cs" />
+    <Compile Include="InGameLogic\Effects\EffectPoolStatics.cs" />
+    <Compile Include="InGameLogic\GameJournals\GameMove.cs" />
     <Compile Include="InGameLogic\GameManagerStatic.cs" />
     <Compile Include="InGameLogic\TtaEntities\Enums.cs" />
     <Compile Include="InGameLogic\GameJournals\GameJournal.cs" />
@@ -96,6 +102,7 @@
     <Compile Include="InGameLogic\TtaEntities\TtaBoard.cs" />
     <Compile Include="InGameLogic\TtaEntities\TtaGameClass.cs" />
     <Compile Include="InGameLogic\WcfEntities\WcfBoard.cs" />
+    <Compile Include="InGameLogic\WcfEntities\WcfCardRowInfo.cs" />
     <Compile Include="InGameLogic\WcfEntities\WcfGame.cs" />
     <Compile Include="Logging\LogRecorder.cs" />
     <Compile Include="OffGameLogic\Ranking\RankingManager.cs" />
@@ -114,7 +121,11 @@
     <Compile Include="Service\Login\UserLoginService.svc.cs">
       <DependentUpon>UserLoginService.svc</DependentUpon>
     </Compile>
-    <Compile Include="Service\TestService.svc.cs">
+    <Compile Include="Service\Test\ITestNormalService.cs" />
+    <Compile Include="Service\Test\TestNormalService.svc.cs">
+      <DependentUpon>TestNormalService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Test\TestService.svc.cs">
       <DependentUpon>TestService.svc</DependentUpon>
     </Compile>
     <Compile Include="Service\UpdateService\ClientUpdateService.svc.cs">
@@ -122,7 +133,10 @@
     </Compile>
     <Compile Include="Service\UpdateService\IClientUpdateService.cs" />
     <Compile Include="Util\CSVUtil.cs" />
-    <Compile Include="Util\GameUtil.cs" />
+    <Compile Include="Util\CardDeckUtil.cs" />
+    <Compile Include="Util\SerializerUtil.cs" />
+    <Compile Include="Util\WcfCastUtil.cs" />
+    <Compile Include="Util\WcfExc.cs" />
     <Compile Include="Web\FileDownload.ashx.cs">
       <DependentUpon>FileDownload.ashx</DependentUpon>
     </Compile>
@@ -130,9 +144,7 @@
       <DependentUpon>FileUpload.ashx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="InGameLogic\ActionDefinition\Handlers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <Compile Include="InGameLogic\Civilpedia\RuleBook\RuleBooks\OriginalTTA0200.cs" />

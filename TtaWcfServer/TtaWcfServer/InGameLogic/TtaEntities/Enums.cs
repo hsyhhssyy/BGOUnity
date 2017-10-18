@@ -11,7 +11,14 @@
         FoodIncrement=5, ResourceIncrement=6, ScienceIncrement=7, CultureIncrement=8,
         HappyFace=9, MilitaryForce=10, Exploration=11,
         WhiteMarkerMax=12, RedMarkerMax=13,
-        WhiteMarker=14, RedMarker=15,
+        /// <summary>
+        /// 白点的当前值
+        /// </summary>
+        WhiteMarker =14,
+        /// <summary>
+        /// 红点的当前值
+        /// </summary>
+        RedMarker =15,
         YellowMarker=16, BlueMarker=17,
         WorkerPool=18,
         CivilCardLimit=19,MilitaryCardLimit = 20,
@@ -50,6 +57,18 @@
         EventResolution,
         Colonize,
         SendColonists,
+        /// <summary>
+        /// 游戏第一回合的行动阶段
+        /// </summary>
+        FirstTurnActionPhase,
+        /// <summary>
+        /// 游戏第一回合的生产阶段
+        /// </summary>
+        FirstTurnProductionPhase,
+        /// <summary>
+        /// 生产阶段
+        /// </summary>
+        ProductionPhase,
     }
 
     public enum CardType

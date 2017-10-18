@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.GameLogic.Actions;
 using UnityEngine;
 
 namespace Assets.CSharpCode.Network.Bgo
@@ -11,6 +12,8 @@ namespace Assets.CSharpCode.Network.Bgo
     public class BgoTestServer:IServerAdapter
     {
         public String File;
+
+        public ServerType ServerType { get { return ServerType.PassiveServer30Sec; } }
 
         public IEnumerator LogIn(String username, String password, Action<String> callback)
         {
@@ -46,7 +49,7 @@ namespace Assets.CSharpCode.Network.Bgo
             yield break;
         }
 
-        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action<String> callback)
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action<ActionResponse> callback)
         {
             if (callback != null)
             {
@@ -56,11 +59,11 @@ namespace Assets.CSharpCode.Network.Bgo
             yield break;
         }
 
-        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>>  callback)
+        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<ActionResponse,List<PlayerAction>>  callback)
         {
             if (callback != null)
             {
-                callback(new List<PlayerAction>());
+                callback(null,new List<PlayerAction>());
             }
 
             yield break;

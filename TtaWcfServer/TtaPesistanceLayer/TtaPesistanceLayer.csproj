@@ -103,6 +103,9 @@
   <ItemGroup>
     <EmbeddedResource Include="NHibernate\Mappings\MetaModel\EntityStructure.hbm.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="NHibernate\Mappings\GameModel\MatchTableContent.hbm.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

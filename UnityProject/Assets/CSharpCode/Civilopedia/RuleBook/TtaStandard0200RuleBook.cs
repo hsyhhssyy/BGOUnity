@@ -49,5 +49,47 @@ namespace Assets.CSharpCode.Civilopedia.RuleBook
             //再加上库克
             return force;
         }
+
+        public override int CorruptionValue(int blueMarker)
+        {
+            if (blueMarker <= 0)
+            {
+                return 6;
+            }
+            else if (blueMarker <= 5)
+            {
+                return  4;
+            }
+            else if (blueMarker <= 10)
+            {
+                return  2;
+            }
+            return 0;
+        }
+
+        public override int ConsumptionValue(int yellowMarker)
+        {
+            if (yellowMarker <= 0)
+            {
+                return 6;
+            }
+            else if (yellowMarker <= 4)
+            {
+                return 4;
+            }
+            else if (yellowMarker <= 8)
+            {
+                return 3;
+            }
+            else if (yellowMarker <= 12)
+            {
+                return 2;
+            }
+            else if (yellowMarker <= 16)
+            {
+                return 1;
+            }
+            return 0;
+        }
     }
 }

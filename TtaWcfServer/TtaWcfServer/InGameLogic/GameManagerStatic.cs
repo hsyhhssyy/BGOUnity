@@ -49,7 +49,15 @@ namespace TtaWcfServer.InGameLogic
             GameManager manager = new GameManager();
             manager.SetupNewGame(room);
             manager.SaveToPesistance( context);
-            CachedGames.Add(room.Id, manager);
+
+            if(!CachedGames.ContainsKey(room.Id))
+            {
+                CachedGames.Add(room.Id, manager);
+            }
+            else
+            {
+                CachedGames[room.Id] = manager;
+            }
 
 
             return manager;
@@ -63,6 +71,14 @@ namespace TtaWcfServer.InGameLogic
                 return SetupNew(room, context);
             }
             return manager;
+        }
+
+        public static void PesistAllMatch(WcfContext context)
+        {
+            foreach (var gameManager in CachedGames)
+            {
+                gameManager.Value.SaveToPesistance(context);
+            }
         }
         
     }

@@ -56,6 +56,18 @@ namespace Assets.CSharpCode.Entity
         EventResolution,
         Colonize,
         SendColonists,
+        /// <summary>
+        /// 游戏第一回合的行动阶段
+        /// </summary>
+        FirstTurnActionPhase,
+        /// <summary>
+        /// 游戏第一回合的生产阶段
+        /// </summary>
+        FirstTurnProductionPhase,
+        /// <summary>
+        /// 生产阶段
+        /// </summary>
+        ProductionPhase,
     }
 
     public enum CardType
@@ -83,7 +95,13 @@ namespace Assets.CSharpCode.Entity
         /// 0. CardRowCardInfo
         /// 1. 此卡在卡牌列上的位置，0开始
         /// </summary>
-        TakeCardFromCardRow, PutBackCard,
+        TakeCardFromCardRow,
+        /// <summary>
+        /// 玩家可以从卡牌列上放回一张卡
+        /// 0. CardRowCardInfo
+        /// 1. 此卡在卡牌列上的位置，0开始
+        /// </summary>
+        PutBackCard,
         /// <summary>
         /// 玩家可以增加一个人口
         /// 0. 保留字段

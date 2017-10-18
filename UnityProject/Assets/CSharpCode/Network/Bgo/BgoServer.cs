@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.GameLogic.Actions;
 using Assets.CSharpCode.UI.Util;
 
 namespace Assets.CSharpCode.Network.Bgo
@@ -9,6 +11,8 @@ namespace Assets.CSharpCode.Network.Bgo
     public class BgoServer : IServerAdapter
     {
         private BgoSessionObject sessionObject;
+
+        public ServerType ServerType {get {return ServerType.PassiveServer30Sec;} }
 
         public IEnumerator LogIn(String username, String password, Action<String> callback)
         {
@@ -56,7 +60,7 @@ namespace Assets.CSharpCode.Network.Bgo
              });
         }
 
-        public IEnumerator TakeAction(TtaGame game, PlayerAction action,Action<String> callback)
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action,Action<ActionResponse> callback)
         {
             BgoGame bgoGame = game as BgoGame;
             BgoPlayerAction bgoAction = action as BgoPlayerAction;
@@ -78,7 +82,7 @@ namespace Assets.CSharpCode.Network.Bgo
             
         }
 
-        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>>  callback)
+        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<ActionResponse,List<PlayerAction>>  callback)
         {
             BgoGame bgoGame = game as BgoGame;
             BgoPlayerAction bgoAction = action as BgoPlayerAction;
@@ -86,7 +90,7 @@ namespace Assets.CSharpCode.Network.Bgo
             {
                 if (callback != null)
                 {
-                    callback(actions);
+                    callback(null,actions);
                 }
             };
 

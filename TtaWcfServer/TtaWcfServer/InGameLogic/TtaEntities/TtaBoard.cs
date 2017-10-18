@@ -1,65 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using TtaWcfServer.InGameLogic.Civilpedia;
+using TtaWcfServer.InGameLogic.Effects;
+using TtaWcfServer.Util;
+using System.Linq;
 
 namespace TtaWcfServer.InGameLogic.TtaEntities
 {
-    [DataContract]
+
     public class TtaBoard
     {
-        [DataMember]
+        public TtaBoard()
+        {
+            //以下这些元素不能根据面板算出，因此需要保存
+            UncountableResourceCount.Add(ResourceType.Science, 0);
+            UncountableResourceCount.Add(ResourceType.Culture, 0);
+
+            UncountableResourceCount.Add(ResourceType.ResourceForMilitary, 0);
+            UncountableResourceCount.Add(ResourceType.ResourceForWonderAndProduction, 0);
+
+            UncountableResourceCount.Add(ResourceType.ScienceForMilitary, 0);
+            UncountableResourceCount.Add(ResourceType.ScienceForSpecialTech, 0);
+
+            UncountableResourceCount.Add(ResourceType.WhiteMarker, 0);
+            UncountableResourceCount.Add(ResourceType.RedMarker, 0);
+
+            UncountableResourceCount.Add(ResourceType.WorkerPool, 0);
+        }
+
         public int PlayerId;
-        [DataMember]
         public List<CardInfo> CompletedWonders;
-        [DataMember]
         public CardInfo ConstructingWonder;
-        [DataMember]
-        public int ConstructingWonderSteps;
 
-        [DataMember]
-        public List<CardInfo> SpecialTechs;
-        [DataMember]
-        public List<CardInfo> Colonies;
-
-        [DataMember]
-        public CardInfo Government;
-        [DataMember]
-        public CardInfo Leader;
-
-        [DataMember]
-        public CardInfo Tactic;
-
-        [DataMember]
-        public List<Warning> Warnings;
-
-        [DataMember]
-        public List<CardInfo> CivilCards;
-
-        [DataMember]
-        public List<CardInfo> MilitaryCards;
-
-        [DataMember]
-        public List<CardInfo> CurrentEventPlayed;
-        [DataMember]
-        public List<CardInfo> FutureEventPlayed;
-
-        [DataMember]
-        public Dictionary<BuildingType, Dictionary<Age, BuildingCell>> Buildings;
-
-        /*
+        [XmlIgnore]
+        public EffectPool EffectPool=new EffectPool();
         /// <summary>
-        /// 这里的每一个元素都可以通过面板算出来，所以这整个集合都是被动运算得到的，将来改为属性或方法
+        /// 表示当前奇迹建设到第几步了
         /// </summary>
-        [DataMember]
-        public Dictionary<ResourceType, int> Resource=new Dictionary<ResourceType, int>();
-        */
-
-        [DataMember]
+        public int ConstructingWonderSteps;
+        
+        public List<CardInfo> SpecialTechs;
+        public List<CardInfo> Colonies;
+        
+        public CardInfo Government;
+        public CardInfo Leader;
+        
+        public CardInfo Tactic;
+        
+        public List<Warning> Warnings;
+        
+        public List<CardInfo> CivilCards;
+        
+        public List<CardInfo> MilitaryCards;
+        
+        public List<CardInfo> CurrentEventPlayed;
+        public List<CardInfo> FutureEventPlayed;
+        
+        public XmlSerializableDictionary<BuildingType, XmlSerializableDictionary<Age, BuildingCell>> Buildings;
+        
         public int InitialYellowMarkerCount;
-
-        [DataMember]
+        
         public int InitialBlueMarkerCount;
+        
+        public XmlSerializableDictionary<ResourceType, int> UncountableResourceCount=new XmlSerializableDictionary<ResourceType, int>();
+
+        //---------Static
+        public T AggregateOnBuildingCell<T>(T initial, Func<T,BuildingCell, T> aggregate)
+        {
+            return
+                (from buildingPair in this.Buildings from cellPair in buildingPair.Value select cellPair.Value)
+                    .Aggregate(initial, aggregate);
+        }
     }
 
     [DataContract]

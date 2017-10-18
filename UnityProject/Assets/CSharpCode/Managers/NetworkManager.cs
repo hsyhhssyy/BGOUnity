@@ -36,7 +36,17 @@ namespace Assets.CSharpCode.Managers
             {
                 return;
             }
+            if (args.EventType == GameUIEventType.BackgroundRefresh)
+            {
+                //强行取消界面暗转
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
 
+                Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, (error) =>
+                {
+                    var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
+                    Channel.Broadcast(msg);
+                }));
+            }else
             if (args.EventType == GameUIEventType.ForceRefresh)
             {
                 //通知界面暗转等待网络
@@ -58,7 +68,7 @@ namespace Assets.CSharpCode.Managers
                 if (action.Internal)
                 {
                     Manager.StartCoroutine(Server.TakeInternalAction(Manager.CurrentGame,
-                        action, (actions) =>
+                        action, (actionResponse,actions) =>
                         {
                             Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
 
@@ -66,43 +76,12 @@ namespace Assets.CSharpCode.Managers
                             var msg = new ManagerGameUIEventArgs(GameUIEventType.ReportInternalAction, "PCBoard");
                             msg.AttachedData["Actions"] = actions;
                             Channel.Broadcast(msg);
-                            /*
-                            PlayerAction actionToPerform =null;
-                            foreach (var candidateAction in actions)
-                            {
-                                if (candidateAction.ActionType == PlayerActionType.DevelopTechCard)
-                                {
-                                    //选出Action
-                                    if (args.AttachedData.ContainsKey("AdditionalCard1") &&
-                                        candidateAction.Data[0] as CardInfo == args.AttachedData["AdditionalCard1"] as CardInfo)
-                                    {
-                                        actionToPerform = candidateAction;
-                                    }
-                                }
-
-                            }
-                            
-
-                            if (actionToPerform == null)
-                            {
-                                LogRecorder.Log("Selection invalid!");
-                                //GameManager提交过来的选择无效
-                                Channel.Broadcast(new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
-                            }
-                            else
-                            {
-                                Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
-                                    actionToPerform, () =>
-                                    {
-                                        Channel.Broadcast(new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard"));
-                                    }));
-                            }*/
                         }));
                 }
                 else
                 {
                     Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
-                        action, (error) =>
+                        action, (actionResponse) =>
                         {
                             var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
                             Channel.Broadcast(msg);

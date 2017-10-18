@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.CSharpCode.Network;
+using Assets.CSharpCode.UI;
 using UnityEngine;
 
 namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
@@ -29,8 +31,8 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
             if (refreshIntervel <= 0)
             {
                 StateData["Toggle"] = false;
-                //Refresh
-                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.ForceRefresh, "NetworkManager"));
+                //这里是定时刷新，因此是后台Refresh
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.BackgroundRefresh, "NetworkManager"));
             }
         }
 
@@ -48,7 +50,14 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
             //Refresh以后仍然处于这个状态
             if (args.EventType == GameUIEventType.Refresh)
             {
-                StateData["Progress"] = 30f;
+                if (SceneTransporter.Server.ServerType == ServerType.PassiveServer2Sec)
+                {
+                    StateData["Progress"] = 2f;
+                }
+                else if (SceneTransporter.Server.ServerType == ServerType.PassiveServer30Sec)
+                {
+                    StateData["Progress"] = 30f;
+                }
                 StateData["Toggle"] = true;
             }
             else if (args.EventType == GameUIEventType.TrySelect)

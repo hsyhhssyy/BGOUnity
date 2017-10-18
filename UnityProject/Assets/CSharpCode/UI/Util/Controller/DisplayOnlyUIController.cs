@@ -12,7 +12,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
     public abstract class DisplayOnlyUIController : TtaUIControllerMonoBehaviour
     {
         protected bool RefreshRequired;
-        private GameManagerState savedManagerState;
+        private GameManagerState _savedManagerState;
 
         private bool _isHoveringAndAllowSelected;
         /// <summary>
@@ -26,7 +26,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 {
                     _isHoveringAndAllowSelected = value;
                     RefreshRequired = true;
-                    savedManagerState = Manager.State;
+                    _savedManagerState = Manager.State;
 
                     OnHoveringHighlightChanged();
                 }
@@ -50,15 +50,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         protected override void OnSubscribedGameEvents(System.Object sender, GameUIEventArgs args)
         {
-            //响应Refresh（来重新创建UI Element）
-            if (args.EventType == GameUIEventType.Refresh)
-            {
-                RefreshRequired = true;
-                savedManagerState = Manager.State;
-
-                this.gameObject.SetActive(true);
-            }
-
+            //调整到Refresh上面
             if (args.UIKey.Contains(Guid))
             {
                 if (args.EventType == GameUIEventType.AllowSelect)
@@ -66,16 +58,33 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                     IsHoveringAndAllowSelected = true;
                 }
             }
+
+            //响应Refresh（来重新创建UI Element）
+            if (args.EventType == GameUIEventType.Refresh)
+            {
+                RefreshRequired = true;
+                _savedManagerState = Manager.State;
+
+                //this.gameObject.SetActive(true);不能这样触发FixedUpdate！因为会出现界面闪烁
+                //直接调用
+                if (this.gameObject.activeInHierarchy == false)
+                {
+                    RefreshRequired = false;
+                    Refresh();
+                }
+            }
+
+            
         }
 
         [UsedImplicitly]
         public virtual void FixedUpdate()
         {
             //如果游戏状态发生了变化，所有元素会强制进行刷新
-            if (savedManagerState != Manager.State)
+            if (_savedManagerState != Manager.State)
             {
                 RefreshRequired = true;
-                savedManagerState = Manager.State;
+                _savedManagerState = Manager.State;
             }
 
             if (RefreshRequired)

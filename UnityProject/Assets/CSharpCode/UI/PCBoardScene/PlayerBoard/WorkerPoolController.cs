@@ -40,9 +40,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 Destroy(child.gameObject);
             }
 
-            float incr = board.Resource[ResourceType.WorkerPool] > 1
+            /*float incr = board.Resource[ResourceType.WorkerPool] > 1
                 ? (0.66f / (board.Resource[ResourceType.WorkerPool] - 1))
-                : 0f;
+                : 0f;*/
 
             int total = board.Resource[ResourceType.WorkerPool];
             for (int i = 0; i < total; i++)

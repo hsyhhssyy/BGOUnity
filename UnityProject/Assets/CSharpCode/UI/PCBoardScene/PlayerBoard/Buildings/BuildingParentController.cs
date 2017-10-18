@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Assets.CSharpCode.Entity;
-using Assets.CSharpCode.Helper;
 using Assets.CSharpCode.Managers;
-using Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior;
-using Assets.CSharpCode.UI.PCBoardScene.PlayerBoard;
 using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Assets.CSharpCode.UI.PCBoardScene.Controller
+namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard.Buildings
 {
     public class BuildingParentController : TtaUIControllerMonoBehaviour
     {
@@ -74,7 +68,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 incr = 0.7f * 8 / (board.Buildings.Count() - 1);
             }
 
-            Age[] ages = { Age.A, Age.I, Age.II, Age.III };
+            //Age[] ages = { Age.A, Age.I, Age.II, Age.III };(age可以直接Cast)
 
             int i = 0;
             foreach (var t in buildingArray)

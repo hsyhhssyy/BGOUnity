@@ -1,4 +1,5 @@
 ﻿using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.Network;
 using Assets.CSharpCode.UI.Util;
 using Assets.CSharpCode.UI.Util.Controller;
 using JetBrains.Annotations;
@@ -23,9 +24,10 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             //响应Refresh（来重新创建UI Element）
             if (args.EventType == GameUIEventType.CancelWaitingNetwork)
             {
-               gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 LogRecorder.Log("Disable Mask");
-            }else if (args.EventType == GameUIEventType.WaitingNetwork)
+            }
+            else if (args.EventType == GameUIEventType.WaitingNetwork)
             {
                 gameObject.SetActive(true);
                 LogRecorder.Log("Enable Mask");

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.GameLogic;
+using Assets.CSharpCode.GameLogic.Actions;
+using Assets.CSharpCode.Network.Wcf.Entities;
 using Assets.CSharpCode.UI.Util;
 using Assets.CSharpScripts.Helper;
 
@@ -14,6 +17,8 @@ namespace Assets.CSharpCode.Network.Wcf
     {
         private String Session;
         private int Uid;
+
+        public ServerType ServerType { get { return ServerType.PassiveServer2Sec; } }
 
         public IEnumerator LogIn(string username, string password, Action<String> callback)
         {
@@ -82,7 +87,7 @@ namespace Assets.CSharpCode.Network.Wcf
             {
                 var payloadJson = obj.TryGetPath("ListMyGameResult").GetField("Payload");
                 List<TtaGame> games= payloadJson.
-                    list.Select(o => WcfJsonPageProvider.CreateRoom(o)).ToList();
+                    list.Select<JSONObject,WcfGame>(WcfJsonPageProvider.ParseTtaGameWithRoomJson).Cast<TtaGame>().ToList();
                 callback(games);
                 yield break;
             }
@@ -91,15 +96,53 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator RefreshBoard(TtaGame game, Action<String> callback)
         {
-            throw new NotImplementedException();
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.RefreshBoard(Session,(WcfGame) game),
+                WcfServiceProvider.CastCallback((json) =>
+                {
+                    if (json != null && json.IsNull == false)
+                    {
+                        WcfJsonPageProvider.ParseTtaGameWithGameJson((WcfGame) game, json);
+                        callback(null);
+                        return;
+                    }
+                    callback("NullReference");
+                }));
         }
 
-        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action<String> callback)
+        public IEnumerator TakeAction(TtaGame game, PlayerAction action, Action<ActionResponse> callback)
         {
-            throw new NotImplementedException();
+            WcfGame wcfGame= game as WcfGame;
+            if (wcfGame == null)
+            {
+                callback(null);
+                return new WcfServiceProvider.EmptyEnumrator();
+            }
+
+            var gameLogicResponse=GameLogicManager.CurrentManager.TakeAction(action);
+            if (gameLogicResponse != null)
+            {
+                callback(gameLogicResponse);
+                return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(Session, wcfGame.RoomId,action, gameLogicResponse),
+                WcfServiceProvider.CastCallback((jsonPayload) =>
+                {
+                    var serverResponse=WcfJsonPageProvider.ParseActionResponse(jsonPayload);
+                    var suppress=GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse, serverResponse);
+                    if (!suppress)
+                    {
+                        callback(serverResponse);
+                    }
+                }));
+            }
+            //否则直接请求网络，并把传入的callback作为网络通信的结果
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(Session, wcfGame.RoomId, action, null),
+                WcfServiceProvider.CastCallback((jsonPayload) =>
+                {
+                        var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload);
+                        callback(serverResponse);
+                }));
         }
 
-        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action, Action<List<PlayerAction>> callback)
+        public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action,Action<ActionResponse,List<PlayerAction>> callback)
         {
             throw new NotImplementedException();
         }
@@ -109,7 +152,7 @@ namespace Assets.CSharpCode.Network.Wcf
             return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.CheckRankedMatch(Session),
                 WcfServiceProvider.CastCallback((game) =>
                 {
-                    callback(game != null&&game.IsNull==false ? WcfJsonPageProvider.CreateRoom(game) : null);
+                    callback(game != null&&game.IsNull==false ? WcfJsonPageProvider.ParseTtaGameWithRoomJson(game) : null);
                 }));
         }
 

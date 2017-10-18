@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Assets.CSharpCode.Civilopedia;
 
 namespace Assets.CSharpCode.Entity
 {
-
+    [DataContract]
     public class PlayerAction
     {
+        [DataMember]
         public PlayerActionType ActionType;
 
+        [DataMember]
         public Dictionary<Int32,Object> Data=new Dictionary<int, object>();
 
         /// <summary>

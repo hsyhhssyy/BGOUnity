@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
 using System.IO;
+using Assets.CSharpCode.Network.Wcf;
 using Assets.CSharpCode.UI.PCBoardScene.CommonPrefab;
 
 public class TestSceneUIBehaviour : MonoBehaviour
@@ -173,6 +174,36 @@ public class TestSceneUIBehaviour : MonoBehaviour
 
             ExtensionMethods.LoadScene("Scene/BoardScene-PC", 1);
 
+        }));
+    }
+
+    [UsedImplicitly]
+    public void 回到登录页面_Clicked()
+    {
+        //登录
+        ExtensionMethods.LoadScene("Scene/StartScreen", 1);
+    }
+
+    #endregion
+
+    #region 测试WcfServer的按钮
+
+    public void LoginAsOlafDrake_Click()
+    {
+        SceneTransporter.Server = new WcfServer();
+        WcfServiceProvider.ServerUrlBase = "http://localhost:50487/Service/";
+        StartCoroutine(SceneTransporter.Server.LogIn("zylzzyyll", "hsy12345", (error) =>
+        {
+            SceneManager.LoadScene("Scene/LobbyScene");
+        }));
+    }
+    public void LoginAsAWeakParrot_Click()
+    {
+        SceneTransporter.Server = new WcfServer();
+        WcfServiceProvider.ServerUrlBase = "http://localhost:50487/Service/";
+        StartCoroutine(SceneTransporter.Server.LogIn("hsyhhssyy", "hsy12345", (error) =>
+        {
+            SceneManager.LoadScene("Scene/LobbyScene");
         }));
     }
 

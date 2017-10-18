@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.Network;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.StatusBar
 
        public void Update()
        {
-           if (Manager.State != GameManagerState.OutOfMyTurn)
+           if (Manager.State != GameManagerState.OutOfMyTurn||SceneTransporter.Server.ServerType!= ServerType.PassiveServer30Sec)
            {
                if (_toggled)
                {

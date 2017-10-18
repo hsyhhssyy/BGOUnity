@@ -89,7 +89,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.ActionBinder
                 trigger.ActionOnMouseClick= () =>
                 {
                     //匿名方法参数传递
-                    int localIndex = index;
+                    //int localIndex = index;
                     var localActions = actions;
                     
                     List<PlayerAction> acceptedActions = new List<PlayerAction>();

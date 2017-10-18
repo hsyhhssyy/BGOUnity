@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 using Assets.CSharpCode.Civilopedia;
+using Assets.CSharpCode.GameLogic.Effect;
+using System.Linq;
+using Assets.CSharpCode.GameLogic;
 
 namespace Assets.CSharpCode.Entity
 {
     public class TtaBoard
     {
+        public TtaBoard()
+        {
+            Resource = new TtaResourceCounter(GameLogicManager.CurrentManager, this);
+        }
+
         public String PlayerName;
         
         public List<CardInfo> CompletedWonders;
 
         public CardInfo ConstructingWonder;
+        /// <summary>
+        /// 未完成为数字，完成为X
+        /// </summary>
         public List<String> ConstructingWonderSteps;
+
+        [XmlIgnore]
+        public EffectPool EffectPool;
 
         public List<CardInfo> SpecialTechs;
         public List<CardInfo> Colonies;
@@ -33,7 +48,11 @@ namespace Assets.CSharpCode.Entity
         
         public Dictionary<BuildingType, Dictionary<Age, BuildingCell>> Buildings;
 
-        public readonly Dictionary<ResourceType, int> Resource=new Dictionary<ResourceType, int>();
+        public TtaResourceCounter Resource;
+        
+        public int InitialYellowMarkerCount;
+
+        public int InitialBlueMarkerCount;
 
         //CalcuatedProperty
         /// <summary>
@@ -60,6 +79,14 @@ namespace Assets.CSharpCode.Entity
                 var discorderV= faceRequired-Resource[ResourceType.HappyFace];
                 return discorderV < 0 ? 0 : discorderV;
             }
+        }
+
+        //---------Static
+        public T AggregateOnBuildingCell<T>(T initial, Func<T, BuildingCell, T> aggregate)
+        {
+            return
+                (from buildingPair in this.Buildings from cellPair in buildingPair.Value select cellPair.Value)
+                    .Aggregate(initial, aggregate);
         }
     }
 

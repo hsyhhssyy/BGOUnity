@@ -4,6 +4,12 @@ namespace Assets.CSharpScripts.Helper
 {
     public static class JsonHelper
     {
+        /// <summary>
+        /// 支持按照中括号和点来进行扫描如xxx[yyy].zzz
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static JSONObject TryGetPath(this JSONObject obj, String path)
         {
 
@@ -80,7 +86,7 @@ namespace Assets.CSharpScripts.Helper
         {
             if (obj.HasField(name))
             {
-                return obj[name];
+                return obj.GetField(name);
             }
             else
             {

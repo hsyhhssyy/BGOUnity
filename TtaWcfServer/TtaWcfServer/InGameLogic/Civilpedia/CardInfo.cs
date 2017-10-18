@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using TtaWcfServer.InGameLogic.TtaEntities;
 
 namespace TtaWcfServer.InGameLogic.Civilpedia
@@ -10,6 +11,11 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
     {
         public static String UnknownInternalId = "Unknown!";
 
+        /// <summary>
+        /// 返回一张不知道是什么内容的特定时代军事牌（用于网络传输）
+        /// </summary>
+        /// <param name="age"></param>
+        /// <returns></returns>
         public static CardInfo UnknownMilitaryCard(Age age)
         {
             return new CardInfo
@@ -34,6 +40,8 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
         public String Description;
         #endregion
 
+        [XmlIgnore] public bool FromSerialization = true;
+
         public String Package;
 
         #region 游戏性数据
@@ -42,17 +50,25 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
         public List<int> BuildCost = new List<int>();
         public List<int> RedMarkerCost    =new List<int>();
 
+        [XmlIgnore]
         public List<CardEffect> ImmediateEffects = new List<CardEffect>();
+        [XmlIgnore]
         public List<CardEffect> SustainedEffects=new List<CardEffect>();
 
         public List<int> AffectedTrget=new List<int>();
+        [XmlIgnore]
         public List<CardEffect> WinnerEffects = new List<CardEffect>();
+        [XmlIgnore]
         public List<CardEffect> LoserEffects = new List<CardEffect>();
 
+        [XmlIgnore]
         public List<int> TacticComposition=new List<int>();
+        [XmlIgnore]
         public List<int> TacticValue = new List<int>();
-        
+
+        [XmlIgnore]
         public List<CardEffect> LeaderActiveSkill = new List<CardEffect>();
+        [XmlIgnore]
         public List<CardEffect> LeaderPassiveSkill = new List<CardEffect>();
 
         #endregion
@@ -121,6 +137,24 @@ namespace TtaWcfServer.InGameLogic.Civilpedia
             return !Equals(left, right);
         }
 
+        #endregion
+
+        #region Requery
+
+        public CardInfo CivilpediaCheck(TtaCivilopedia civilopedia)
+        {
+            if (civilopedia == null)
+            {
+                return this;
+            }
+            if (this.FromSerialization)
+            {
+                var cloneCard =civilopedia.GetCardInfoById(this.InternalId);
+
+                return cloneCard;
+            }
+            return this;
+        }
         #endregion
     }
 

@@ -16,8 +16,9 @@ namespace Assets.CSharpCode.Network.Wcf
             var headers = myPostData.headers;
             headers["Content-Type"] = "application/json";
             headers["Accept"] = "application/json";
-            
-            byte[] rawData = Encoding.UTF8.GetBytes(json.ToString(true));
+
+            var str = json.ToString(true);
+            byte[] rawData = Encoding.UTF8.GetBytes(str);
 
             var www = new WWW(uri,
                 rawData, headers);

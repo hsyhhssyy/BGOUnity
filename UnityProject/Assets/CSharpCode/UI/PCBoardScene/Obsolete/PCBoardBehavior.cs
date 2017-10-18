@@ -106,7 +106,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene
             {
                 InterAction = action;
                 StartCoroutine(SceneTransporter.Server.TakeInternalAction(SceneTransporter.CurrentGame, action,
-                    (actions) =>
+                    (response,actions) =>
                     {
                         LoadingGo.SetActive(false);
                         if (internalActionCallback != null)

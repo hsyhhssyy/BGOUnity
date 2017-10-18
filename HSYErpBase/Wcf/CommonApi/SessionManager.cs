@@ -103,8 +103,8 @@ namespace HSYErpBase.Wcf.CommonApi
                         }
                     }
                     else
+                    // ReSharper disable once HeuristicUnreachableCode
                     {
-                        // ReSharper disable once HeuristicUnreachableCode
                         return WcfError.NoSuchModule;
                     }
                     #pragma warning restore 162

@@ -71,7 +71,7 @@ namespace Assets.CSharpCode.Managers
                 },
                 {
                     GameManagerState.ActionPhaseChooseTarget, new List<GameBoardStateHandler>
-                    {
+                    { 
                         new ActionPhaseChooseTargetStateHandler(this)
                     }
                 },
@@ -249,6 +249,7 @@ namespace Assets.CSharpCode.Managers
                         newState = GameManagerState.PoliticalPhaseIdle;
                         break;
                     case TtaPhase.ActionPhase:
+                    case TtaPhase.FirstTurnActionPhase:
                         newState = GameManagerState.ActionPhaseIdle;
                         break;
                     case TtaPhase.EventResolution:

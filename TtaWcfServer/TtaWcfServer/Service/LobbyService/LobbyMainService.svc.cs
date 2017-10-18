@@ -32,6 +32,8 @@ namespace TtaWcfServer.Service.LobbyService
 
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
+
                 var user = SessionManager.GetCurrentUser(sessionString);
                 var query=hibernateSession.CreateQuery(
                     "from GameRoom where (HostId = ? or Players like ? or Observers like ? or Referees like ?) and end_date is null");
@@ -46,7 +48,7 @@ namespace TtaWcfServer.Service.LobbyService
 
                 foreach (var gameRoom in result)
                 {
-                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom,hibernateSession);
+                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, context);
                 }
 
                 return new WcfServicePayload<List<GameRoom>>(result);
@@ -66,6 +68,8 @@ namespace TtaWcfServer.Service.LobbyService
 
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
+
                 var query = hibernateSession.CreateQuery(
                     "from GameRoom where RelatedMatchId is null and end_date is null");
 
@@ -74,7 +78,7 @@ namespace TtaWcfServer.Service.LobbyService
 
                 foreach (var gameRoom in result)
                 {
-                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, hibernateSession);
+                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, context);
                 }
 
                 return new WcfServicePayload<List<GameRoom>>(result);
@@ -94,6 +98,8 @@ namespace TtaWcfServer.Service.LobbyService
 
             using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
             {
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
+
                 var query = hibernateSession.CreateQuery(
                     "from GameRoom where RelatedMatchId is null and end_date is null and RoomName like ?");
                 query.SetString(0, "%" + keyword + "%");
@@ -103,7 +109,7 @@ namespace TtaWcfServer.Service.LobbyService
 
                 foreach (var gameRoom in result)
                 {
-                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, hibernateSession);
+                    LobbyServiceApi.FillUserLitesOfGameRoom(gameRoom, context);
                 }
 
                 return new WcfServicePayload<List<GameRoom>>(result);
@@ -220,7 +226,7 @@ namespace TtaWcfServer.Service.LobbyService
                     return new WcfServicePayload<GameRoom>(null);
                 }
 
-                if (room.HasPassword == true)
+                if (room.HasPassword)
                 {
                     if (password != room.Password)
                     {
@@ -245,7 +251,7 @@ namespace TtaWcfServer.Service.LobbyService
                 hibernateSession.Save(room);
                 if (sp.Length +1 >= room.PlayerMax)
                 {
-                    if (room.AutoStart == true)
+                    if (room.AutoStart)
                     {
                         GameManager.SetupNew(room,context);
                     }

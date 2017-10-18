@@ -40,6 +40,23 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
         protected override void Refresh()
         {
+            if (Manager.CurrentGame.CardRow == null)
+            {
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                this.gameObject.SetActive(true);
+            }
+            if (Manager.CurrentGame.CardRow.Count <= Position)
+            {
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                this.gameObject.SetActive(true);
+            }
+
             CardRowCardInfo cardRowInfo = Manager.CurrentGame.CardRow[Position];
 
             var whitePrefab = Resources.Load<GameObject>("Dynamic-PC/WhiteMarker");
@@ -58,7 +75,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
             if (cardRowInfo.Card != null)
             {
-                if (cardRowInfo.CanPutBack != true)
+                if (cardRowInfo.CanTake)
                 {
                     SmallCardFrame.gameObject.SetActive(true);
                     SmallCardFrame.GetComponent<PCBoardCardDisplayBehaviour>().Bind(cardRowInfo.Card);

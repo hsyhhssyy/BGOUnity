@@ -32,9 +32,18 @@ namespace Assets.CSharpCode.Managers
     }
     public class ServerGameUIEventArgs : GameUIEventArgs
     {
-        public ServerGameUIEventArgs(GameUIEventType allowSelect, string uIKey)
+        public ServerGameUIEventArgs(GameUIEventType eventType, string uIKey)
         {
-            EventType = allowSelect;
+            EventType = eventType;
+            UIKey = uIKey;
+        }
+    }
+
+    public class LogicGameUIEventArgs : GameUIEventArgs
+    {
+        public LogicGameUIEventArgs(GameUIEventType eventType, string uIKey)
+        {
+            EventType = eventType;
             UIKey = uIKey;
         }
     }
@@ -68,6 +77,10 @@ namespace Assets.CSharpCode.Managers
         /// </summary>
         TakeAction,
         /// <summary>
+        /// 表示服务器对玩家的Action做出了响应（注意一个action可能会触发多次此事件，因为TtaServer本地可能在服务器之前响应。）
+        /// </summary>
+        ActionResponse,
+        /// <summary>
         /// 表示请UI提示玩家等待网络通讯
         /// </summary>
         WaitingNetwork,
@@ -88,9 +101,18 @@ namespace Assets.CSharpCode.Managers
         /// </summary>
         SelectionDeactive,
         /// <summary>
-        /// 强制要求进行网络刷新
+        /// 强制要求进行网络刷新（界面暗转）
         /// </summary>
         ForceRefresh,
-        //
+        /// <summary>
+        /// 后台进行网络刷新（界面保持不变）
+        /// </summary>
+        BackgroundRefresh,
+
+        //-------------------Logic Event ------------
+        /// <summary>
+        /// 表示GameChange事件被触发
+        /// </summary>
+        LogicGameChanged,
     }
 }

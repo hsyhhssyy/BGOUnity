@@ -14,10 +14,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.GameBoard
 
         protected override void Refresh()
         {
-            var board = Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo];
-
+            //var board = Manager.CurrentGame.Boards[Manager.CurrentDisplayingBoardNo];
             
-
             this.GetComponent<SpriteRenderer>().sprite = UnityResources.GetSprite("SpriteTile/PCBoard/pc-board-player-background-"+_playerColor[Manager.CurrentDisplayingBoardNo]);
         }
     }
