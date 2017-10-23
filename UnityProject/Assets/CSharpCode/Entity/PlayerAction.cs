@@ -34,6 +34,11 @@ namespace Assets.CSharpCode.Entity
             Data[0] = act;
         }
 
+        public Object this[int index]
+        {
+            get { return Data[index]; }
+        }
+
         public String GetDescription()
         {
             switch (ActionType)

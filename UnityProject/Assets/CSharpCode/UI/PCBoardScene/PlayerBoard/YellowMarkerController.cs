@@ -43,14 +43,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
             int happyface = board.Resource[ResourceType.HappyFace];
             for (int i = 0; i < 9; i++)
             {
-                if (i < happyface)
-                {
-                    HappyFaces[i].SetActive(false);
-                }
-                else
-                {
-                    HappyFaces[i].SetActive(true);
-                }
+                HappyFaces[i].SetActive(i > happyface);
             }
         }
 

@@ -144,8 +144,8 @@ namespace Assets.CSharpCode.Managers
         public void Regiseter(TtaUIControllerMonoBehaviour controller)
         {
             controller.Channel = Channel;
-
-            LogRecorder.Log(controller.name + " Registed");
+            //这个Log量太大，暂时关闭，需要Debug再开
+            //LogRecorder.Log(controller.name + " Registed");
         }
 
         private void OnSubscribedUiControllerEvents(System.Object sender, GameUIEventArgs args)
@@ -153,7 +153,8 @@ namespace Assets.CSharpCode.Managers
             //只有在刷新时才会出现，否则定时请求刷新
             if (args.EventType == GameUIEventType.Refresh)
             {
-                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
+                //先关掉这个，我倒要看看什么东西在暗转
+                //Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
                 VerifyState();
             }
 

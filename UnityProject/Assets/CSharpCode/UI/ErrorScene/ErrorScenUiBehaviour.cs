@@ -21,12 +21,13 @@ namespace Assets.CSharpCode.UI.ErrorScene
 
             if (SceneTransporter.CurrentGame != null)
             {
-                errorStr += Environment.NewLine + "------Game" + SceneTransporter.CurrentGame.Name + "-----";
+                errorStr += Environment.NewLine + "------Game:" + SceneTransporter.CurrentGame.Name + "-----";
                 errorStr += Environment.NewLine;
                 JsonSerializer serializer = new JsonSerializer();
                 try
                 {
-                    serializer.Serialize(SceneTransporter.CurrentGame);
+                    var obj=serializer.Serialize(SceneTransporter.CurrentGame,true);
+                    errorStr+=obj.ToString();
                 }
                 catch (Exception e)
                 {
@@ -36,12 +37,13 @@ namespace Assets.CSharpCode.UI.ErrorScene
 
             if (SceneTransporter.Server != null)
             {
-                errorStr += Environment.NewLine + "------Server" + SceneTransporter.Server.GetType().Name + "-----";
+                errorStr += Environment.NewLine + "------Server:" + SceneTransporter.Server.GetType().Name + "-----";
                 errorStr += Environment.NewLine;
                 JsonSerializer serializer = new JsonSerializer();
                 try
                 {
-                    serializer.Serialize(SceneTransporter.Server);
+                    var obj=serializer.Serialize(SceneTransporter.Server, true);
+                    errorStr += obj.ToString();
                 }
                 catch (Exception e)
                 {

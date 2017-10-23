@@ -23,6 +23,10 @@ namespace Assets.CSharpCode.GameLogic
             {
                 new EndPhaseActionHandler(this),
                 new TakeCardFromCardRowActionHandler(this),
+                new BuildAndDestoryActionHandler(this),
+                new PlayActionCardActionHandler(this),
+                new PlayTechCardActionHandler(this),
+                new IncreasePopulationActionHandler(this),
             };
             LastCalcuatedActions = new Dictionary<int, List<PlayerAction>>();
 
@@ -162,11 +166,62 @@ namespace Assets.CSharpCode.GameLogic
 
                 //需要通知界面刷新
                 _channel.Broadcast(new ControllerGameUIEventArgs(GameUIEventType.ForceRefresh, "GameLogicManager"));
+            }else if (serverResponse.Type == ActionResponseType.Accepted)
+            {
+                foreach (var move in serverResponse.Changes)
+                {
+                    ExecuteServerMoves(move);
+                }
+            }
+            else if (serverResponse.Type == ActionResponseType.ChangeList)
+            {
+                //这里是要求比对两个List，如果不同，则表示操作有误
+                //TODO 暂不比较，假定客户端版本更为正确
             }
             return true;
         }
 
+        /// <summary>
+        /// 执行来自服务器的GameMove指令，注意不接受所有的Move指令，只接受服务器可能传回的版本。
+        /// 客户端想要做操作，请直接操作TtaGame。（并生成GameMove提供给Response）
+        /// </summary>
+        public void ExecuteServerMoves(GameMove move)
+        {
+            if (move == null)
+            {
+                return;
+            }
+
+            var board = CurrentGame.Boards[move.PlayerNo];
+            switch (move.Type)
+            {
+                case GameMoveType.DrawCards:
+                    List<CardInfo> cards = (List<CardInfo>) move.Data[1];
+                    foreach (var card in cards)
+                    {
+                        if (card.CardType == CardType.Colony ||
+                            card.CardType == CardType.Aggression ||
+                            card.CardType == CardType.Defend ||
+                            card.CardType == CardType.Event ||
+                            card.CardType == CardType.Pact ||
+                            card.CardType == CardType.War ||
+                            card.CardType == CardType.Unknown
+                        )
+                        {
+                            board.MilitaryCards.Add(card);
+                        }
+                        else
+                        {
+                            board.CivilCards.Add(card);
+                        }
+                    }
+                    break;
+            }
+        }
+
         #endregion
+
+
 
         /// <summary>
         /// 执行一个不包含抽牌的生产阶段
@@ -216,11 +271,11 @@ namespace Assets.CSharpCode.GameLogic
             if (corruptionValue > 0)
             {
                 Dictionary<CardInfo, int> corruptionMarkers = new Dictionary<CardInfo, int>();
-                int left = SpendResource(playerNo, BuildingType.Mine, ResourceType.ResourceIncrement, corruptionValue,
+                int left = SimSpendResource(playerNo, BuildingType.Mine, ResourceType.ResourceIncrement, corruptionValue,
                     corruptionMarkers);
                 if (left > 0)
                 {
-                    left = SpendResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, left,
+                    left = SimSpendResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, left,
                         corruptionMarkers);
                     if (left > 0)
                     {
@@ -244,7 +299,7 @@ namespace Assets.CSharpCode.GameLogic
             //生产粮食
             Dictionary<CardInfo, int> markers = new Dictionary<CardInfo, int>();
             int amount = board.Resource[ResourceType.FoodIncrement];
-            ProduceResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, amount, markers);
+            SimProduceResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, amount, markers);
             PerformMarkerChange(playerNo, markers);
 
             response.Changes.Add(GameMove.Production(ResourceType.Food, amount, markers));
@@ -254,7 +309,7 @@ namespace Assets.CSharpCode.GameLogic
             int consumptionValue = Civilopedia.GetRuleBook().ConsumptionValue(currentYellowMarker);
 
             markers.Clear();
-            int spend = SpendResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, consumptionValue, markers);
+            int spend = SimSpendResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, consumptionValue, markers);
             if (spend > 0)
             {
                 //扣分
@@ -273,7 +328,7 @@ namespace Assets.CSharpCode.GameLogic
             //生产矿物
             markers.Clear();
             amount = board.Resource[ResourceType.ResourceIncrement];
-            ProduceResource(playerNo, BuildingType.Mine, ResourceType.ResourceIncrement, amount, markers);
+            SimProduceResource(playerNo, BuildingType.Mine, ResourceType.ResourceIncrement, amount, markers);
             PerformMarkerChange(playerNo, markers);
 
             response.Changes.Add(GameMove.Production(ResourceType.Resource, amount, markers));
@@ -293,18 +348,23 @@ namespace Assets.CSharpCode.GameLogic
             return response;
         }
 
+        #region 蓝点调整代码
+
         /// <summary>
-        /// 返回没能消耗掉的资源数量
+        /// 计算如果要[消耗]指定数量的资源，各个建筑物上的蓝点应如何变化。（注意，并不真的操作蓝点）
+        /// 返回没能消耗掉的资源数量（如果蓝点不足）。
         /// </summary>
-        /// <param name="playerNo"></param>
-        /// <param name="value"></param>
-        /// <param name="marker"></param>
-        /// <returns></returns>
-        public int SpendResource(int playerNo, BuildingType buildingType, ResourceType rType, int value,Dictionary<CardInfo, int> marker)
+        /// <param name="playerNo">玩家编号（0开始）</param>
+        /// <param name="exchangeBuildingType">指示一旦发生资源找零时，蓝点放置于什么建筑物上。（该建筑也必须有生产对应类型资源的Effect）</param>
+        /// <param name="effectType">指示进行查找的资源在CardEffect上对应的资源，注意一般来说，是Increment，如消耗食物，这里应当填入FoodIncrement而不是Food。</param>
+        /// <param name="value">要消耗的绝对数值（不是蓝点数）</param>
+        /// <param name="marker">蓝点调整的结果将被添加到这里返回用户。</param>
+        /// <returns>返回一旦资源不足时，未能消耗的资源绝对点数。</returns>
+        public int SimSpendResource(int playerNo, BuildingType exchangeBuildingType, ResourceType effectType, int value,Dictionary<CardInfo, int> marker)
         {
             //从小往大拿
             var board = CurrentGame.Boards[playerNo];
-            var buildings = board.Buildings[buildingType];
+            var buildings = board.Buildings[exchangeBuildingType];
 
             int currentAmount = value;
             for (int i = 0; i < 4; i++)
@@ -319,7 +379,7 @@ namespace Assets.CSharpCode.GameLogic
                     }
 
                     var effect=
-                        cell.Card.SustainedEffects.FirstOrDefault(e => e.FunctionId == CardEffectType.E100&&e.Data[0]==(int)rType);
+                        cell.Card.SustainedEffects.FirstOrDefault(e => e.FunctionId == CardEffectType.E100&&e.Data[0]==(int)effectType);
                     if (effect == null)
                     {
                         continue;
@@ -342,7 +402,7 @@ namespace Assets.CSharpCode.GameLogic
                     }
                     if (currentAmount < 0)
                     {
-                        ProduceResource(playerNo, buildingType, rType,0 - currentAmount, marker);
+                        SimProduceResource(playerNo, exchangeBuildingType, effectType,0 - currentAmount, marker);
                         break;
                     }
                 }
@@ -352,13 +412,13 @@ namespace Assets.CSharpCode.GameLogic
         }
 
         /// <summary>
-        /// 返回没能消耗掉的资源数量
+        /// 计算如果要[生产]指定数量的资源，各个建筑物上的蓝点应如何变化。（注意，并不真的操作蓝点）
+        /// 不考虑蓝点储备不足的情况。
         /// </summary>
         /// <param name="playerNo"></param>
         /// <param name="value"></param>
         /// <param name="marker"></param>
-        /// <returns></returns>
-        public void ProduceResource(int playerNo, BuildingType buildingType,ResourceType rType, int value, Dictionary<CardInfo, int> marker)
+        public void SimProduceResource(int playerNo, BuildingType buildingType,ResourceType rType, int value, Dictionary<CardInfo, int> marker)
         {
             //从大往小放
             var board = CurrentGame.Boards[playerNo];
@@ -400,6 +460,11 @@ namespace Assets.CSharpCode.GameLogic
             return;
         }
 
+        /// <summary>
+        /// 根据指示调整建筑物上的蓝点，如果储备不足，则建筑物按照Age从大到小的顺序获得蓝点，同时代建筑物随机（其实是按照指示的顺序）分配。
+        /// </summary>
+        /// <param name="playerNo"></param>
+        /// <param name="markers"></param>
         public void PerformMarkerChange(int playerNo, Dictionary<CardInfo, int> markers)
         {
             var board = CurrentGame.Boards[playerNo];
@@ -442,5 +507,7 @@ namespace Assets.CSharpCode.GameLogic
                 return 0;
             });
         }
+
+        #endregion
     }
 }

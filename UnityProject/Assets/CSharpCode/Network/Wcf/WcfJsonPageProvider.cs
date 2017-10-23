@@ -9,6 +9,7 @@ using Assets.CSharpCode.GameLogic.Actions;
 using Assets.CSharpCode.GameLogic.Effect;
 using Assets.CSharpCode.Network.Bgo;
 using Assets.CSharpCode.Network.Wcf.Entities;
+using Assets.CSharpCode.Network.Wcf.Json;
 using Assets.CSharpScripts.Helper;
 using UnityEngine;
 
@@ -19,8 +20,6 @@ namespace Assets.CSharpCode.Network.Wcf
     /// </summary>
     public static class WcfJsonPageProvider
     {
-        public const String BgoBaseUrl = "http://www.boardgaming-online.com/";
-
         public static WcfGame ParseTtaGameWithRoomJson(JSONObject room)
         {
             WcfGame game = new WcfGame();
@@ -183,7 +182,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public static ActionResponse ParseActionResponse(JSONObject json)
         {
-            return new ActionResponse();
+            return WcfServiceProvider.Serializer.Deserialize<ActionResponse>(json);
         }
     }
 }

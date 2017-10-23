@@ -15,6 +15,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
 {
     /// <summary>
     /// 这是每一个建筑物单独的Controller，如需获取其实例，请尝试查找BuildingChildController
+    /// 本Controller仅仅控制点击的相应，不负责进行绘制
     /// </summary>
     public class BuildingCellController : TtaUIControllerMonoBehaviour
     {

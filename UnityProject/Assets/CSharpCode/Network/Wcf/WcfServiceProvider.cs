@@ -11,6 +11,7 @@ using Assets.CSharpScripts.Helper;
 using UnityEngine;
 using Assets.CSharpCode.GameLogic.Actions;
 using Assets.CSharpCode.Network.Wcf.Json;
+using Assets.CSharpCode.UI;
 
 namespace Assets.CSharpCode.Network.Wcf
 {
@@ -25,6 +26,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         static WcfServiceProvider()
         {
+            Serializer.ObjectDeserialized += Serializer_ObjectDeserialized;
             Serializer.ReplaceAttributes.Add(typeof (CardRowCardInfo),
                 new DataContractAttribute
                 {
@@ -46,6 +48,16 @@ namespace Assets.CSharpCode.Network.Wcf
                     Name = "KeyValuePairOfCardInfointc81yGVyJ",
                     Namespace = "System.Collections.Generic"
                 });
+        }
+
+        private static void Serializer_ObjectDeserialized(object sender, JsonSerializerDeserializedEventArgs e)
+        {
+            if (e.DeserializedObj is CardInfo)
+            {
+                var cardInfo =
+                    SceneTransporter.CurrentCivilopedia.GetCardInfoById(((CardInfo) e.DeserializedObj).InternalId);
+                e.DeserializedObj = cardInfo;
+            }
         }
 
         public static IEnumerator Enumerate(params IEnumerator[] enums)

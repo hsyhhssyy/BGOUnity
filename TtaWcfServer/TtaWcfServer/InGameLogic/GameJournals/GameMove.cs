@@ -15,15 +15,21 @@ namespace TtaWcfServer.InGameLogic.GameJournals
     [DataContract]
     [KnownType(typeof(CardInfo))]
     [KnownType(typeof(CardRowInfo))]
+    [KnownType(typeof(List<CardInfo>))]
     [KnownType(typeof(Dictionary<CardInfo,int>))]
     public class GameMove
     {
         [DataMember]
         public GameMoveType Type;
+        /// <summary>
+        /// 表示执行该操作的玩家编号
+        /// </summary>
+        [DataMember]
+        public int PlayerNo;
         [DataMember]
         public Dictionary<int, Object> Data;
 
-        public GameMove(GameMoveType type, params Object[] data)
+        public GameMove(GameMoveType type,int playerNo, params Object[] data)
         {
             Data = new Dictionary<int, object>();
             Type = type;

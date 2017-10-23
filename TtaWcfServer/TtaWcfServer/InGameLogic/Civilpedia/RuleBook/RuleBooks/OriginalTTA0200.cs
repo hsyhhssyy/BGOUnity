@@ -127,6 +127,8 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
                 Storage = 0
             });
 
+            //白送一个空闲工人
+	        board.UncountableResourceCount[ResourceType.WorkerPool] = 1;
 
 			//初始为空的那些东西们
 			board.CivilCards=new List<CardInfo>();

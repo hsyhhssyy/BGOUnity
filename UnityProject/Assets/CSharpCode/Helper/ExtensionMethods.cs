@@ -134,6 +134,12 @@ namespace Assets.CSharpCode.Helper
             var cutPiece = origin.Substring(index1 + prefix.Length, origin.Length-index1-prefix.Length);
             return cutPiece;
         }
+        /// <summary>
+        /// 返回给定模板之前的内容，如对abcdef调用并传入def，返回abc
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="suffix"></param>
+        /// <returns></returns>
         [UsedImplicitly]
         public static String CutBefore(this String origin, String suffix)
         {

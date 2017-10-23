@@ -73,6 +73,22 @@ namespace TtaWcfServer.InGameLogic
             return manager;
         }
 
+        public static GameManager ReloadFromPesistance(GameRoom room, WcfContext context)
+        {
+            GameManager manager = new GameManager();
+            var result = manager.LoadFromPesistance(room, context);
+
+            if (!CachedGames.ContainsKey(room.Id))
+            {
+                CachedGames.Add(room.Id, manager);
+            }
+            else
+            {
+                CachedGames[room.Id] = manager;
+            }
+            return manager;
+        }
+
         public static void PesistAllMatch(WcfContext context)
         {
             foreach (var gameManager in CachedGames)

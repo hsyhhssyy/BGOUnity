@@ -15,8 +15,8 @@ namespace Assets.CSharpCode.Network.Wcf
 {
     public class WcfServer: IServerAdapter
     {
-        private String Session;
-        private int Uid;
+        private String _session;
+        private int _uid;
 
         public ServerType ServerType { get { return ServerType.PassiveServer2Sec; } }
 
@@ -33,14 +33,14 @@ namespace Assets.CSharpCode.Network.Wcf
 
             JSONObject obj=(JSONObject)enumrator.Current;
 
-            Session = obj.GetField("GenerateSessionKeyResult").str;
+            _session = obj.GetField("GenerateSessionKeyResult").str;
             var md5Crpt = MD5.Create();
             String passwordMd5 =
                 BitConverter.ToString(md5Crpt.ComputeHash(Encoding.UTF8.GetBytes(password))).Replace("-", "").ToUpper();
             String sessionPasswordMd5 =
-                BitConverter.ToString(md5Crpt.ComputeHash(Encoding.UTF8.GetBytes(Session+ passwordMd5))).Replace("-", "").ToUpper();
+                BitConverter.ToString(md5Crpt.ComputeHash(Encoding.UTF8.GetBytes(_session+ passwordMd5))).Replace("-", "").ToUpper();
 
-            enumrator = WcfServiceProvider.Login(Session, username, sessionPasswordMd5);
+            enumrator = WcfServiceProvider.Login(_session, username, sessionPasswordMd5);
             enumrator.MoveNext();
             yield return enumrator.Current;
 
@@ -58,7 +58,7 @@ namespace Assets.CSharpCode.Network.Wcf
             }
             else
             {
-                Uid = (int) obj.TryGetPath("LoginResult").GetField("Payload").i;
+                _uid = (int) obj.TryGetPath("LoginResult").GetField("Payload").i;
                 callback(null);
                 yield break;
             }
@@ -66,8 +66,8 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator ListGames(Action<List<TtaGame>> callback)
         {
-            LogRecorder.Log("ListGames:" + Session);
-            var enumrator = WcfServiceProvider.ListGames(Session);
+            LogRecorder.Log("ListGames:" + _session);
+            var enumrator = WcfServiceProvider.ListGames(_session);
             enumrator.MoveNext();
             yield return enumrator.Current;
 
@@ -96,7 +96,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator RefreshBoard(TtaGame game, Action<String> callback)
         {
-            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.RefreshBoard(Session,(WcfGame) game),
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.RefreshBoard(_session,(WcfGame) game),
                 WcfServiceProvider.CastCallback((json) =>
                 {
                     if (json != null && json.IsNull == false)
@@ -121,20 +121,46 @@ namespace Assets.CSharpCode.Network.Wcf
             var gameLogicResponse=GameLogicManager.CurrentManager.TakeAction(action);
             if (gameLogicResponse != null)
             {
-                callback(gameLogicResponse);
-                return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(Session, wcfGame.RoomId,action, gameLogicResponse),
-                WcfServiceProvider.CastCallback((jsonPayload) =>
+                if (gameLogicResponse.Type == ActionResponseType.ForceRefresh ||
+                    gameLogicResponse.Type == ActionResponseType.InvalidAction)
                 {
-                    var serverResponse=WcfJsonPageProvider.ParseActionResponse(jsonPayload);
-                    var suppress=GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse, serverResponse);
-                    if (!suppress)
-                    {
-                        callback(serverResponse);
-                    }
-                }));
+                    //这里这样做是因为客户端要求ForceRefresh了，但是还不需要立刻Refresh
+                    //因为客户端虽然要求ForceRefresh，但是服务器可能不这么觉得。
+                    return WcfServiceProvider.ExecuteWcfService(
+                        WcfServiceProvider.TakeAction(_session, wcfGame.RoomId, action, gameLogicResponse),
+                        WcfServiceProvider.CastCallback((jsonPayload) =>
+                        {
+                            callback(gameLogicResponse);
+                            var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload);
+                            var suppress =
+                                GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse,
+                                    serverResponse);
+                            if (!suppress)
+                            {
+                                callback(serverResponse);
+                            }
+                        }));
+                }
+                else
+                {
+                    callback(gameLogicResponse);
+                    return WcfServiceProvider.ExecuteWcfService(
+                        WcfServiceProvider.TakeAction(_session, wcfGame.RoomId, action, gameLogicResponse),
+                        WcfServiceProvider.CastCallback((jsonPayload) =>
+                        {
+                            var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload);
+                            var suppress =
+                                GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse,
+                                    serverResponse);
+                            if (!suppress)
+                            {
+                                callback(serverResponse);
+                            }
+                        }));
+                }
             }
             //否则直接请求网络，并把传入的callback作为网络通信的结果
-            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(Session, wcfGame.RoomId, action, null),
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(_session, wcfGame.RoomId, action, null),
                 WcfServiceProvider.CastCallback((jsonPayload) =>
                 {
                         var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload);
@@ -149,7 +175,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator CheckRankedMatch(Action<TtaGame> callback)
         {
-            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.CheckRankedMatch(Session),
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.CheckRankedMatch(_session),
                 WcfServiceProvider.CastCallback((game) =>
                 {
                     callback(game != null&&game.IsNull==false ? WcfJsonPageProvider.ParseTtaGameWithRoomJson(game) : null);
@@ -158,7 +184,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator StartRanking(string queueName, Action<bool> callback)
         {
-            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.StartRanking(Session),
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.StartRanking(_session),
                 WcfServiceProvider.CastCallback((game) =>
                 {
                     callback(game);
@@ -167,7 +193,7 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator StopRanking(string queueName, Action<bool> callback)
         {
-            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.StopRanking(Session),
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.StopRanking(_session),
                 WcfServiceProvider.CastCallback((game) =>
                 {
                     callback(game);

@@ -66,6 +66,7 @@ namespace TtaWcfServer.InGameLogic
             }
 
             //初始化其他成员
+            LastCalcuatedActions=new Dictionary<int, List<PlayerAction>>();
             for (int index = 0; index < room.JoinedPlayer.Count; index++)
             {
                 LastCalcuatedActions.Add(index, new List<PlayerAction>());
@@ -194,6 +195,15 @@ namespace TtaWcfServer.InGameLogic
                 }
             }
 
+            //特别的，这里处理一下Reset的事情
+            if (action.ActionType == PlayerActionType.ResetActionPhase)
+            {
+                LoadFromPesistance(CurrentGame.Room, context);
+                response=new ActionResponse();
+                response.Type = ActionResponseType.ForceRefresh;
+                return response;
+            }
+
             foreach (var actionHandler in _handlers)
             {
                 response=actionHandler.PerfromAction(playerNo, action, data,context);
@@ -205,7 +215,8 @@ namespace TtaWcfServer.InGameLogic
 
             if (response == null||response.Type== ActionResponseType.Accepted)
             {
-                //没有handler接受，目前暂定执行客户端结果
+                //没有handler接受时，目前暂定执行客户端结果
+                //TODO：当每一个Action都有了验证以后，这里要修改当response==null时为报错
                 if (clientResponse != null)
                 {
                     ExecuteGameMove(playerNo, clientResponse.Changes);
@@ -237,8 +248,11 @@ namespace TtaWcfServer.InGameLogic
             {
                 switch (gameMove.Type)
                 {
-                        case GameMoveType.Resource:
-                        board.UncountableResourceCount[(ResourceType) gameMove.Data[0]] =(int)gameMove.Data[2];
+                    case GameMoveType.Resource:
+                        if (board.UncountableResourceCount.ContainsKey((ResourceType) gameMove.Data[0]))
+                        {
+                            board.UncountableResourceCount[(ResourceType) gameMove.Data[0]] = (int) gameMove.Data[2];
+                        }
                         break;
                     case GameMoveType.TakeCard:
                         CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = playerNo;
@@ -313,7 +327,7 @@ namespace TtaWcfServer.InGameLogic
                     amount
                     , CurrentGame.DiscardedMilitaryCardsDeck);
 
-            response.Changes.Add(new GameMove(GameMoveType.DrawCards, amount, cards));
+            response.Changes.Add(new GameMove(GameMoveType.DrawCards, playerNo, amount, cards));
 
             return response;
         }
@@ -336,7 +350,7 @@ namespace TtaWcfServer.InGameLogic
             {
                 var cardRowInfo = CurrentGame.CardRow[slot];
 
-                if (cardRowInfo.TakenBy != -1)
+                if (cardRowInfo.TakenBy == -1)
                 {
                     CurrentGame.CardRow[index] = cardRowInfo;
                     index++;
@@ -406,6 +420,10 @@ namespace TtaWcfServer.InGameLogic
 
         public void NextAge()
         {
+            if (CurrentGame.CurrentAge == Age.IV)
+            {
+                return;
+            }
             CurrentGame.CurrentAge = CurrentGame.CurrentAge + 1;
             //领袖死去
 
@@ -443,14 +461,8 @@ namespace TtaWcfServer.InGameLogic
                 case ResourceType.WhiteMarkerMax:
                     resourceValue += board.EffectPool.FilterEffect(CardEffectType.E100, 12).Sum(e => e.Data[1]);
                     break;
-                case ResourceType.WhiteMarker:
-                    resourceValue = board.UncountableResourceCount[ResourceType.WhiteMarker];
-                    break;
                 case ResourceType.RedMarkerMax:
                     resourceValue += board.EffectPool.FilterEffect(CardEffectType.E100, 13).Sum(e => e.Data[1]);
-                    break;
-                case ResourceType.RedMarker:
-                    resourceValue = board.UncountableResourceCount[ResourceType.RedMarker];
                     break;
                 case ResourceType.Food:
                     resourceValue = AggregateCountResourceOnBuildingCell(ResourceType.Food, board,
@@ -489,7 +501,15 @@ namespace TtaWcfServer.InGameLogic
                     resourceValue = board.InitialBlueMarkerCount - blueMarkerUsed;
                     break;
                 case ResourceType.Science:
-                    resourceValue = board.UncountableResourceCount[ResourceType.Science];
+                case ResourceType.Culture:
+                case ResourceType.ResourceForMilitary:
+                case ResourceType.ResourceForWonderAndProduction:
+                case ResourceType.ScienceForMilitary:
+                case ResourceType.ScienceForSpecialTech:
+                case ResourceType.WhiteMarker:
+                case ResourceType.RedMarker:
+                case ResourceType.WorkerPool:
+                    resourceValue = board.UncountableResourceCount[type];
                     break;
             }
 

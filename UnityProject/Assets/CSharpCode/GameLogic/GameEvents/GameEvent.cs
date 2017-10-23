@@ -17,8 +17,18 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
     {
         [DataMember]
         public GameMoveType Type;
+        /// <summary>
+        /// 表示执行该操作的玩家编号
+        /// </summary>
+        [DataMember]
+        public int PlayerNo;
         [DataMember]
         public Dictionary<int, Object> Data;
+
+        private GameMove()
+        {
+            //Used for Serialization
+        }
 
         private GameMove(GameMoveType type, Dictionary<int, Object> data)
         {

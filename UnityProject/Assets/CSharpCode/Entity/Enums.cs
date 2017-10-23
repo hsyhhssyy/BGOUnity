@@ -104,12 +104,11 @@ namespace Assets.CSharpCode.Entity
         PutBackCard,
         /// <summary>
         /// 玩家可以增加一个人口
-        /// 0. 保留字段
-        /// 1. 需要的Food
+        /// 0. 需要的Food
         /// </summary>
         IncreasePopulation,
         /// <summary>
-        /// 玩家可以建造一个建筑物
+        /// 玩家可以建造一个建筑物（包括士兵）
         /// 0. CardInfo
         /// 1. Price
         /// </summary>

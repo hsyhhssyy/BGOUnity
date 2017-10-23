@@ -91,5 +91,25 @@ namespace Assets.CSharpCode.Civilopedia.RuleBook
             }
             return 0;
         }
+
+        public override int FoodToIncreasePopulation(int yellowMarker)
+        { if (yellowMarker <= 4)
+            {
+                return 7;
+            }
+            else if (yellowMarker <= 8)
+            {
+                return 5;
+            }
+            else if (yellowMarker <= 12)
+            {
+                return 4;
+            }
+            else if (yellowMarker <= 16)
+            {
+                return 3;
+            }
+            return 2;
+        }
     }
 }

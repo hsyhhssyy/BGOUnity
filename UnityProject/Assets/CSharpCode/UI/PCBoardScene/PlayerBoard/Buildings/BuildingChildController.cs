@@ -161,7 +161,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
                 {
                     var mSp = Instantiate(markerPrefab);
                     mSp.transform.SetParent(frame.transform);
-                    mSp.transform.localPosition = new Vector3(i * -0.07f, 0);
+                    mSp.transform.localPosition = new Vector3(i * -0.07f, 0f, -0.001f * i);
                     mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                 }
 
@@ -172,13 +172,31 @@ namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
                 {
                     var mSp = Instantiate(markerPrefab);
                     mSp.transform.SetParent(frame.transform);
-                    mSp.transform.localPosition = new Vector3(i * -0.07f, -0.15f, -0.01f * i);
+                    mSp.transform.localPosition = new Vector3(i * -0.07f, -0.15f, -0.001f * i);
                     mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                 }
             }
             else
             {
                 //显示Marker x N
+                //双行显示的第一行
+                for (int i = 0; i < markerTotal/2; i++)
+                {
+                    var mSp = Instantiate(markerPrefab);
+                    mSp.transform.SetParent(frame.transform);
+                    mSp.transform.localPosition = new Vector3(i * -0.07f, 0f, -0.001f * i);
+                    mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                }
+
+                //第二行
+
+                for (int i = markerTotal / 2; i < markerTotal; i++)
+                {
+                    var mSp = Instantiate(markerPrefab);
+                    mSp.transform.SetParent(frame.transform);
+                    mSp.transform.localPosition = new Vector3(i * -0.07f, -0.15f, -0.001f * i);
+                    mSp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                }
             }
         }
 

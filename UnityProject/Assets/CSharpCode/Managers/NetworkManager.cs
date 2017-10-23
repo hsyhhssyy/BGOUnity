@@ -32,37 +32,36 @@ namespace Assets.CSharpCode.Managers
                 Channel.GameEvent -= OnSubscribedGameEvents;
                 return;
             }
-            if (args.UIKey != "NetworkManager")
-            {
-                return;
-            }
             if (args.EventType == GameUIEventType.BackgroundRefresh)
             {
+                /* ? 强行取消谁发出的界面暗转？
                 //强行取消界面暗转
-                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
-
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard");
+                */
                 Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, (error) =>
                 {
-                    var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
+                    var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "NetworkManager");
                     Channel.Broadcast(msg);
                 }));
             }else
             if (args.EventType == GameUIEventType.ForceRefresh)
             {
                 //通知界面暗转等待网络
-                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.WaitingNetwork, "PCBoard"));
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.WaitingNetwork, "NetworkManager"));
 
                 Manager.StartCoroutine(Server.RefreshBoard(Manager.CurrentGame, (error) =>
                 {
+                    Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "NetworkManager"));
+
                     Manager.CurrentDisplayingBoardNo = Manager.CurrentGame.MyPlayerIndex;
                     
-                    var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
+                    var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "NetworkManager");
                     Channel.Broadcast(msg);
                 }));
             }else if (args.EventType == GameUIEventType.TakeAction)
             {
                 //通知界面暗转等待网络
-                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.WaitingNetwork, "PCBoard"));
+                Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.WaitingNetwork, "NetworkManager"));
 
                 var action = (PlayerAction) args.AttachedData["PlayerAction"];
                 if (action.Internal)
@@ -70,10 +69,10 @@ namespace Assets.CSharpCode.Managers
                     Manager.StartCoroutine(Server.TakeInternalAction(Manager.CurrentGame,
                         action, (actionResponse,actions) =>
                         {
-                            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "PCBoard"));
+                            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "NetworkManager"));
 
 
-                            var msg = new ManagerGameUIEventArgs(GameUIEventType.ReportInternalAction, "PCBoard");
+                            var msg = new ManagerGameUIEventArgs(GameUIEventType.ReportInternalAction, "NetworkManager");
                             msg.AttachedData["Actions"] = actions;
                             Channel.Broadcast(msg);
                         }));
@@ -83,7 +82,9 @@ namespace Assets.CSharpCode.Managers
                     Manager.StartCoroutine(Server.TakeAction(Manager.CurrentGame,
                         action, (actionResponse) =>
                         {
-                            var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "PCBoard");
+                            Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "NetworkManager"));
+
+                            var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "NetworkManager");
                             Channel.Broadcast(msg);
                         }));
                 }

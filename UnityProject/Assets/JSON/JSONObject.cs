@@ -18,6 +18,9 @@ using System.Text;
  * Copyright Matt Schoen 2010 - 2013
  */
 
+/// <summary>
+/// 备注：该类并没有重写和Null的Equals，请使用IsNull
+/// </summary>
 public class JSONObject {
 #if POOLING
 	const int MAX_POOL_SIZE = 10000;

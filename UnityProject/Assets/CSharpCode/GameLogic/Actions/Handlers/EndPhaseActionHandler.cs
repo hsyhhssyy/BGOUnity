@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.Managers;
+using Assets.CSharpCode.UI;
 
 
 namespace Assets.CSharpCode.GameLogic.Actions.Handlers
@@ -57,6 +59,10 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers
                 }
                 var response=Manager.ExecuteProduction(playerNo);
                 return response;
+            }else if (action.ActionType == PlayerActionType.ResetActionPhase)
+            {
+                //特殊逻辑
+                return new ActionResponse() {Type = ActionResponseType.ForceRefresh};
             }
             return null;
         }

@@ -132,8 +132,8 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     int foodCost = Convert.ToInt32(bgoStr.CutBetween("(", "F)"));
                     action.ActionType = PlayerActionType.IncreasePopulation;
-                    action.Data[0] = bgoStr;
-                    action.Data[1] = foodCost;
+                    action.Data[0] = foodCost;
+                    action.Data[1] = bgoStr;
                     action.Data[2] = optValue;
                 }
                 else if (bgoStr.StartsWith("Build"))
