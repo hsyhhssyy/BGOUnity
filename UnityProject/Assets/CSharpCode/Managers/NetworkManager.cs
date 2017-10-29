@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.GameLogic.Actions;
 using Assets.CSharpCode.Network;
 using Assets.CSharpCode.UI;
 using Assets.CSharpCode.UI.Util;
@@ -84,8 +85,12 @@ namespace Assets.CSharpCode.Managers
                         {
                             Channel.Broadcast(new ManagerGameUIEventArgs(GameUIEventType.CancelWaitingNetwork, "NetworkManager"));
 
-                            var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "NetworkManager");
-                            Channel.Broadcast(msg);
+                            if (actionResponse.Type != ActionResponseType.Canceled)
+                            {
+                                var msg = new ServerGameUIEventArgs(GameUIEventType.Refresh, "NetworkManager");
+                                Channel.Broadcast(msg);
+                            }
+
                         }));
                 }
             }

@@ -57,10 +57,10 @@ namespace TtaWcfServer.InGameLogic.WcfEntities
             Tactic = board.Tactic;
             Warnings = board.Warnings;
             
-            CivilCards = new List<CardInfo>();
+            CivilCards = new List<HandCardInfo>();
             CivilCards.AddRange(board.CivilCards);
             
-            MilitaryCards = new List<CardInfo>();
+            MilitaryCards = new List<HandCardInfo>();
             MilitaryCards.AddRange(board.MilitaryCards);
 
             CurrentEventPlayed = new List<CardInfo>();
@@ -96,13 +96,14 @@ namespace TtaWcfServer.InGameLogic.WcfEntities
         //在RefereeBoard的基础上隐藏观战者/选手不能看到的内容
         private void ObserverMode()
         {
-            var cards = new List<CardInfo>();
+            var cards = new List<HandCardInfo>();
             cards.AddRange(MilitaryCards);
 
-            MilitaryCards=new List<CardInfo>();
+            MilitaryCards=new List<HandCardInfo>();
             foreach (var cardInfo in cards)
             {
-                MilitaryCards.Add(CardInfo.UnknownMilitaryCard(cardInfo.CardAge));
+                MilitaryCards.Add(new HandCardInfo(CardInfo.UnknownMilitaryCard(cardInfo.Card.CardAge),
+                    cardInfo.TurnTaken));
             }
         }
 
@@ -136,10 +137,10 @@ namespace TtaWcfServer.InGameLogic.WcfEntities
         public List<Warning> Warnings;
 
         [DataMember]
-        public List<CardInfo> CivilCards;
+        public List<HandCardInfo> CivilCards;
 
         [DataMember]
-        public List<CardInfo> MilitaryCards;
+        public List<HandCardInfo> MilitaryCards;
 
         [DataMember]
         public List<CardInfo> CurrentEventPlayed;

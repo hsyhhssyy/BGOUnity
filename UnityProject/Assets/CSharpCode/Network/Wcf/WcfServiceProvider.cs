@@ -27,7 +27,8 @@ namespace Assets.CSharpCode.Network.Wcf
         static WcfServiceProvider()
         {
             Serializer.ObjectDeserialized += Serializer_ObjectDeserialized;
-            Serializer.ReplaceAttributes.Add(typeof (CardRowCardInfo),
+
+            Serializer.ReplaceAttributes.Add(typeof (CardRowInfo),
                 new DataContractAttribute
                 {
                     IsReference = true,
@@ -47,6 +48,13 @@ namespace Assets.CSharpCode.Network.Wcf
                     IsReference = true,
                     Name = "KeyValuePairOfCardInfointc81yGVyJ",
                     Namespace = "System.Collections.Generic"
+                });
+            Serializer.ReplaceAttributes.Add(typeof(HandCardInfo),
+                new DataContractAttribute
+                {
+                    IsReference = true,
+                    Name = "HandCardInfo",
+                    Namespace = "TtaWcfServer.InGameLogic.TtaEntities"
                 });
         }
 

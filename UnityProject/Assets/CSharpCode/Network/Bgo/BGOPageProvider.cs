@@ -177,14 +177,14 @@ namespace Assets.CSharpCode.Network.Bgo
             //解出卡牌列
             var matches = BgoRegexpCollections.ExtractCardRow.Matches(html);
 
-            game.CardRow=new List<CardRowCardInfo>();
+            game.CardRow=new List<CardRowInfo>();
 
             foreach(Match mc in matches)
             {
                 var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), mc.Groups[5].Value),
                     mc.Groups[6].Value);
 
-                BgoCardRowCardInfo cardRowCardInfo = new BgoCardRowCardInfo
+                BgoCardRowInfo cardRowInfo = new BgoCardRowInfo
                 {
                     Card = card,
                     CanPutBack = mc.Groups[4].Value.Contains("carteEnMain"),
@@ -199,18 +199,18 @@ namespace Assets.CSharpCode.Network.Bgo
                 {
                     ActionType = PlayerActionType.TakeCardFromCardRow
                 };
-                pa.Data[0] = cardRowCardInfo;
+                pa.Data[0] = cardRowInfo;
                 pa.Data[1] = game.CardRow.Count; //Card Row Pos
                 pa.Data[2] = mc.Groups[3].Value;//idNote
                 pa.Data[3] = mc.Groups[2].Value;//PostUrl
 
                 //能拿能放回去，才能有Action
-                if (cardRowCardInfo.CanPutBack || cardRowCardInfo.CanTake)
+                if (cardRowInfo.CanPutBack || cardRowInfo.CanTake)
                 {
                     game.PossibleActions.Add(pa);
                 }
 
-                game.CardRow.Add(cardRowCardInfo);
+                game.CardRow.Add(cardRowInfo);
             }
 
             //当前事件牌堆
@@ -531,12 +531,16 @@ namespace Assets.CSharpCode.Network.Bgo
                 else
                 {
                     board.ConstructingWonder = civilopedia.GetCardInfoByName(m.Groups[5].Value);
-                    board.ConstructingWonderSteps =new List<string>();
+                    board.ConstructingWonderSteps =0;
                     foreach (Match mBuild in BgoRegexpCollections.ExtractWondeBuildStatus.Matches(m.Groups[6].Value))
                     {
-                        board.ConstructingWonderSteps.Add(mBuild.Groups[1].Value.Length > 4
-                            ? "X"
-                            : mBuild.Groups[1].Value);
+                        if (mBuild.Groups[1].Value.Length > 4)
+                        {
+                            board.ConstructingWonderSteps++;
+                        }
+                        //board.ConstructingWonderSteps.Add(mBuild.Groups[1].Value.Length > 4
+                        //? "X"
+                        //: mBuild.Groups[1].Value);
                     }
                 }
             }
@@ -563,17 +567,19 @@ namespace Assets.CSharpCode.Network.Bgo
 
             //手牌
             var matchHandCivilCard = BgoRegexpCollections.ExtractHandCivilCard.Match(htmlShade);
-            board.CivilCards=new List<CardInfo>();
+            board.CivilCards=new List<HandCardInfo>();
             foreach (Match m in BgoRegexpCollections.ExtractHandCardName.Matches(matchHandCivilCard.Groups[1].Value))
             {
-                board.CivilCards.Add(civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), m.Groups[1].Value) , m.Groups[2].Value));
+                var card=civilopedia.GetCardInfoByName((Age) Enum.Parse(typeof(Age), m.Groups[1].Value), m.Groups[2].Value);
+                board.CivilCards.Add(new HandCardInfo( card, HandCardInfo.TurnUnknownPlayable));
             }
 
             var matchHandMilitaryCard = BgoRegexpCollections.ExtractHandMilitaryCard.Match(htmlShade);
-            board.MilitaryCards = new List<CardInfo>();
+            board.MilitaryCards = new List<HandCardInfo>();
             foreach (Match m in BgoRegexpCollections.ExtractHandCardName.Matches(matchHandMilitaryCard.Groups[1].Value))
             {
-                board.MilitaryCards.Add(civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), m.Groups[1].Value) ,m.Groups[2].Value));
+                var card = civilopedia.GetCardInfoByName((Age)Enum.Parse(typeof(Age), m.Groups[1].Value), m.Groups[2].Value);
+                board.MilitaryCards.Add(new HandCardInfo(card, HandCardInfo.TurnUnknownPlayable));
             }
 
             //警告

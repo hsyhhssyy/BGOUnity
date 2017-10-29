@@ -59,7 +59,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.SendColonists
 
                 //显示防御卡
 
-                cardsToDisplay.AddRange(board.MilitaryCards.Where(card=>card.CardType== CardType.Defend));
+                cardsToDisplay.AddRange(board.MilitaryCards.Where(card=>card.Card.CardType== CardType.Defend).Select(info=>info.Card));
 
                 //每行6张卡
                 //从-1到2.5 +0.8

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Managers;
-using Assets.CSharpCode.UI.PCBoardScene.Controller;
-using Assets.CSharpCode.UI.PCBoardScene.Menu;
 using Assets.CSharpCode.UI.Util.Controller;
+using JetBrains.Annotations;
 
-namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard
+namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard.Wonder
 {
     /// <summary>
     /// 正在建造的奇迹的那个框框的Controller
     /// </summary>
+    [UsedImplicitly]
     public class ConstructingWonderController:SimpleClickUIController
     {
         public WonderMenuController Menu;

@@ -69,13 +69,35 @@ namespace Assets.CSharpCode.Entity
 
         public List<CardInfo> SharedTactics; 
 
-        public List<CardRowCardInfo> CardRow;
+        public List<CardRowInfo> CardRow;
 
         public List<PlayerAction> PossibleActions=new List<PlayerAction>();
 
         public String Version = "2.0";
 
         public List<GameJournalEntry> Journal;
+    }
+
+    [DataContract]
+    public class HandCardInfo
+    {
+        public const int TurnUnknownPlayable = -1;
+        public const int TurnUnknownIllegal = 200;
+        [DataMember]
+        public CardInfo Card;
+        [DataMember]
+        public int TurnTaken;
+
+        public HandCardInfo()
+        {
+            
+        }
+
+        public HandCardInfo(CardInfo card, int turn)
+        {
+            Card = card;
+            TurnTaken = turn;
+        }
     }
 
     public class Warning
@@ -85,7 +107,7 @@ namespace Assets.CSharpCode.Entity
     }
 
     [DataContract]
-    public class CardRowCardInfo
+    public class CardRowInfo
     {
         [DataMember]
         public CardInfo Card;

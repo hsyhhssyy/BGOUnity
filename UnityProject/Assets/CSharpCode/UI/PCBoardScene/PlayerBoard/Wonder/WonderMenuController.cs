@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Helper;
-using Assets.CSharpCode.Managers;
-using Assets.CSharpCode.UI.PCBoardScene.ActionBinder;
 using Assets.CSharpCode.UI.PCBoardScene.Controller;
-using Assets.CSharpCode.UI.PCBoardScene.DisplayBehavior;
 using Assets.CSharpCode.UI.PCBoardScene.PlayerBoard.Buildings;
+using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Assets.CSharpCode.UI.PCBoardScene.Menu
+namespace Assets.CSharpCode.UI.PCBoardScene.PlayerBoard.Wonder
 {
+    [UsedImplicitly]
     public class WonderMenuController: DisplayOnlyUIController
     {
 

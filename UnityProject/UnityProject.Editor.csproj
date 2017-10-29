@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2017.2.0f3</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -280,7 +282,6 @@
     <None Include="Assets\Materials\FontStencilDrawin.shader" />
     <None Include="Assets\Materials\StencilDrawinMask.shader" />
     <None Include="Assets\Materials\StencilMask.shader" />
-    <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
     <None Include="Assets\Resources\Localization\legend_zh-cn_dest.txt" />
     <None Include="Assets\Resources\Localization\legend_zh-cn_source.txt" />

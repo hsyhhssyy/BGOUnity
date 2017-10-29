@@ -92,13 +92,13 @@ namespace Assets.CSharpCode.Entity
         #region 常见内政行动
         /// <summary>
         /// 玩家可以从卡牌列上拿一张卡
-        /// 0. CardRowCardInfo
+        /// 0. CardRowInfo
         /// 1. 此卡在卡牌列上的位置，0开始
         /// </summary>
         TakeCardFromCardRow,
         /// <summary>
         /// 玩家可以从卡牌列上放回一张卡
-        /// 0. CardRowCardInfo
+        /// 0. CardRowInfo
         /// 1. 此卡在卡牌列上的位置，0开始
         /// </summary>
         PutBackCard,

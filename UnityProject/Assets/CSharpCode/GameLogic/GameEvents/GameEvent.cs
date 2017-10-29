@@ -45,6 +45,10 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
             }
         }
 
+        public static GameMove Build(CardInfo card, int from, int to)
+        {
+            return new GameMove(GameMoveType.Build, card, from, to);
+        }
         public static GameMove Resource(ResourceType type, int from, int to)
         {
             return new GameMove(GameMoveType.Resource, type, from, to);
@@ -68,6 +72,30 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         public static GameMove DrawCards(int amount)
         {
             return new GameMove(GameMoveType.DrawCards, amount, new List<CardInfo>());
+        }
+        public static GameMove CardUsed(HandCardInfo info)
+        {
+            return new GameMove(GameMoveType.CardUsed, info);
+        }
+        public static GameMove ReplaceSpecialTech(CardInfo oldInfo,CardInfo newInfo)
+        {
+            return new GameMove(GameMoveType.ReplaceSpecialTech, oldInfo,newInfo);
+        }
+        public static GameMove DevelopSpecialTech(CardInfo info)
+        {
+            return new GameMove(GameMoveType.DevelopSpecialTech, info);
+        }
+        public static GameMove DevelopBuilding(CardInfo info)
+        {
+            return new GameMove(GameMoveType.DevelopBuilding, info);
+        }
+        public static GameMove ElectLeader(CardInfo info)
+        {
+            return new GameMove(GameMoveType.ElectLeader, info);
+        }
+        public static GameMove ReplaceGovernment(CardInfo info)
+        {
+            return new GameMove(GameMoveType.ReplaceGovernment, info);
         }
         public static GameMove Production(ResourceType type,int amount, Dictionary<CardInfo, int> markers)
         {
@@ -140,5 +168,35 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         /// 表示发生了总计[0]点消耗，，从Dictionary[1]（key：卡牌）上变化了Value个蓝点
         /// </summary>
         Consumption,
+        /// <summary>
+        /// 表示建筑物/部队[0]上的黄点从[1]变到[2]（变少表示拆除）
+        /// </summary>
+        Build,
+        /// <summary>
+        /// 表示手牌[0]被用掉了。注意这里的的[0]是HandCardInfo而不是CardInfo。
+        /// 从而能在多张同名牌里分出是哪一张。
+        /// </summary>
+        CardUsed,
+        /// <summary>
+        /// 表示用牌[0]替换掉当前的政体
+        /// </summary>
+        ReplaceGovernment,
+        /// <summary>
+        /// 表示用牌[0]替换掉当前的特殊科技[1]
+        /// </summary>
+        ReplaceSpecialTech,
+        /// <summary>
+        /// 表示将牌[0]加入玩家的特殊科技
+        /// </summary>
+        DevelopSpecialTech,
+        /// <summary>
+        /// 表示玩家激活科技牌[0]代表的建筑或者部队
+        /// </summary>
+        DevelopBuilding,
+        /// <summary>
+        /// 表示玩家将领袖牌[0]作为自己的领袖
+        /// </summary>
+        ElectLeader,
+
     }
 }

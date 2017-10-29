@@ -44,7 +44,7 @@ namespace Assets.CSharpCode.Network.Bgo
         
     }
 
-    public class BgoCardRowCardInfo:CardRowCardInfo
+    public class BgoCardRowInfo:CardRowInfo
     {
         public readonly Dictionary<String, Object> ServerData = new Dictionary<string, object>();
     }

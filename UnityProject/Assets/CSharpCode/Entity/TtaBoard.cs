@@ -22,9 +22,9 @@ namespace Assets.CSharpCode.Entity
 
         public CardInfo ConstructingWonder;
         /// <summary>
-        /// 未完成为数字，完成为X
+        /// 表示完成的步数
         /// </summary>
-        public List<String> ConstructingWonderSteps;
+        public int ConstructingWonderSteps;
 
         [XmlIgnore]
         public EffectPool EffectPool;
@@ -39,9 +39,9 @@ namespace Assets.CSharpCode.Entity
 
         public List<Warning> Warnings;
 
-        public List<CardInfo> CivilCards;
+        public List<HandCardInfo> CivilCards;
 
-        public List<CardInfo> MilitaryCards;
+        public List<HandCardInfo> MilitaryCards;
 
         public List<CardInfo> CurrentEventPlayed;
         public List<CardInfo> FutureEventPlayed;

@@ -31,6 +31,10 @@ namespace Assets.CSharpCode.GameLogic.Actions
         /// <summary>
         /// 表示不接受Action，并且当前客户端状态可能与服务器已经不一致，需要进行刷新
         /// </summary>
-        ForceRefresh
+        ForceRefresh,
+        /// <summary>
+        /// 表示该用户，其他用户或者服务器取消了本Action，没有事情发生
+        /// </summary>
+        Canceled,
     }
 }

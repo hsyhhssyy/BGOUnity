@@ -53,7 +53,7 @@ namespace Assets.CSharpCode.Network.Wcf
             game.SharedTactics = ParseCardInfoListFromJson(civilopedia, json.TryGetField("SharedTactics"));
 
             var cardRowJson=json.TryGetField("CardRow");
-            game.CardRow=new List<CardRowCardInfo>();
+            game.CardRow=new List<CardRowInfo>();
 
             foreach (var cardRowInfoJson in cardRowJson.list)
             {
@@ -99,9 +99,11 @@ namespace Assets.CSharpCode.Network.Wcf
             board.Warnings=new List<Warning>();//TODO Wanings
             //public List<Warning> Warnings;
 
-            board.CivilCards=ParseCardInfoListFromJson(civilopedia, json.TryGetField("CivilCards"));
+            board.CivilCards =
+                WcfServiceProvider.Serializer.Deserialize<List<HandCardInfo>>(json.TryGetField("MilitaryCards"));
 
-            board.MilitaryCards= ParseCardInfoListFromJson(civilopedia, json.TryGetField("MilitaryCards"));
+            board.MilitaryCards= 
+                WcfServiceProvider.Serializer.Deserialize<List<HandCardInfo>>(json.TryGetField("MilitaryCards"));
 
             board.CurrentEventPlayed = ParseCardInfoListFromJson(civilopedia, json.TryGetField("CurrentEventPlayed"));
             board.FutureEventPlayed = ParseCardInfoListFromJson(civilopedia, json.TryGetField("FutureEventPlayed"));
@@ -152,9 +154,9 @@ namespace Assets.CSharpCode.Network.Wcf
             return board;
         }
 
-        public static CardRowCardInfo ParseCardRowCardInfoFromJson(TtaCivilopedia pedia, JSONObject json)
+        public static CardRowInfo ParseCardRowCardInfoFromJson(TtaCivilopedia pedia, JSONObject json)
         {
-            CardRowCardInfo info=new CardRowCardInfo();
+            CardRowInfo info=new CardRowInfo();
             String internalId = json.TryGetPath("Card").TryGetField("InternalId").str;
             info.Card=pedia.GetCardInfoById(internalId);
             info.CanPutBack = json.TryGetField("CanPutBack").b;

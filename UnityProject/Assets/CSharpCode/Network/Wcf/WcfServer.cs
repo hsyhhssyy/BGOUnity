@@ -121,6 +121,12 @@ namespace Assets.CSharpCode.Network.Wcf
             var gameLogicResponse=GameLogicManager.CurrentManager.TakeAction(action);
             if (gameLogicResponse != null)
             {
+                if (gameLogicResponse.Type == ActionResponseType.Canceled)
+                {
+                    //直接Callback返回
+                    callback(gameLogicResponse);
+                    return new WcfServiceProvider.EmptyEnumrator();
+                }
                 if (gameLogicResponse.Type == ActionResponseType.ForceRefresh ||
                     gameLogicResponse.Type == ActionResponseType.InvalidAction)
                 {

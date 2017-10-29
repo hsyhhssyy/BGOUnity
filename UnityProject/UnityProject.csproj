@@ -234,12 +234,17 @@
     <Compile Include="Assets\CSharpCode\Entity\TtaResourceCounter.cs" />
     <Compile Include="Assets\CSharpCode\GameLogic\Actions\ActionHandler.cs" />
     <Compile Include="Assets\CSharpCode\GameLogic\Actions\ActionResponse.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\BuildAndDestoryActionHandler.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\EndPhaseActionHandler.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\IncreasePopulationActionHandler.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\PlayActionCardActionHandler.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\PlayTechCardActionHandler.cs" />
-    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\TakeCardFromCardRowActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\BuildAndDestoryActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\BuildWonderActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\ElectLeaderActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\EndPhaseActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\IncreasePopulationActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\PlayActionCardActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\PlayTechCardActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\SetupAdoptTacticActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\TakeCardFromCardRowActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\ActionPhaseHandler\UpgradeActionHandler.cs" />
+    <Compile Include="Assets\CSharpCode\GameLogic\Actions\Handlers\PoliticalPhaseHandler\DeclareWarActionHandler.cs" />
     <Compile Include="Assets\CSharpCode\GameLogic\Effect\EffectExecutor.cs" />
     <Compile Include="Assets\CSharpCode\GameLogic\Effect\EffectPool.cs" />
     <Compile Include="Assets\CSharpCode\GameLogic\Effect\EffectPoolStatics.cs" />
@@ -367,11 +372,13 @@
     <None Include="Assets\Materials\FontStencilDrawin.shader" />
     <None Include="Assets\Materials\StencilDrawinMask.shader" />
     <None Include="Assets\Materials\StencilMask.shader" />
-    <None Include="Assets\Resources\Civilopedia\TTA7.xml" />
     <None Include="Assets\Resources\Localization\dict_zh-cn.txt" />
     <None Include="Assets\Resources\Localization\legend_zh-cn_dest.txt" />
     <None Include="Assets\Resources\Localization\legend_zh-cn_source.txt" />
     <None Include="Assets\Resources\Test\测试用页面\派出殖民者中.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\CSharpCode\GameLogic\Actions\Handlers\SpecialEffectHandler\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

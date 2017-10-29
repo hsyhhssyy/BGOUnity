@@ -60,8 +60,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase
 
             //---第一行
 
-            var eventCards = militaryCards.Where(c => c.CardType == CardType.Event).ToList();
-            var colonyCards = militaryCards.Where(c => c.CardType == CardType.Colony).ToList();
+            var eventCards = militaryCards.Where(c => c.Card.CardType == CardType.Event).Select(info=>info.Card).ToList();
+            var colonyCards = militaryCards.Where(c => c.Card.CardType == CardType.Colony).Select(info => info.Card).ToList();
 
             if (eventCards.Count + colonyCards.Count > 0)
             {
@@ -74,8 +74,8 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase
 
             //第二行
 
-            var aggressionCards = militaryCards.Where(c => c.CardType == CardType.Aggression).ToList();
-            var pactCards = militaryCards.Where(c => c.CardType == CardType.Pact).ToList();
+            var aggressionCards = militaryCards.Where(c => c.Card.CardType == CardType.Aggression).Select(info => info.Card).ToList();
+            var pactCards = militaryCards.Where(c => c.Card.CardType == CardType.Pact).Select(info => info.Card).ToList();
 
             start = 0;
             if (aggressionCards.Count + pactCards.Count > 0)
@@ -90,7 +90,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Dialog.PoliticalPhase
             LeaderPowerFrame.SetActive(false);
 
             //第三行
-            var warCards = militaryCards.Where(c => c.CardType == CardType.War).ToList();
+            var warCards = militaryCards.Where(c => c.Card.CardType == CardType.War).Select(hInfo=>hInfo.Card).ToList();
             start = 0;
             if (warCards.Count > 0)
             {

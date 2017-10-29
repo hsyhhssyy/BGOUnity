@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.CSharpCode.UI.PCBoardScene.StatusBar
 {
-    class OtherPlayerStatusBarController:DisplayOnlyUIController
+    public class OtherPlayerStatusBarController:DisplayOnlyUIController
     {
         public TextMesh Username;
         public TextMesh PhaseName;

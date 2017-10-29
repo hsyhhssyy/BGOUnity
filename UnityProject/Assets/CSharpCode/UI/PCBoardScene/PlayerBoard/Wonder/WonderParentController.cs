@@ -70,20 +70,19 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
                 var stepPrefab = Resources.Load<GameObject>("Dynamic-PC/WonderBuildingStage");
 
-                float init = -0.16f*board.ConstructingWonderSteps.Count + 0.16f;
-                for (int index = 0; index < board.ConstructingWonderSteps.Count; index++)
+                float init = -0.16f* board.ConstructingWonder.BuildCost.Count + 0.16f;
+                for (int index = 0; index < board.ConstructingWonder.BuildCost.Count; index++)
                 {
-                    var str = board.ConstructingWonderSteps[index];
-
                     var mSp = Instantiate(stepPrefab);
-                    if (str == "X")
+                    if (index < board.ConstructingWonderSteps)
                     {
-                        mSp.FindObject("StepText").SetActive(false);
+                        mSp.FindObject("BlueMarker").SetActive(false);
+                        mSp.FindObject("StepText").GetComponent<TextMesh>().text =
+                            board.ConstructingWonder.BuildCost[index].ToString();
                     }
                     else
                     {
-                        mSp.FindObject("BlueMarker").SetActive(false);
-                        mSp.FindObject("StepText").GetComponent<TextMesh>().text = str;
+                        mSp.FindObject("StepText").SetActive(false);
                     }
                     mSp.transform.parent = stepFrame.transform;
                     mSp.transform.localPosition = new Vector3(init + 0.16f*index, 0, 0);

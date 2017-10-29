@@ -43,6 +43,29 @@ namespace TtaWcfServer.InGameLogic.TtaEntities
 
     }
 
+
+    [DataContract]
+    public class HandCardInfo
+    {
+        public const int TurnUnknownPlayable = -1;
+        public const int TurnUnknownIllegal = 200;
+        [DataMember]
+        public CardInfo Card;
+        [DataMember]
+        public int TurnTaken;
+
+        public HandCardInfo()
+        {
+
+        }
+
+        public HandCardInfo(CardInfo card, int turn)
+        {
+            Card = card;
+            TurnTaken = turn;
+        }
+    }
+
     [DataContract]
     public class CardRowInfo
     {

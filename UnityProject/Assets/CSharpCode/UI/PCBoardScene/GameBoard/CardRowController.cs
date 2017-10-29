@@ -57,7 +57,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 this.gameObject.SetActive(true);
             }
 
-            CardRowCardInfo cardRowInfo = Manager.CurrentGame.CardRow[Position];
+            CardRowInfo cardRowInfo = Manager.CurrentGame.CardRow[Position];
 
             var whitePrefab = Resources.Load<GameObject>("Dynamic-PC/WhiteMarker");
             

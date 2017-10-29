@@ -36,6 +36,8 @@ namespace Assets.CSharpCode.Civilopedia
         [CardEffectDetail("升级资源建筑减少资源点消耗[0]")] E404 = 404,
         [CardEffectDetail("升级城市建筑减少资源点消耗[0]")] E405 = 405,
         [CardEffectDetail("研究科技后改变[0]类型的属性[1]点")] E408 = 408,
+        [CardEffectDetail("消耗1白点建造奇迹最多[0]层")]
+        E410 = 410,
         [CardEffectDetail("拿取领袖卡时，减少白点消耗[0]")]
         E411 = 411,
         [CardEffectDetail("拿取奇观卡时，免除额外白点消耗")]
@@ -43,6 +45,8 @@ namespace Assets.CSharpCode.Civilopedia
         //-------------E600------
         [CardEffectDetail("不能拿取时代[0]的领袖")]
         E608 = 608,
+        [CardEffectDetail("可将1个红点当做白点用")]
+        E603 = 603,
 
 
         //-----------Program Effect ---------

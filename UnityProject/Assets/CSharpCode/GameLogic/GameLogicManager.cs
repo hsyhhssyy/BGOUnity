@@ -6,6 +6,8 @@ using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.GameLogic.Actions;
 using Assets.CSharpCode.GameLogic.Actions.Handlers;
+using Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler;
+using Assets.CSharpCode.GameLogic.Actions.Handlers.PoliticalPhaseHandler;
 using Assets.CSharpCode.GameLogic.Effect;
 using Assets.CSharpCode.GameLogic.GameEvents;
 using Assets.CSharpCode.Managers;
@@ -19,15 +21,47 @@ namespace Assets.CSharpCode.GameLogic
 
         protected GameLogicManager()
         {
+            #region 注册ActionHandler
             _handlers = new List<ActionHandler>
             {
-                new EndPhaseActionHandler(this),
+                //根据规则卡片上的顺序排列
+                //----政治阶段
+                //筹划事件
+                //发动侵略
+                //宣告战争
+                //提出条约
+                //取缔条约
+                //体面退出
+                new DeclareWarActionHandler(this),
+                //----行动阶段
+                //从卡牌列拿取卡牌
                 new TakeCardFromCardRowActionHandler(this),
-                new BuildAndDestoryActionHandler(this),
-                new PlayActionCardActionHandler(this),
-                new PlayTechCardActionHandler(this),
+                //增加人口
                 new IncreasePopulationActionHandler(this),
+                //建造农场矿山和城市建筑物
+                //摧毁农场矿山和城市建筑物
+                //组建军事单位
+                //解散军事单位
+                new BuildAndDestoryActionHandler(this),
+                //升级农场矿山和城市建筑物
+                //升级军事单位
+                new UpgradeBuildingActionHandler(this),
+                //打出领袖牌
+                new ElectLeaderActionHandler(this),
+                //建造奇迹的一个等级
+                new BuildWonderActionHandler(this),
+                //发展一项科技
+                //宣告革命
+                new PlayTechCardActionHandler(this),
+                //打出行动牌
+                new PlayActionCardActionHandler(this),
+                //打出阵型牌
+                //复制阵型牌
+                new SetupAdoptTacticActionHandler(this),
+                //结束回合
+                new EndPhaseActionHandler(this),
             };
+            #endregion
             LastCalcuatedActions = new Dictionary<int, List<PlayerAction>>();
 
             _channel.GameEvent += OnSubscribedGameEvents;
@@ -54,7 +88,7 @@ namespace Assets.CSharpCode.GameLogic
             var actions = new List<PlayerAction>();
             foreach (var handler in _handlers)
             {
-                var returnActions = handler.CheckAbleToPerform(playerNo);
+                var returnActions = handler.GenerateAction(playerNo);
                 if (returnActions != null)
                 {
                     actions.AddRange(returnActions);
@@ -102,7 +136,20 @@ namespace Assets.CSharpCode.GameLogic
 
             foreach (var actionHandler in _handlers)
             {
-                var response = actionHandler.PerfromAction(SceneTransporter.CurrentGame.MyPlayerIndex,action,action.Data);
+                var valid = actionHandler.CheckAction(
+                    SceneTransporter.CurrentGame.MyPlayerIndex, 
+                    action, GameBoardManager.ActiveManager.StateData);
+                if (!valid)
+                {
+                    var response=new ActionResponse();
+                    response.Type = ActionResponseType.Canceled;
+                    return response;
+                }
+            }
+
+            foreach (var actionHandler in _handlers)
+            {
+                var response = actionHandler.PerfromAction(SceneTransporter.CurrentGame.MyPlayerIndex,action,GameBoardManager.ActiveManager.StateData);
                 if (response != null)
                 {
                     //action被处理掉了
@@ -208,11 +255,11 @@ namespace Assets.CSharpCode.GameLogic
                             card.CardType == CardType.Unknown
                         )
                         {
-                            board.MilitaryCards.Add(card);
+                            board.MilitaryCards.Add(new HandCardInfo(card,CurrentGame.CurrentRound));
                         }
                         else
                         {
-                            board.CivilCards.Add(card);
+                            board.CivilCards.Add(new HandCardInfo(card, CurrentGame.CurrentRound));
                         }
                     }
                     break;

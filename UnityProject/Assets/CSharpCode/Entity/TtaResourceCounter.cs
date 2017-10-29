@@ -139,7 +139,7 @@ namespace Assets.CSharpCode.Entity
                     break;
                 case ResourceType.BlueMarker:
                     var blueMarkerUsed = Board.AggregateOnBuildingCell(0, (current, cell) => current + cell.Storage);
-                    blueMarkerUsed += Board.ConstructingWonderSteps.Count;
+                    blueMarkerUsed += Board.ConstructingWonderSteps;
 
                     resourceValue = Board.InitialBlueMarkerCount - blueMarkerUsed;
                     break;

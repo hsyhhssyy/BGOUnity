@@ -51,9 +51,9 @@ namespace TtaWcfServer.InGameLogic.TtaEntities
         
         public List<Warning> Warnings;
         
-        public List<CardInfo> CivilCards;
+        public List<HandCardInfo> CivilCards;
         
-        public List<CardInfo> MilitaryCards;
+        public List<HandCardInfo> MilitaryCards;
         
         public List<CardInfo> CurrentEventPlayed;
         public List<CardInfo> FutureEventPlayed;

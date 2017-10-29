@@ -256,7 +256,7 @@ namespace TtaWcfServer.InGameLogic
                         break;
                     case GameMoveType.TakeCard:
                         CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = playerNo;
-                        board.CivilCards.Add(Civilopedia.GetCardInfoById(((CardInfo)gameMove.Data[1]).InternalId));
+                        board.CivilCards.Add(new HandCardInfo(Civilopedia.GetCardInfoById(((CardInfo)gameMove.Data[1]).InternalId),CurrentGame.CurrentRound));
                         break;
                     case GameMoveType.TakeWonder:
                         CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = playerNo;
@@ -265,7 +265,7 @@ namespace TtaWcfServer.InGameLogic
                         break;
                     case GameMoveType.PutBackCard:
                         CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = -1;
-                        board.CivilCards.Remove((CardInfo)gameMove.Data[1]);
+                        board.CivilCards.Remove(board.CivilCards.FirstOrDefault(info=>info.Card==(CardInfo)gameMove.Data[1]));
                         break;
                     case GameMoveType.PutBackWonder:
                         CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = -1;

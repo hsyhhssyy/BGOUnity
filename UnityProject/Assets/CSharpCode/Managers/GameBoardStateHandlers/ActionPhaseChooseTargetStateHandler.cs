@@ -37,20 +37,20 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
             
 
             //1. 突破(研究科技后改变[0]类型的属性[1]点）
-            var cards =
+            var hInfos =
                 board.CivilCards.Where(
-                    card =>
+                    info =>
                         actions.Exists(
                             action =>
                                 action.ActionType == PlayerActionType.DevelopTechCard &&
-                                (action.Data[0] as CardInfo).InternalId == card.InternalId)).ToList();
+                                (action.Data[0] as CardInfo).InternalId == info.Card.InternalId)).ToList();
 
-            targetElements["HandCivilCard"].AddRange(cards);
-            
-            
+            targetElements["HandCivilCard"].AddRange(hInfos.Select(info=>info.Card));
+
+
             //建造资源建筑减少资源点消耗[0]
             //建造城市建筑减少资源点消耗[0]
-            cards =
+            var cards =
                 actions.Where(action => action.ActionType == PlayerActionType.BuildBuilding)
                     .Select(act => act.Data[0] as CardInfo)
                     .ToList();

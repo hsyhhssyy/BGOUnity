@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.CSharpCode.Civilopedia;
+using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.Managers;
 using Assets.CSharpCode.UI.PCBoardScene.Effects;
 using Assets.CSharpCode.UI.Util.Controller;
@@ -13,7 +14,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
     public class HandCardChildController: TtaUIControllerMonoBehaviour
     {
         public HandCardParentController ParentController;
-        public CardInfo Card;
+        public HandCardInfo CardInfo;
 
         public bool Highlight { get; set; }
 
@@ -40,7 +41,7 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
                 var dict = ParentController.Manager.StateData["HighlightElement"] as Dictionary<String, List<CardInfo>>;
                 if (dict != null && dict.ContainsKey("HandCivilCard"))
                 {
-                    if (dict["HandCivilCard"].Contains(Card))
+                    if (dict["HandCivilCard"].Contains(CardInfo.Card))
                     {
                         highligtGo.Highlight = true;
                         return;
@@ -70,7 +71,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             var args = new ControllerGameUIEventArgs(GameUIEventType.TrySelect, UIKey);
 
             //附加Card
-            args.AttachedData["Card"] = Card;
+            args.AttachedData["Card"] = CardInfo.Card;
+            args.AttachedData["Turn"] = CardInfo.TurnTaken;
+
 
             Channel.Broadcast(args);
             return true;
@@ -89,7 +92,9 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
             var args = new ControllerGameUIEventArgs(GameUIEventType.Selected, UIKey);
 
             //附加Card
-            args.AttachedData["Card"] = Card;
+            args.AttachedData["Card"] = CardInfo.Card;
+            args.AttachedData["Turn"] = CardInfo.TurnTaken;
+
 
             Channel.Broadcast(args);
 

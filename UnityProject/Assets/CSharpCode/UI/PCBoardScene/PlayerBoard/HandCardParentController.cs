@@ -61,22 +61,22 @@ namespace Assets.CSharpCode.UI.PCBoardScene.Controller
 
             float incr = 0.7f;
 
-            List<CardInfo> cards  = HandType == "HandCivilCard" ? board.CivilCards : board.MilitaryCards;
+            List<HandCardInfo> infos  = HandType == "HandCivilCard" ? board.CivilCards : board.MilitaryCards;
 
-            if (cards.Count > 5)
+            if (infos.Count > 5)
             {
-                incr = 0.7f * 4 / (cards.Count - 1);
+                incr = 0.7f * 4 / (infos.Count - 1);
             }
 
-            for (int i = 0; i < cards.Count; i++)
+            for (int i = 0; i < infos.Count; i++)
             {
                 var mSp = Instantiate(unknownCardPrefab);
                 var childController = mSp.AddComponent<HandCardChildController>();
                 childController.ParentController=this;
-                childController.Card = cards[i];
+                childController.CardInfo = infos[i];
 
                 mSp.GetComponent<PCBoardCardDisplayBehaviour>()
-                    .Bind(cards[i], HandCardFrame.transform, new Vector3(i * incr, 0, -0.1f * i));
+                    .Bind(infos[i].Card, HandCardFrame.transform, new Vector3(i * incr, 0, -0.1f * i));
 
             }
         }
