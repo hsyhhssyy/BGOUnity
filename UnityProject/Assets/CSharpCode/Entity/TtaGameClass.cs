@@ -66,8 +66,10 @@ namespace Assets.CSharpCode.Entity
         /// 
         /// </summary>
         public List<TtaBoard> Boards;
-
-        public List<CardInfo> SharedTactics; 
+        /// <summary>
+        /// 共享的阵型，这个集合默认就是distinct的
+        /// </summary>
+        public List<CardInfo> SharedTactics=new List<CardInfo>();
 
         public List<CardRowInfo> CardRow;
 

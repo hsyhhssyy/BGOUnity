@@ -22,15 +22,23 @@ namespace Assets.CSharpCode.Managers.GameBoardStateHandlers
 
         public override void LeaveState()
         {
+            if (SavedActions != null)
+            {
+                CurrentGame.PossibleActions = SavedActions;
+            }
         }
+
+        public List<PlayerAction> SavedActions=new List<PlayerAction>();
 
         public override void ProcessGameEvents(object sender, GameUIEventArgs args)
         {
             if (args.EventType == GameUIEventType.ReportInternalAction)
             {
-
                 //进行一番处理
+                SavedActions = CurrentGame.PossibleActions;
+                CurrentGame.PossibleActions = args.AttachedData["Actions"] as List<PlayerAction>;
 
+                //切换状态
                 Manager.SwitchState(GameManagerState.ActionPhaseChooseTarget, CreateStateData(args));
             }
         }

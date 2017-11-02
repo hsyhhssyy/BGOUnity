@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
@@ -8,6 +9,7 @@ using HSYErpBase.Wcf.CommonApi;
 using NHibernate;
 using TtaCommonLibrary.Entities.GameModel;
 using TtaWcfServer.InGameLogic;
+using TtaWcfServer.InGameLogic.GameJournals;
 using TtaWcfServer.InGameLogic.WcfEntities;
 using TtaWcfServer.ServerApi.LobbyService;
 
@@ -98,5 +100,45 @@ namespace TtaWcfServer.Service.Test
                 }
             }
         }
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", BodyStyle = WebMessageBodyStyle.Wrapped, RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        public void Cheat(String sessionString, int roomId,GameMove move)
+        {
+            var val = ValidateSessionApi.CurrentValidator.ValidateSession<WcfGame>(sessionString);
+            if (val != null)
+            {
+                return;
+            }
+
+
+            using (ISession hibernateSession = NHibernateHelper.CurrentHelper.OpenSession())
+            {
+                var user = SessionManager.GetCurrentUser(sessionString);
+                if (user.Id != 1 && user.Id != 2)
+                {
+                    return;
+                }
+
+                WcfContext context = new WcfContext(sessionString, hibernateSession);
+
+                GameRoom room = hibernateSession.Get<GameRoom>(roomId);
+                if (room != null)
+                {
+                    room.JoinedPlayer = LobbyServiceApi.CreateUserLites(room.Players, context);
+                    room.ObserverPlayer = LobbyServiceApi.CreateUserLites(room.Observers, context);
+                    room.RefereePlayer = LobbyServiceApi.CreateUserLites(room.Referees, context);
+
+                    //给出结果
+                    var manager=GameManager.GetManager(room, context);
+                    manager.ExecuteGameMove(move.PlayerNo,new []{move}.ToList());
+
+                    hibernateSession.Flush();
+
+                }
+            }
+        }
+
     }
 }

@@ -84,7 +84,7 @@ namespace Assets.CSharpCode.Network.Wcf
             board.CompletedWonders = ParseCardInfoListFromJson(civilopedia, json.TryGetField("CompletedWonders"));
 
             board.ConstructingWonder=ParseCardInfoFromJson(civilopedia, json.TryGetField("ConstructingWonder"));
-            board.ConstructingWonderSteps= json.TryGetField("ConstructingWonderSteps").list.Select(j=>j.i).Select(q=>q.ToString()).ToList();
+            board.ConstructingWonderSteps= json.TryGetField("ConstructingWonderSteps").list.Select(j=>j.str).Count(q => q=="X");
 
 
             board.SpecialTechs = ParseCardInfoListFromJson(civilopedia, json.TryGetField("SpecialTechs"));

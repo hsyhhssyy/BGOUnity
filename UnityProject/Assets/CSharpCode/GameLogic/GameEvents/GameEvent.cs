@@ -21,7 +21,7 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         /// 表示执行该操作的玩家编号
         /// </summary>
         [DataMember]
-        public int PlayerNo;
+        public int PlayerNo=-1;
         [DataMember]
         public Dictionary<int, Object> Data;
 
@@ -45,6 +45,10 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
             }
         }
 
+        public static GameMove Upgrade(BuildingType type,CardInfo from, CardInfo to, int count)
+        {
+            return new GameMove(GameMoveType.Upgrade, type, from, to, count);
+        }
         public static GameMove Build(CardInfo card, int from, int to)
         {
             return new GameMove(GameMoveType.Build, card, from, to);
@@ -96,6 +100,18 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         public static GameMove ReplaceGovernment(CardInfo info)
         {
             return new GameMove(GameMoveType.ReplaceGovernment, info);
+        }
+        public static GameMove ConstructWonder(int step)
+        {
+            return new GameMove(GameMoveType.ConstructWonder, step);
+        }
+        public static GameMove WonderComplete(CardInfo info)
+        {
+            return new GameMove(GameMoveType.WonderComplete, info);
+        }
+        public static GameMove SetupTactic(CardInfo info)
+        {
+            return new GameMove(GameMoveType.SetupTactic, info);
         }
         public static GameMove Production(ResourceType type,int amount, Dictionary<CardInfo, int> markers)
         {
@@ -169,7 +185,7 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         /// </summary>
         Consumption,
         /// <summary>
-        /// 表示建筑物/部队[0]上的黄点从[1]变到[2]（变少表示拆除）
+        /// 表示建筑物/部队[0:CardInfo]上的黄点从[1]变到[2]（变少表示拆除）
         /// </summary>
         Build,
         /// <summary>
@@ -194,9 +210,24 @@ namespace Assets.CSharpCode.GameLogic.GameEvents
         /// </summary>
         DevelopBuilding,
         /// <summary>
-        /// 表示玩家将领袖牌[0]作为自己的领袖
+        /// 表示玩家将领袖牌[0]作为自己的领袖（不包括手牌变化）
         /// </summary>
         ElectLeader,
-
+        /// <summary>
+        /// 表示玩家建造了当前奇迹的[0]步（资源和白点消耗另行通知）
+        /// </summary>
+        ConstructWonder,
+        /// <summary>
+        /// 表示玩家当前建造的奇迹[0]已经完成
+        /// </summary>
+        WonderComplete,
+        /// <summary>
+        /// 表示建筑物/部队[0:BuildingType]上的黄点从[1:CardInfo]移动到[2:CardInfo]，一共移动[3]个
+        /// </summary>
+        Upgrade,
+        /// <summary>
+        /// 表示玩家设置阵型[0]为其当前阵型（不考虑消耗和阵型的来源）
+        /// </summary>
+        SetupTactic,
     }
 }

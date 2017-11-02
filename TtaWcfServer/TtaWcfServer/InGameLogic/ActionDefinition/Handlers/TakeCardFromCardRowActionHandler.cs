@@ -128,7 +128,7 @@ namespace TtaWcfServer.InGameLogic.ActionDefinition.Handlers
                     case CardType.UrbanTechTheater:
                     {
                         //检查对应位置和手牌
-                        if (board.CivilCards.Contains(info.Card))
+                        if (board.CivilCards.Any(hInfo=>hInfo.Card==info.Card))
                         {
                             baseCost = -1;
                             break;

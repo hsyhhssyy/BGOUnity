@@ -255,20 +255,24 @@ namespace TtaWcfServer.InGameLogic
                         }
                         break;
                     case GameMoveType.TakeCard:
-                        CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = playerNo;
-                        board.CivilCards.Add(new HandCardInfo(Civilopedia.GetCardInfoById(((CardInfo)gameMove.Data[1]).InternalId),CurrentGame.CurrentRound));
+                        CurrentGame.CardRow[(int) gameMove.Data[0]].TakenBy = playerNo;
+                        board.CivilCards.Add(new HandCardInfo(
+                            Civilopedia.GetCardInfoById(((CardInfo) gameMove.Data[1]).InternalId),
+                            CurrentGame.CurrentRound));
                         break;
                     case GameMoveType.TakeWonder:
-                        CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = playerNo;
-                        board.ConstructingWonder=Civilopedia.GetCardInfoById(((CardInfo)gameMove.Data[1]).InternalId);
+                        CurrentGame.CardRow[(int) gameMove.Data[0]].TakenBy = playerNo;
+                        board.ConstructingWonder =
+                            Civilopedia.GetCardInfoById(((CardInfo) gameMove.Data[1]).InternalId);
                         board.ConstructingWonderSteps = 0;
                         break;
                     case GameMoveType.PutBackCard:
-                        CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = -1;
-                        board.CivilCards.Remove(board.CivilCards.FirstOrDefault(info=>info.Card==(CardInfo)gameMove.Data[1]));
+                        CurrentGame.CardRow[(int) gameMove.Data[0]].TakenBy = -1;
+                        board.CivilCards.Remove(
+                            board.CivilCards.FirstOrDefault(info => info.Card == (CardInfo) gameMove.Data[1]));
                         break;
                     case GameMoveType.PutBackWonder:
-                        CurrentGame.CardRow[(int)gameMove.Data[0]].TakenBy = -1;
+                        CurrentGame.CardRow[(int) gameMove.Data[0]].TakenBy = -1;
                         board.ConstructingWonder = null;
                         break;
                     case GameMoveType.Consumption:
@@ -296,6 +300,121 @@ namespace TtaWcfServer.InGameLogic
                             return 0;
                         });
                         break;
+                    case GameMoveType.Build:
+                    {
+                        var bdCard = ((CardInfo) gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.AggregateOnBuildingCell(0, (c, cell) =>
+                        {
+                            if (bdCard == cell.Card)
+                            {
+                                cell.Worker = (int) gameMove.Data[2];
+                            }
+                            return 0;
+                        });
+                        break;
+                }
+                    case GameMoveType.Upgrade:
+                    {
+                        var count = (int)gameMove.Data[3];
+                        var fromCard = ((CardInfo)gameMove.Data[1]).CivilpediaCheck(Civilopedia);
+                            var toCard = ((CardInfo)gameMove.Data[2]).CivilpediaCheck(Civilopedia);
+                            board.AggregateOnBuildingCell(0, (c, cell) =>
+                        {
+                            if (fromCard == cell.Card)
+                            {
+                                cell.Worker -= count;
+                            }else if (toCard == cell.Card)
+                            {
+                                cell.Worker += count;
+                            }
+                            return 0;
+                        });
+                        break;
+                    }
+                    case GameMoveType.CardUsed:
+                    {
+                        var card = (HandCardInfo) gameMove.Data[0];
+                         card.Card=card.Card.CivilpediaCheck(Civilopedia);
+
+                            var handC = board.CivilCards.FirstOrDefault(hInfo =>
+                            hInfo.Card == card.Card && hInfo.TurnTaken == card.TurnTaken);
+                        if (handC != null)
+                        {
+                            board.CivilCards.Remove(handC);
+                        }
+                        else
+                        {
+                            var handM = board.MilitaryCards.FirstOrDefault(hInfo =>
+                                hInfo.Card == card.Card && hInfo.TurnTaken == card.TurnTaken);
+                            if (handM != null)
+                            {
+                                board.CivilCards.Remove(handM);
+                            }
+                        }
+                        break;
+                    }
+                    case GameMoveType.ConstructWonder:
+                    {
+                        board.ConstructingWonderSteps += (int) gameMove.Data[0];
+                        break;
+                    }
+                    case GameMoveType.WonderComplete:
+                    {
+                        board.CompletedWonders.Add(board.ConstructingWonder);
+                        board.ConstructingWonderSteps =0;
+                        break;
+                    }
+                    case GameMoveType.DevelopSpecialTech:
+                    {
+
+                        var card = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.SpecialTechs.Add(card);
+                            break;
+                    }
+                    case GameMoveType.ReplaceSpecialTech:
+                    {
+
+                        var newCard = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            var oldCard = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.SpecialTechs.Add(newCard);
+                        board.SpecialTechs.Remove(oldCard);
+                            break;
+                    }
+                    case GameMoveType.ElectLeader:
+                    {
+                        var card = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.Leader = card;
+                        break;
+                    }
+                    case GameMoveType.ReplaceGovernment:
+                    {
+                        var card = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.Government = card;
+                        break;
+                    }
+                    case GameMoveType.SetupTactic:
+                    {
+                        var card = ((CardInfo)gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                            board.Tactic = card;
+                        break;
+                        }
+                    case GameMoveType.DevelopBuilding:
+                    {
+                        var card = ((CardInfo) gameMove.Data[0]).CivilpediaCheck(Civilopedia);
+                           
+                        var bType = Civilopedia.GetRuleBook().GetBuildingType(card);
+                        if (!board.Buildings.ContainsKey(bType))
+                        {
+                            board.Buildings.Add(bType, new XmlSerializableDictionary<Age, BuildingCell>());
+                        }
+                        var cell = new BuildingCell();
+                        cell.Card = card;
+                        cell.Worker = 0;
+                        cell.Storage = 0;
+                        board.Buildings[bType].Add(card.CardAge, cell);
+
+                        break;
+                    }
                 }
             }
         }

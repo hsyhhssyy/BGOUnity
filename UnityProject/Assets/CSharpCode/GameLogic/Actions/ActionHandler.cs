@@ -31,8 +31,9 @@ namespace Assets.CSharpCode.GameLogic.Actions
         public abstract ActionResponse PerfromAction(int playerNo, PlayerAction action, Dictionary<string, object> boardManagerStateData);
 
         public virtual ActionResponse PerfromInternalAction(int playerNo, PlayerAction action,
-            Dictionary<string, object> boardManagerStateData)
+            Dictionary<string, object> boardManagerStateData,out List<PlayerAction> followingActions)
         {
+            followingActions = null;
             return null;
         }
 

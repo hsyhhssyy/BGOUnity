@@ -131,7 +131,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
 	        board.UncountableResourceCount[ResourceType.WorkerPool] = 1;
 
 			//初始为空的那些东西们
-			board.CivilCards=new List<CardInfo>();
+			board.CivilCards=new List<HandCardInfo>();
 			board.Colonies=new List<CardInfo>();
 			board.CompletedWonders=new List<CardInfo>();
 	        board.ConstructingWonder = null;
@@ -143,8 +143,8 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
 	        board.Government = _civilopedia.GetCardInfoById("5001");//Despotism
 
 	        board.Leader = null;
-			board.MilitaryCards=new List<CardInfo>();
-			board.CivilCards=new List<CardInfo>();
+			board.MilitaryCards=new List<HandCardInfo>();
+			board.CivilCards=new List<HandCardInfo>();
 			board.SpecialTechs=new List<CardInfo>();
 	        board.Tactic = null;
 
@@ -298,5 +298,38 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook.RuleBooks
         {
             return 5 - room.PlayerMax;
         }
+
+	    public override BuildingType GetBuildingType(CardInfo card)
+	    {
+	        switch (card.CardType)
+	        {
+	            case CardType.ResourceTechFarm:
+	                return BuildingType.Farm;
+	            case CardType.ResourceTechMine:
+	                return BuildingType.Mine;
+
+	            case CardType.UrbanTechLab:
+	                return BuildingType.Lab;
+	            case CardType.UrbanTechArena:
+	                return BuildingType.Arena;
+	            case CardType.UrbanTechLibrary:
+	                return BuildingType.Library;
+	            case CardType.UrbanTechTemple:
+	                return BuildingType.Temple;
+	            case CardType.UrbanTechTheater:
+	                return BuildingType.Theater;
+
+	            case CardType.MilitaryTechAirForce:
+	                return BuildingType.AirForce;
+	            case CardType.MilitaryTechArtillery:
+	                return BuildingType.Artillery;
+	            case CardType.MilitaryTechCavalry:
+	                return BuildingType.Cavalry;
+	            case CardType.MilitaryTechInfantry:
+	                return BuildingType.Infantry;
+	            default:
+	                return BuildingType.Unknown;
+	        }
+	    }
     }
 }

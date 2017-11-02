@@ -237,6 +237,18 @@ namespace Assets.CSharpCode.Network.Wcf
             obj.SetField("data",(String)null);
             obj.SetField("clientResponse", Serializer.Serialize(clientResponse));
             return WcfPostOperator.PostJson(ServerUrlBase + "GameService/GameMainService.svc/PerformAction", obj);
+        } 
+        
+        //------------------
+        public static IEnumerator TakeInternalAction(String session, int roomId, PlayerAction action, ActionResponse clientResponse)
+        {
+            JSONObject obj = new JSONObject();
+            obj.SetField("sessionString", session);
+            obj.SetField("roomId", roomId);
+            obj.SetField("action", Serializer.Serialize(action));
+            obj.SetField("data", (String)null);
+            obj.SetField("clientResponse", Serializer.Serialize(clientResponse));
+            return WcfPostOperator.PostJson(ServerUrlBase + "GameService/GameMainService.svc/PerformInternalAction", obj);
         }
 
         public static JSONObject PackAction(PlayerAction action)

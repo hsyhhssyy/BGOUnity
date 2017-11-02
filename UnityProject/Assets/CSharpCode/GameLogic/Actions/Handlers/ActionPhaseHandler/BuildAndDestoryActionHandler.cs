@@ -101,8 +101,7 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
         public override ActionResponse PerfromAction(int playerNo, PlayerAction action, Dictionary<string, object> data)
         {
             var board = Manager.CurrentGame.Boards[playerNo];
-            var response = new ActionResponse();
-            response.Type = ActionResponseType.ChangeList;
+            var response = new ActionResponse {Type = ActionResponseType.ChangeList};
 
             if (action.ActionType == PlayerActionType.BuildBuilding)
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
@@ -41,6 +42,25 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
             return result;
         }
 
+
+        public override bool CheckAction(int playerNo, PlayerAction action, Dictionary<String, object> data)
+        {
+            //拉比换领袖，必须要为Action不停的附加数据,直到用户做出选择
+            if (action.ActionType == PlayerActionType.ElectLeader)
+            {
+                var leaderCard = (CardInfo)action.Data[0];
+                if (leaderCard.SustainedEffects.Any(e => e.FunctionId == CardEffectType.E603))
+                {
+                    if (!data.ContainsKey("E603Choice"))
+                    {
+                        //InternalAction
+                    }
+                }
+            }
+            return true;
+        }
+
+
         public override ActionResponse PerfromAction(int playerNo, PlayerAction action, Dictionary<string, object> data)
         {
             if (action.ActionType != PlayerActionType.ElectLeader)
@@ -72,10 +92,18 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
                 board.Resource[ResourceType.WhiteMarker] = originalWhite - 1;
                 response.Changes.Add(GameMove.Resource(ResourceType.WhiteMarker, originalWhite, originalWhite - 1));
             }
+
             board.EffectPool.AddCardInfo(leaderCard);
             board.Leader = leaderCard;
             response.Changes.Add(GameMove.ElectLeader(leaderCard));
-            
+
+            //用牌
+            var infoList = board.CivilCards.Where(info => info.Card == leaderCard).ToList();
+            infoList.Sort((a, b) => a.TurnTaken.CompareTo(b.TurnTaken));
+            var handInfo = infoList.FirstOrDefault();
+            response.Changes.Add(GameMove.CardUsed(handInfo));
+
+
             return response;
         }
     }

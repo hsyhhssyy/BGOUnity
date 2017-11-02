@@ -15,6 +15,7 @@ namespace TtaWcfServer.InGameLogic.Civilpedia.RuleBook
 
         public abstract List<CardInfo> GetCivilDeckForAge(GameRoom room,Age age);
         public abstract List<CardInfo> GetMilitaryDeckForAge(GameRoom room,Age age);
+        public abstract BuildingType GetBuildingType(CardInfo card);
     }
 
     public static class CommonRoomRule

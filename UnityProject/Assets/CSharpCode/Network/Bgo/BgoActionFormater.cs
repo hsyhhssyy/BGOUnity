@@ -156,7 +156,8 @@ namespace Assets.CSharpCode.Network.Bgo
                         action.Data[0] = Civilopedia.GetCardInfoByName(wonderName);
                         action.Data[1] = stageCount;
                         action.Data[2] = resCost;
-                        action.Data[3] = optValue;
+                        action.Data[3] = 1;
+                        action.Data[4] = optValue;
                     }
                     else if (bgoStr.Contains("("))
                     {

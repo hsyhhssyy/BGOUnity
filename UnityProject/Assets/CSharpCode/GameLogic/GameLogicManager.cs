@@ -17,7 +17,7 @@ namespace Assets.CSharpCode.GameLogic
 {
     public class GameLogicManager
     {
-        public static GameLogicManager CurrentManager = new GameLogicManager();
+        public static readonly GameLogicManager CurrentManager = new GameLogicManager();
 
         protected GameLogicManager()
         {
@@ -68,7 +68,7 @@ namespace Assets.CSharpCode.GameLogic
         }
 
 
-        private GameEventChannel _channel = SceneTransporter.CurrentChannel;
+        private readonly GameEventChannel _channel = SceneTransporter.CurrentChannel;
 
         public TtaGame CurrentGame { get { return SceneTransporter.CurrentGame; } }
         
@@ -85,6 +85,11 @@ namespace Assets.CSharpCode.GameLogic
         /// <returns></returns>
         public List<PlayerAction> GetPossibleActions(int playerNo)
         {
+            if (LastCalcuatedActions.ContainsKey(playerNo))
+            {
+                return LastCalcuatedActions[playerNo];
+            }
+
             var actions = new List<PlayerAction>();
             foreach (var handler in _handlers)
             {
@@ -110,6 +115,9 @@ namespace Assets.CSharpCode.GameLogic
 
         public void ReSyncStatus()
         {
+            //重置action缓存
+            LastCalcuatedActions=new Dictionary<int, List<PlayerAction>>();
+            //重置effectpool
             foreach (var board in CurrentGame.Boards)
             {
                 board.EffectPool.ReSyncStatus();
@@ -119,8 +127,8 @@ namespace Assets.CSharpCode.GameLogic
         #endregion
 
 
-        public List<ActionResponse> SubmittedActionResponses = new List<ActionResponse>();
-        public List<ActionResponse> DiscardedActionResponses = new List<ActionResponse>();
+        public readonly List<ActionResponse> SubmittedActionResponses = new List<ActionResponse>();
+        public readonly List<ActionResponse> DiscardedActionResponses = new List<ActionResponse>();
 
         /// <summary>
         /// 尝试在本地执行一个action并发送刷新消息，如果不能处理，则返回null，否则返回处理结果
@@ -133,7 +141,10 @@ namespace Assets.CSharpCode.GameLogic
             {
                 return null;
             }
-
+            
+            //重置缓存
+            LastCalcuatedActions=new Dictionary<int, List<PlayerAction>>();
+            
             foreach (var actionHandler in _handlers)
             {
                 var valid = actionHandler.CheckAction(
@@ -141,8 +152,7 @@ namespace Assets.CSharpCode.GameLogic
                     action, GameBoardManager.ActiveManager.StateData);
                 if (!valid)
                 {
-                    var response=new ActionResponse();
-                    response.Type = ActionResponseType.Canceled;
+                    var response = new ActionResponse {Type = ActionResponseType.Canceled};
                     return response;
                 }
             }
@@ -156,6 +166,10 @@ namespace Assets.CSharpCode.GameLogic
                     //进行事件触发
                     foreach (var change in response.Changes)
                     {
+                        if (change.PlayerNo == -1)
+                        {
+                            change.PlayerNo = SceneTransporter.CurrentGame.MyPlayerIndex;
+                        }
                         TriggerChangeEvent(response,change);
                     }
 
@@ -167,6 +181,66 @@ namespace Assets.CSharpCode.GameLogic
                     CurrentGame.PossibleActions.Clear();
                     CurrentGame.PossibleActions.AddRange(actions);
 
+                    //不需要在这里通知界面刷新，因为TakeAction的callback会判断是否需要刷新
+                    SubmittedActionResponses.Add(response);
+                    return response;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 尝试在本地执行一个action并发送刷新消息，如果不能处理，则返回null，否则返回处理结果
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="followingActions"></param>
+        /// <returns></returns>
+        public ActionResponse TakeInternalAction(PlayerAction action,out List<PlayerAction> followingActions)
+        {
+            followingActions = new List<PlayerAction>();
+            if (CurrentGame == null)
+            {
+                return null;
+            }
+
+            //重置缓存
+            LastCalcuatedActions = new Dictionary<int, List<PlayerAction>>();
+
+            foreach (var actionHandler in _handlers)
+            {
+                var valid = actionHandler.CheckAction(
+                    SceneTransporter.CurrentGame.MyPlayerIndex,
+                    action, GameBoardManager.ActiveManager.StateData);
+                if (!valid)
+                {
+                    var response = new ActionResponse { Type = ActionResponseType.Canceled };
+                    return response;
+                }
+            }
+
+            foreach (var actionHandler in _handlers)
+            {
+                var response = actionHandler.PerfromInternalAction(SceneTransporter.CurrentGame.MyPlayerIndex, action, GameBoardManager.ActiveManager.StateData
+                    ,out followingActions);
+                if (response != null)
+                {
+                    //action被处理掉了
+                    //进行事件触发
+                    foreach (var change in response.Changes)
+                    {
+                        if (change.PlayerNo == -1)
+                        {
+                            change.PlayerNo = SceneTransporter.CurrentGame.MyPlayerIndex;
+                        }
+                        TriggerChangeEvent(response, change);
+                    }
+
+                    //处理动画
+                    _channel.Broadcast(new ServerGameUIEventArgs(GameUIEventType.Refresh, "GameLogicManager"));
+
+                    //不重新计算action
+                    
                     //不需要在这里通知界面刷新，因为TakeAction的callback会判断是否需要刷新
                     SubmittedActionResponses.Add(response);
                     return response;
@@ -277,19 +351,10 @@ namespace Assets.CSharpCode.GameLogic
         /// <returns></returns>
         public ActionResponse ExecuteProduction(int playerNo)
         {
-
-            if (CurrentGame.CurrentPhase == TtaPhase.FirstTurnActionPhase)
-            {
-                CurrentGame.CurrentPhase = TtaPhase.FirstTurnProductionPhase;
-            }
-            else
-            {
-                CurrentGame.CurrentPhase = TtaPhase.ProductionPhase;
-            }
+            CurrentGame.CurrentPhase = CurrentGame.CurrentPhase == TtaPhase.FirstTurnActionPhase ? TtaPhase.FirstTurnProductionPhase : TtaPhase.ProductionPhase;
 
             //执行一个不包含抽牌的生产阶段
-            ActionResponse response = new ActionResponse();
-            response.Type = ActionResponseType.ChangeList;
+            ActionResponse response = new ActionResponse {Type = ActionResponseType.ChangeList};
 
             var board = CurrentGame.Boards[playerNo];
             
@@ -402,16 +467,16 @@ namespace Assets.CSharpCode.GameLogic
         /// 返回没能消耗掉的资源数量（如果蓝点不足）。
         /// </summary>
         /// <param name="playerNo">玩家编号（0开始）</param>
-        /// <param name="exchangeBuildingType">指示一旦发生资源找零时，蓝点放置于什么建筑物上。（该建筑也必须有生产对应类型资源的Effect）</param>
+        /// <param name="buildingType">指示查找蓝点和进行资源找零时参照的建筑物。（该建筑也必须有生产对应类型资源的Effect）</param>
         /// <param name="effectType">指示进行查找的资源在CardEffect上对应的资源，注意一般来说，是Increment，如消耗食物，这里应当填入FoodIncrement而不是Food。</param>
         /// <param name="value">要消耗的绝对数值（不是蓝点数）</param>
         /// <param name="marker">蓝点调整的结果将被添加到这里返回用户。</param>
         /// <returns>返回一旦资源不足时，未能消耗的资源绝对点数。</returns>
-        public int SimSpendResource(int playerNo, BuildingType exchangeBuildingType, ResourceType effectType, int value,Dictionary<CardInfo, int> marker)
+        public int SimSpendResource(int playerNo, BuildingType buildingType, ResourceType effectType, int value,Dictionary<CardInfo, int> marker)
         {
             //从小往大拿
             var board = CurrentGame.Boards[playerNo];
-            var buildings = board.Buildings[exchangeBuildingType];
+            var buildings = board.Buildings[buildingType];
 
             int currentAmount = value;
             for (int i = 0; i < 4; i++)
@@ -449,7 +514,7 @@ namespace Assets.CSharpCode.GameLogic
                     }
                     if (currentAmount < 0)
                     {
-                        SimProduceResource(playerNo, exchangeBuildingType, effectType,0 - currentAmount, marker);
+                        SimProduceResource(playerNo, buildingType, effectType,0 - currentAmount, marker);
                         break;
                     }
                 }
@@ -462,10 +527,12 @@ namespace Assets.CSharpCode.GameLogic
         /// 计算如果要[生产]指定数量的资源，各个建筑物上的蓝点应如何变化。（注意，并不真的操作蓝点）
         /// 不考虑蓝点储备不足的情况。
         /// </summary>
-        /// <param name="playerNo"></param>
-        /// <param name="value"></param>
-        /// <param name="marker"></param>
-        public void SimProduceResource(int playerNo, BuildingType buildingType,ResourceType rType, int value, Dictionary<CardInfo, int> marker)
+        /// <param name="playerNo">玩家编号（0开始）</param>
+        /// <param name="buildingType">指示放置蓝点的建筑物。（该建筑也必须有生产对应类型资源的Effect）</param>
+        /// <param name="effectType">指示进行查找的资源在CardEffect上对应的资源，注意一般来说，是Increment，如消耗食物，这里应当填入FoodIncrement而不是Food。</param>
+        /// <param name="value">要生产的绝对数值（不是蓝点数）</param>
+        /// <param name="marker">蓝点调整的结果将被添加到这里返回用户。</param>
+        public void SimProduceResource(int playerNo, BuildingType buildingType,ResourceType effectType, int value, Dictionary<CardInfo, int> marker)
         {
             //从大往小放
             var board = CurrentGame.Boards[playerNo];
@@ -484,7 +551,7 @@ namespace Assets.CSharpCode.GameLogic
                     }
 
                     var effect =
-                        cell.Card.SustainedEffects.FirstOrDefault(e => e.FunctionId == CardEffectType.E100 && e.Data[0] == (int)rType);
+                        cell.Card.SustainedEffects.FirstOrDefault(e => e.FunctionId == CardEffectType.E100 && e.Data[0] == (int)effectType);
                     if (effect == null)
                     {
                         continue;

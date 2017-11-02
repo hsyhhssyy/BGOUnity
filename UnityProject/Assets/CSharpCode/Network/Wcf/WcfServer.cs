@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.GameLogic;
 using Assets.CSharpCode.GameLogic.Actions;
@@ -19,6 +20,9 @@ namespace Assets.CSharpCode.Network.Wcf
         private int _uid;
 
         public ServerType ServerType { get { return ServerType.PassiveServer2Sec; } }
+
+        
+
 
         public IEnumerator LogIn(string username, string password, Action<String> callback)
         {
@@ -176,7 +180,71 @@ namespace Assets.CSharpCode.Network.Wcf
 
         public IEnumerator TakeInternalAction(TtaGame game, PlayerAction action,Action<ActionResponse,List<PlayerAction>> callback)
         {
-            throw new NotImplementedException();
+            WcfGame wcfGame = game as WcfGame;
+            if (wcfGame == null)
+            {
+                callback(null,null);
+                return new WcfServiceProvider.EmptyEnumrator();
+            }
+
+            List<PlayerAction> clientActions;
+            var gameLogicResponse = GameLogicManager.CurrentManager.TakeInternalAction(action,out clientActions);
+            if (gameLogicResponse != null)
+            {
+                if (gameLogicResponse.Type == ActionResponseType.Canceled)
+                {
+                    //直接Callback返回
+                    callback(gameLogicResponse, clientActions);
+                    return new WcfServiceProvider.EmptyEnumrator();
+                }
+                if (gameLogicResponse.Type == ActionResponseType.ForceRefresh ||
+                    gameLogicResponse.Type == ActionResponseType.InvalidAction)
+                {
+                    //这里这样做是因为客户端要求ForceRefresh了，但是还不需要立刻Refresh
+                    //因为客户端虽然要求ForceRefresh，但是服务器可能不这么觉得。
+                    return WcfServiceProvider.ExecuteWcfService(
+                        WcfServiceProvider.TakeInternalAction(_session, wcfGame.RoomId, action, gameLogicResponse),
+                        WcfServiceProvider.CastCallback((jsonPayload) =>
+                        {
+                            var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload.TryGetField("ActionResponse"));
+                            var serverAction =WcfServiceProvider.Serializer.Deserialize<List<PlayerAction>>(jsonPayload.TryGetField("Actions"));
+                            callback(gameLogicResponse, serverAction);
+                            var suppress =
+                                GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse,
+                                    serverResponse);
+                            if (!suppress)
+                            {
+                                callback(serverResponse, serverAction);
+                            }
+                        }));
+                }
+                else
+                {
+                    callback(gameLogicResponse, clientActions);
+                    return WcfServiceProvider.ExecuteWcfService(
+                        WcfServiceProvider.TakeInternalAction(_session, wcfGame.RoomId, action, gameLogicResponse),
+                        WcfServiceProvider.CastCallback((jsonPayload) =>
+                        {
+                            var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload.TryGetField("ActionResponse"));
+                            var serverAction = WcfServiceProvider.Serializer.Deserialize<List<PlayerAction>>(jsonPayload.TryGetField("Actions"));
+                            var suppress =
+                                GameLogicManager.CurrentManager.ProcessServerCallback(gameLogicResponse,
+                                    serverResponse);
+                            if (!suppress)
+                            {
+                                callback(serverResponse, serverAction);
+                            }
+                        }));
+                }
+            }
+            //否则直接请求网络，并把传入的callback作为网络通信的结果
+            return WcfServiceProvider.ExecuteWcfService(WcfServiceProvider.TakeAction(_session, wcfGame.RoomId, action, null),
+                WcfServiceProvider.CastCallback((jsonPayload) =>
+                {
+                    var serverResponse = WcfJsonPageProvider.ParseActionResponse(jsonPayload.TryGetField("ActionResponse"));
+                    var serverAction = WcfServiceProvider.Serializer.Deserialize<List<PlayerAction>>(jsonPayload.TryGetField("Actions"));
+                    callback(serverResponse, serverAction);
+                }));
         }
 
         public IEnumerator CheckRankedMatch(Action<TtaGame> callback)

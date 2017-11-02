@@ -31,10 +31,17 @@ namespace Assets.CSharpCode.Civilopedia
         Unknown = 0,
         //-------------E100------
         [CardEffectDetail("改变[0]类型的属性[1]点")] E100 = 100,
+        //-------------E200------
+        [CardEffectDetail("根据军力高于自己的其他玩家的数量*[1]，改变[0]类型的属性")] E232 = 232,
+        [CardEffectDetail("根据文化高于自己的其他玩家的数量*[1]，改变[0]类型的属性")] E233 = 233,
+        //-------------E400
+        [CardEffectDetail("生产闲置工人减少粮食消耗[0]")] E400 = 400,
+        [CardEffectDetail("生产闲置工人后返还粮食[0]")] E401 = 401,
         [CardEffectDetail("建造资源建筑减少资源点消耗[0]")] E402 = 402,
         [CardEffectDetail("建造城市建筑减少资源点消耗[0]")] E403 = 403,
         [CardEffectDetail("升级资源建筑减少资源点消耗[0]")] E404 = 404,
         [CardEffectDetail("升级城市建筑减少资源点消耗[0]")] E405 = 405,
+        [CardEffectDetail("建造一层奇迹减少资源点消耗[0]")] E407 = 407,
         [CardEffectDetail("研究科技后改变[0]类型的属性[1]点")] E408 = 408,
         [CardEffectDetail("消耗1白点建造奇迹最多[0]层")]
         E410 = 410,

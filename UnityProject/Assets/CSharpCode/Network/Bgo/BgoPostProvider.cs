@@ -46,8 +46,10 @@ namespace Assets.CSharpCode.Network.Bgo
                         callback);
                 //----optvalue is [3]
                 case PlayerActionType.UpgradeBuilding:
-                case PlayerActionType.BuildWonder:
                     return PerformAction(sessionObject, game, action.Data[3].ToString(), AttachIdCarte(4, action), callback);
+                //----optvalue is [4]
+                case PlayerActionType.BuildWonder:
+                    return PerformAction(sessionObject, game, action.Data[4].ToString(), AttachIdCarte(4, action), callback);
                 //----has additional form
                 case PlayerActionType.Destory:
                 case PlayerActionType.Disband:
@@ -93,7 +95,7 @@ namespace Assets.CSharpCode.Network.Bgo
                 case PlayerActionType.PlayActionCard:
                     return Perform2StepAction(sessionObject, game, action.Data[1].ToString(), callback);
                 case PlayerActionType.BuildWonder:
-                    return Perform2StepAction(sessionObject, game, action.Data[3].ToString(), callback);
+                    return Perform2StepAction(sessionObject, game, action.Data[4].ToString(), callback);
                     
                 default:
                     return null;

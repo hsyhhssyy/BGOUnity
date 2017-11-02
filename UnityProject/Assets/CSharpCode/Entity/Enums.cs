@@ -111,6 +111,7 @@ namespace Assets.CSharpCode.Entity
         /// 玩家可以建造一个建筑物（包括士兵）
         /// 0. CardInfo
         /// 1. Price
+        /// 2. 相关CardInfo（例如城市发展ActionCard）
         /// </summary>
         BuildBuilding,
         /// <summary>
@@ -118,6 +119,7 @@ namespace Assets.CSharpCode.Entity
         /// 0. CardInfo (from)
         /// 1. CardInfo (to)
         /// 2. Price
+        /// 3. 相关CardInfo（例如城市发展ActionCard）
         /// </summary>
         UpgradeBuilding,
         /// <summary>
@@ -138,6 +140,7 @@ namespace Assets.CSharpCode.Entity
         //---------打出一张内政卡---------
         /// <summary>
         /// 0. CardInfo
+        /// 1. 相关CardInfo（例如突破ActionCard）
         /// </summary>
         DevelopTechCard,
         /// <summary>
@@ -157,6 +160,7 @@ namespace Assets.CSharpCode.Entity
         /// 0. CardInfo
         /// 1. 这个行动建造的步数
         /// 2. 总的资源消耗
+        /// 3. 总的白点消耗
         /// </summary>
         BuildWonder,
         //--------掉红点的行动------

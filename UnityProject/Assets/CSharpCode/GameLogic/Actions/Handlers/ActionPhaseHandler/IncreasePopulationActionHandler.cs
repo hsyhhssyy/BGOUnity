@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
+using Assets.CSharpCode.GameLogic.Effect;
 using Assets.CSharpCode.GameLogic.GameEvents;
 
 namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
@@ -24,14 +26,8 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
             {
                 return null;
             }
-
-            int yellowMarker = board.Resource[ResourceType.YellowMarker];
-            if (yellowMarker <= 0)
-            {
-                return null;
-            }
-            int baseFood=Manager.Civilopedia.GetRuleBook().FoodToIncreasePopulation(yellowMarker);
-            int calcuatedFood = baseFood;
+            
+            int calcuatedFood = CalcuatedFoodCost(playerNo);
             if (board.Resource[ResourceType.Food] >= calcuatedFood)
             {
                 var action = new PlayerAction()
@@ -51,26 +47,68 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
                 var board = Manager.CurrentGame.Boards[playerNo];
                 var response = new ActionResponse {Type = ActionResponseType.ChangeList};
 
-                int foodCost = (int)action.Data[0];
-                Dictionary<CardInfo, int> markers = new Dictionary<CardInfo, int>();
-                Manager.SimSpendResource(playerNo, BuildingType.Farm, ResourceType.FoodIncrement, foodCost, markers);
+                response.Changes.AddRange(IncreasePopulation(playerNo));
 
-                response.Changes.Add(GameMove.Production(ResourceType.Food,0-foodCost,markers));
-                Manager.PerformMarkerChange(playerNo,markers);
-
-                int originalWorkerPool = board.Resource[ResourceType.WorkerPool];
-                board.Resource[ResourceType.WorkerPool] = originalWorkerPool + 1;
-
-                response.Changes.Add(GameMove.Resource(ResourceType.WorkerPool, originalWorkerPool, originalWorkerPool+1));
-
-                //别忘了掉1白
-                var originalWhite = board.Resource[ResourceType.WhiteMarker];
+                 //别忘了掉1白
+                 var originalWhite = board.Resource[ResourceType.WhiteMarker];
                 board.Resource[ResourceType.WhiteMarker] = originalWhite - 1;
                 response.Changes.Add(GameMove.Resource(ResourceType.WhiteMarker, originalWhite, originalWhite - 1));
                 
                 return response;
             }
             return null;
+        }
+
+        /// <summary>
+        /// 返回当前拉一个1人需要的粮食消耗
+        /// </summary>
+        /// <returns></returns>
+        public static int CalcuatedFoodCost(int playerNo)
+        {
+            var board = GameLogicManager.CurrentManager.CurrentGame.Boards[playerNo];
+            int yellowMarker = board.Resource[ResourceType.YellowMarker];
+            if (yellowMarker <= 0)
+            {
+                return Int32.MaxValue;
+            }
+            int baseFood = GameLogicManager.CurrentManager.Civilopedia.GetRuleBook().FoodToIncreasePopulation(yellowMarker);
+            int calcuatedFood = baseFood;
+            foreach (var effect in
+                board.EffectPool.FilterEffect(CardEffectType.E400))
+            {
+                calcuatedFood -= effect.Data[0];
+            }
+            if (calcuatedFood < 0)
+            {
+                calcuatedFood = 0;
+            }
+            //Calc
+            return calcuatedFood;
+        }
+
+        /// <summary>
+        /// 消耗合理的粮食，并增加1人口
+        /// </summary>
+        /// <returns></returns>
+        public static List<GameMove> IncreasePopulation(int playerNo)
+        {
+            var result = new List<GameMove>();
+            var board = GameLogicManager.CurrentManager.CurrentGame.Boards[playerNo];
+
+            int calcuatedFood = CalcuatedFoodCost(playerNo);
+            Dictionary<CardInfo, int> markers = new Dictionary<CardInfo, int>();
+            GameLogicManager.CurrentManager.SimSpendResource(
+                GameLogicManager.CurrentManager.CurrentGame.Boards.IndexOf(board), BuildingType.Farm,
+                ResourceType.FoodIncrement, calcuatedFood, markers);
+            result.Add(GameMove.Production(ResourceType.Food, 0 - calcuatedFood, markers));
+            GameLogicManager.CurrentManager.PerformMarkerChange(playerNo, markers);
+
+            int originalWorkerPool = board.Resource[ResourceType.WorkerPool];
+            board.Resource[ResourceType.WorkerPool] = originalWorkerPool + 1;
+            result.Add(GameMove.Resource(ResourceType.WorkerPool, originalWorkerPool, originalWorkerPool + 1));
+
+
+            return result;
         }
     }
 }
