@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.CSharpCode.Civilopedia;
 using Assets.CSharpCode.Entity;
 using Assets.CSharpCode.GameLogic.Effect;
 using Assets.CSharpCode.GameLogic.GameEvents;
+using JetBrains.Annotations;
 
 namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
 {
@@ -13,7 +15,7 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
         {
         }
 
-        public override List<PlayerAction> GenerateAction(int playerNo)
+        public override System.Collections.Generic.List<PlayerAction> GenerateAction(int playerNo)
         {
             if (Manager.CurrentGame.CurrentPhase != TtaPhase.ActionPhase ||
                 Manager.CurrentGame.CurrentPlayer != playerNo)
@@ -27,69 +29,47 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
                 return null;
             }
 
-            var result = new List<PlayerAction>();
+            var ruleBook = Manager.Civilopedia.GetRuleBook();
             var originalWhite = board.Resource[ResourceType.WhiteMarker];
             var originalRed = board.Resource[ResourceType.RedMarker];
-            var ruleBook = Manager.Civilopedia.GetRuleBook();
+
             var resource = board.Resource[ResourceType.Resource];
-
-            foreach (var buildingPair in board.Buildings)
+            var result = new List<PlayerAction>();
+            board.AggregateOnBuildingUpgradePair(true,(b,fromCell,toCell) =>
             {
-                var dict = buildingPair.Value;
-                for (int fromAgei = 0; fromAgei < (int) Age.IV; fromAgei++)
+                if (ruleBook.IsMilitary(fromCell.Card))
                 {
-                    if (!dict.ContainsKey((Age) fromAgei))
+                    if (originalRed <= 0)
                     {
-                        continue;
-                    }
-                    var fromCell = dict[(Age) fromAgei];
-
-                    if (ruleBook.IsMilitary(fromCell.Card))
-                    {
-                        if (originalRed <= 0)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (originalWhite <= 0)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (fromCell.Worker <= 0)
-                    {
-                        continue;
-                    }
-
-                    for (int toAgei = fromAgei + 1; toAgei < (int) Age.IV; toAgei++)
-                    {
-                        if (!dict.ContainsKey((Age) toAgei))
-                        {
-                            continue;
-                        }
-
-                        var toCell = dict[(Age) fromAgei];
-
-                        var pricediff = EffectExecutor.GetBuildingCost(Manager, playerNo, toCell)
-                                        - EffectExecutor.GetBuildingCost(Manager, playerNo, fromCell);
-                        if (pricediff <= resource)
-                        {
-                            var action = new PlayerAction {ActionType = PlayerActionType.UpgradeBuilding};
-                            action.Data[0] = fromCell.Card;
-                            action.Data[1] = fromCell.Card;
-                            action.Data[2] = pricediff;
-
-                            result.Add(action);
-                        }
+                        return true;
                     }
                 }
-            }
+                else
+                {
+                    if (originalWhite <= 0)
+                    {
+                        return true;
+                    }
+                }
+
+                var pricediff = BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, toCell)
+                                - BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, fromCell);
+                if (pricediff <= resource)
+                {
+                    var action = new PlayerAction { ActionType = PlayerActionType.UpgradeBuilding };
+                    action.Data[0] = fromCell.Card;
+                    action.Data[1] = toCell.Card;
+                    action.Data[2] = pricediff;
+
+                    result.Add(action);
+                }
+
+                return true;
+            });
 
             return result;
         }
+        
 
         public override ActionResponse PerfromAction(int playerNo, PlayerAction action,
             Dictionary<string, object> boardManagerStateData)

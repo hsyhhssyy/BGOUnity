@@ -108,10 +108,11 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
             return response;
         }
 
-        public override ActionResponse PerfromInternalAction(int playerNo, PlayerAction action, Dictionary<string, object> boardManagerStateData, out List<PlayerAction> followingActions)
+        public override ActionResponse PerfromInternalAction(int playerNo, PlayerAction action, Dictionary<string, object> boardManagerStateData, 
+            out List<PlayerAction> followingActions)
         {
             followingActions=new List<PlayerAction>();
-            if (action.ActionType != PlayerActionType.PlayActionCard)
+            if (action.ActionType != PlayerActionType.PlayActionCard||action.Internal!=true)
             {
                 return null;
             }
@@ -119,6 +120,7 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
 
             var board = Manager.CurrentGame.Boards[playerNo];
             var card = (CardInfo)action.Data[0];
+            var rulebook = Manager.Civilopedia.GetRuleBook();
             var handInfo = board.CivilCards.FirstOrDefault(info =>
                 info.Card == card && info.TurnTaken < Manager.CurrentGame.CurrentRound);
 
@@ -130,32 +132,166 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers.ActionPhaseHandler
             var response = new ActionResponse();
             response.Type = ActionResponseType.Accepted;
 
+            var resource = board.Resource[ResourceType.Resource];
+            var science = board.Resource[ResourceType.Science];
+            var scienceForMili = board.Resource[ResourceType.ScienceForMilitary];
+            var scienceForSpec = board.Resource[ResourceType.ScienceForSpecialTech];
 
             foreach (var effect in card.ImmediateEffects)
             {
+                var effect1 = effect;
+                List<PlayerAction> actions = followingActions;
+
                 switch (effect.FunctionId)
                 {
                     case CardEffectType.E402:
-                        //TODO 找到所有可以升级的建筑物加入Action
+                    {
+                        board.AggregateOnBuildingCell(true, (b, cell) =>
+                        {
+                            if (cell.Card.CardType != CardType.ResourceTechFarm &&
+                                cell.Card.CardType != CardType.ResourceTechMine)
+                            {
+                                return true;
+                            }
+
+                            var buildPrice = BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, cell) -
+                                             effect1.Data[0];
+                            if (buildPrice <= resource)
+                            {
+                                var actualAction = new PlayerAction { ActionType = 
+                                    PlayerActionType.BuildBuilding };
+                                actualAction.Data[0] = cell.Card;
+                                actualAction.Data[1] = buildPrice;
+                                actualAction.Data[2] = card;
+
+                                actions.Add(action);
+                            }
+                            return true;
+                        });
                         break;
+                    } 
                     case CardEffectType.E403:
-                        //TODO 找到所有可以升级的建筑物加入Action
+                    {
+                        board.AggregateOnBuildingUpgradePair(true, (b, fromCell, toCell) =>
+                        {
+                            if (fromCell.Card.CardType!= CardType.ResourceTechFarm&&
+                            fromCell.Card.CardType!= CardType.ResourceTechMine)
+                            {
+                                    return true;
+                            }
+
+                            var pricediff = BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, toCell)
+                                            - BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, fromCell)
+                                            - effect1.Data[0];
+
+                            if (pricediff <= resource)
+                            {
+                                var actualAction = new PlayerAction { ActionType = PlayerActionType.UpgradeBuilding };
+                                actualAction.Data[0] = fromCell.Card;
+                                actualAction.Data[1] = toCell.Card;
+                                actualAction.Data[2] = pricediff;
+                                actualAction.Data[3] = card;
+
+                                actions.Add(action);
+                            }
+
+                            return true;
+                        });
                         break;
+                    }
                     case CardEffectType.E404:
-                        //TODO 找到所有可以升级的建筑物加入Action
+                    {
+                        board.AggregateOnBuildingCell(true, (b, cell) =>
+                        {
+                            if (!rulebook.IsUrban(cell.Card))
+                            {
+                                return true;
+                            }
+
+                            var buildPrice = BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, cell) -
+                                             effect1.Data[0];
+                            if (buildPrice <= resource)
+                            {
+                                var actualAction = new PlayerAction
+                                {
+                                    ActionType =
+                                        PlayerActionType.BuildBuilding
+                                };
+                                actualAction.Data[0] = cell.Card;
+                                actualAction.Data[1] = buildPrice;
+                                actualAction.Data[2] = card;
+
+                                actions.Add(action);
+                            }
+                            return true;
+                        });
                         break;
+                    }
                     case CardEffectType.E405:
-                        //TODO 找到所有可以升级的建筑物加入Action
+                    {
+                        board.AggregateOnBuildingUpgradePair(true, (b, fromCell, toCell) =>
+                        {
+                            if (!rulebook.IsUrban(fromCell.Card))
+                            {
+                                return true;
+                            }
+
+                            var pricediff = BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, toCell)
+                                            - BuildAndDestoryActionHandler.GetBuildingCost(Manager, playerNo, fromCell)
+                                            - effect1.Data[0];
+
+                            if (pricediff <= resource)
+                            {
+                                var actualAction = new PlayerAction { ActionType = PlayerActionType.UpgradeBuilding };
+                                actualAction.Data[0] = fromCell.Card;
+                                actualAction.Data[1] = toCell.Card;
+                                actualAction.Data[2] = pricediff;
+                                actualAction.Data[3] = card;
+
+                                actions.Add(actualAction);
+                            }
+                            return true;
+                        });
                         break;
+                    }
                     case CardEffectType.E408:
-                        //TODO 找到所有可以升级的建筑物加入Action
+                    {
+                        board.CivilCards.Aggregate(true, (b, hInfo) =>
+                        {
+                            var actionType = PlayTechCardActionHandler.CanDevelopThisTechCard(hInfo, rulebook, board,
+                                science+effect.Data[0],
+                                scienceForSpec + effect.Data[0], scienceForMili + effect.Data[0]);
+                            if (actionType == PlayerActionType.DevelopTechCard
+                            )
+                            {
+                                PlayerAction actualAction = new PlayerAction { ActionType = PlayerActionType.DevelopTechCard };
+                                actualAction.Data[0] = handInfo.Card;
+                                actualAction.Data[1] = handInfo.Card.ResearchCost[0]- effect.Data[0];
+                                actions.Add(actualAction);
+                            }
+                            else if (actionType == PlayerActionType.Revolution)
+                            {
+                                PlayerAction actualAction = new PlayerAction { ActionType = PlayerActionType.Revolution };
+                                actualAction.Data[0] = handInfo.Card;
+                                actualAction.Data[1] = handInfo.Card.ResearchCost[1] - effect.Data[0];
+                                actions.Add(actualAction);
+                            }
+                            return true;
+                        });
                         break;
+                    }
                 }
             }
 
             return response;
         }
 
+        
+        /// <summary>
+        /// 判断该卡牌所含有的效果类型是否应被解释为InternalAction
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
         public bool IsInternalAction(CardInfo card)
         {
             if (card.ImmediateEffects != null)

@@ -141,16 +141,5 @@ namespace Assets.CSharpCode.GameLogic.Effect
             }
             return true;
         }
-        /// <summary>
-        /// 确定一个建筑物的造价（矿物）
-        /// </summary>
-        /// <param name="manager"></param>
-        /// <param name="playerNo"></param>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-        public static int GetBuildingCost(GameLogicManager manager, int playerNo, BuildingCell cell)
-        {
-            return cell.Card.BuildCost[0];
-        }
     }
 }

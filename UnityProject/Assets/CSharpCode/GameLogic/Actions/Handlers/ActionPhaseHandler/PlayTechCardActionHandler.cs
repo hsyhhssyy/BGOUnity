@@ -39,78 +39,91 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers
 
             foreach (var handInfo in board.CivilCards)
             {
-                var card = handInfo.Card;
-                if (ruleBook.IsTechCard(card))
+                var actionType = CanDevelopThisTechCard(handInfo, ruleBook, board, science, scienceForSpec, scienceForMili);
+
+                if (actionType== PlayerActionType.DevelopTechCard
+                   )
                 {
-                    //注意检查是否已经拥有
-
-                    if (card.CardType == CardType.Government)
-                    {
-                        if (card == board.Government)
-                        {
-                            continue;
-                        }
-                        if (science >= card.ResearchCost[0])
-                        {
-                            PlayerAction action = new PlayerAction {ActionType = PlayerActionType.DevelopTechCard};
-                            action.Data[0] = handInfo.Card;
-                            result.Add(action);
-                        }
-
-                        if (science >= card.ResearchCost[1])
-                        {
-                            PlayerAction action = new PlayerAction {ActionType = PlayerActionType.Revolution};
-                            action.Data[0] = handInfo.Card;
-                            result.Add(action);
-                        }
-                    }
-                    else if (ruleBook.IsSpecialTech(card))
-                    {
-                        if (board.SpecialTechs.Contains(card))
-                        {
-                            //TODO 不能更换为更早的特殊科技
-                            continue;
-                        }
-                        if (science + scienceForSpec >= card.ResearchCost[0])
-                        {
-                            PlayerAction action = new PlayerAction { ActionType = PlayerActionType.DevelopTechCard };
-                            action.Data[0] = handInfo.Card;
-                            result.Add(action);
-                        }
-                    }else
-                    {
-                        var hasBuilding=board.AggregateOnBuildingCell(false, (b, cell) =>
-                        {
-                            if (cell.Card == card)
-                            {
-                                return true;
-                            }
-                            return b;
-                        });
-                        if (hasBuilding)
-                        {
-                            continue;
-                        }
-                    if (ruleBook.IsMilitary(card))
-                    {
-                        if (science + scienceForMili >= card.ResearchCost[0])
-                        {
-                            PlayerAction action = new PlayerAction { ActionType = PlayerActionType.DevelopTechCard };
-                            action.Data[0] = handInfo.Card;
-                            result.Add(action);
-                        }
-                    }
-                    else if (science >= card.ResearchCost[0])
-                    {
-                        PlayerAction action = new PlayerAction { ActionType = PlayerActionType.DevelopTechCard };
-                        action.Data[0] = handInfo.Card;
-                        result.Add(action);
-                        }
-                    }
+                    PlayerAction action = new PlayerAction { ActionType = PlayerActionType.DevelopTechCard };
+                    action.Data[0] = handInfo.Card;
+                    action.Data[1] = handInfo.Card.ResearchCost[0];
+                    result.Add(action);
+                }else if (actionType == PlayerActionType.Revolution)
+                {
+                    PlayerAction action = new PlayerAction { ActionType = PlayerActionType.Revolution };
+                    action.Data[0] = handInfo.Card;
+                    action.Data[1] = handInfo.Card.ResearchCost[1];
+                    result.Add(action);
                 }
             }
 
             return result;
+        }
+
+        public static PlayerActionType CanDevelopThisTechCard(HandCardInfo handInfo, TtaRuleBook ruleBook, TtaBoard board, int science,
+            int scienceForSpec, int scienceForMili)
+        {
+            var card = handInfo.Card;
+            if (ruleBook.IsTechCard(card))
+            {
+                //注意检查是否已经拥有
+
+                if (card.CardType == CardType.Government)
+                {
+                    if (card == board.Government)
+                    {
+                        return PlayerActionType.Unknown;
+                    }
+                    if (science >= card.ResearchCost[0])
+                    {
+                        return PlayerActionType.DevelopTechCard;
+                    }
+
+                    if (science >= card.ResearchCost[1])
+                    {
+                        return PlayerActionType.Revolution;
+                    }
+                }
+                else if (ruleBook.IsSpecialTech(card))
+                {
+                    if (board.SpecialTechs.Contains(card))
+                    {
+                        //TODO 不能更换为更早的特殊科技
+                        return PlayerActionType.Unknown;
+                    }
+                    if (science + scienceForSpec >= card.ResearchCost[0])
+                    {
+                        return PlayerActionType.DevelopTechCard;
+                    }
+                }
+                else
+                {
+                    var hasBuilding = board.AggregateOnBuildingCell(false, (b, cell) =>
+                    {
+                        if (cell.Card == card)
+                        {
+                            return true;
+                        }
+                        return b;
+                    });
+                    if (hasBuilding)
+                    {
+                        return PlayerActionType.Unknown;
+                    }
+                    if (ruleBook.IsMilitary(card))
+                    {
+                        if (science + scienceForMili >= card.ResearchCost[0])
+                        {
+                            return PlayerActionType.DevelopTechCard;
+                        }
+                    }
+                    else if (science >= card.ResearchCost[0])
+                    {
+                        return PlayerActionType.DevelopTechCard;
+                    }
+                }
+            }
+            return PlayerActionType.Unknown;
         }
 
         public override ActionResponse PerfromAction(int playerNo, PlayerAction action, Dictionary<string, object> data)
@@ -125,7 +138,7 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers
 
                 var card = (CardInfo) action.Data[0];
 
-                int cost0 = card.ResearchCost[0];
+                int cost0 = (int)action.Data[1];
                 int originalScience = board.Resource[ResourceType.Science];
                 var originalScienceForMili = board.Resource[ResourceType.ScienceForMilitary];
                 var originalScienceForSpec = board.Resource[ResourceType.ScienceForSpecialTech];
@@ -134,8 +147,7 @@ namespace Assets.CSharpCode.GameLogic.Actions.Handlers
                 int destScienceForMili = originalScienceForMili;
                 int destScienceForSpec = originalScienceForSpec;
 
-                //计算科技消耗
-                
+                //计算科技消耗的方式（优先消耗专用资源）
                 if (ruleBook.IsMilitary(card))
                 {
                     if (originalScienceForMili < cost0)

@@ -140,7 +140,8 @@ namespace Assets.CSharpCode.Entity
         //---------打出一张内政卡---------
         /// <summary>
         /// 0. CardInfo
-        /// 1. 相关CardInfo（例如突破ActionCard）
+        /// 1. Cost（科技）
+        /// 2. 相关CardInfo（例如突破ActionCard）
         /// </summary>
         DevelopTechCard,
         /// <summary>
@@ -153,6 +154,8 @@ namespace Assets.CSharpCode.Entity
         ElectLeader,
         /// <summary>
         /// 0. CardInfo
+        /// 1. Cost（科技）
+        /// 2. 相关CardInfo（例如突破ActionCard）
         /// </summary>
         Revolution,
         /// <summary>

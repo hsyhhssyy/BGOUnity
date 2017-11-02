@@ -81,12 +81,46 @@ namespace Assets.CSharpCode.Entity
             }
         }
 
-        //---------Static
+        //---------Helper functions---------
         public T AggregateOnBuildingCell<T>(T initial, Func<T, BuildingCell, T> aggregate)
         {
             return
                 (from buildingPair in this.Buildings from cellPair in buildingPair.Value select cellPair.Value)
                     .Aggregate(initial, aggregate);
+        }
+
+        public void AggregateOnBuildingUpgradePair<T>(T initial, Func<T, BuildingCell, BuildingCell,T> aggregate)
+        {
+            T value = initial;
+            foreach (var buildingPair in Buildings)
+            {
+                var dict = buildingPair.Value;
+                for (int fromAgei = 0; fromAgei < (int)Age.IV; fromAgei++)
+                {
+                    if (!dict.ContainsKey((Age)fromAgei))
+                    {
+                        continue;
+                    }
+                    var fromCell = dict[(Age)fromAgei];
+
+                    if (fromCell.Worker <= 0)
+                    {
+                        continue;
+                    }
+
+                    for (int toAgei = fromAgei + 1; toAgei < (int)Age.IV; toAgei++)
+                    {
+                        if (!dict.ContainsKey((Age)toAgei))
+                        {
+                            continue;
+                        }
+
+                        var toCell = dict[(Age)fromAgei];
+
+                        value= aggregate(value,fromCell, toCell);
+                    }
+                }
+            }
         }
     }
 
